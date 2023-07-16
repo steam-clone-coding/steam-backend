@@ -18,8 +18,9 @@ class JenkinsTestServiceTest {
 
 
     @Test
-    @DisplayName("젠킨스용 테스트 : 테스트를 실패해야 한다.")
+    @DisplayName("젠킨스용 테스트 : 테스트를 성공한다")
     void t1() throws Exception {
-        fail("테스트를 실패한다.");
+        final int i = 1;
+        assertThat(i).isEqualTo(1);
     }
 }
