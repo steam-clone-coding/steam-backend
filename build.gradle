@@ -17,7 +17,25 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	//Authentication Libraries
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	implementation 'javax.xml.bind:jaxb-api:2.3.1'
+	implementation 'org.springframework.boot:spring-boot-starter-security:3.0.4'
+
+
+	//Spring Libraries
+	compileOnly 'org.projectlombok:lombok:1.18.26'
+	annotationProcessor 'org.projectlombok:lombok:1.18.26'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	//test Implementations
+	testImplementation 'org.springframework.boot:spring-boot-starter-test:3.1.0'
+	testImplementation 'org.springframework.security:spring-security-test:6.0.2'
+	testImplementation 'org.testcontainers:elasticsearch:1.17.6'
+	testImplementation 'com.h2database:h2:2.2.220'
 }
 
 tasks.named('test') {
