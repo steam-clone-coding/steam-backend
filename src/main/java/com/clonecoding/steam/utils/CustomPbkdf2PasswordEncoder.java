@@ -21,7 +21,6 @@ public class CustomPbkdf2PasswordEncoder extends Pbkdf2PasswordEncoder {
         this.saltLength = saltLength;
     }
 
-
     /**
      * methodName : matches
      * Author : Minseok Kim
@@ -31,7 +30,6 @@ public class CustomPbkdf2PasswordEncoder extends Pbkdf2PasswordEncoder {
      * @param encodedPassword - DB에 저장된 비밀번호 : 토큰:비밀번호 형태로 넘겨받도록되어있음(CustomUserDetails.getPasswords() 참고)
      * @return true면 비밀번호 일치, false면 불일치
      */
-
     @Override
     public boolean matches(CharSequence rawPassword, String encodedPassword) {
         try {
@@ -59,4 +57,5 @@ public class CustomPbkdf2PasswordEncoder extends Pbkdf2PasswordEncoder {
             throw new UnAuthorizedException(ExceptionMessages.LOGIN_FAILURE.getMessage(), e);
         }
     }
+
 }

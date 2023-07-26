@@ -39,6 +39,8 @@ public class SecurityConfig{
 
     private static final RequestMatcher LOGIN_REQUEST_MATCHER = new AntPathRequestMatcher("/api/login","POST");
 
+
+    //TODO: hashWidth, ITERATIONS, HASHING ALGORITHM은 어떻게 하는게 제일 효율적일까?
     @Value("${spring.security.pbkdf2.hashwidth}")
     private Integer HASH_WIDTH;
 
