@@ -5,6 +5,7 @@ import com.clonecoding.steam.dto.response.ErrorResponse;
 import com.clonecoding.steam.exceptions.UnAuthorizedException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,7 +34,7 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try{
             filterChain.doFilter(request, response);
-        }catch(UnAuthorizedException e){
+        }catch(UnAuthorizedException | JwtException e){
             String errorResBody = objectMapper.writeValueAsString(new ErrorResponse(e));
 
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
