@@ -41,6 +41,9 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test:6.0.2'
 	testImplementation 'org.testcontainers:elasticsearch:1.17.6'
 	testImplementation 'com.h2database:h2:2.2.220'
+
+	//OAuth2 Implementatioons
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 }
 
 tasks.named('test') {
