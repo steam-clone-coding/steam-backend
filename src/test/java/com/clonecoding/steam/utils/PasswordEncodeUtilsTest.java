@@ -40,7 +40,19 @@ public class PasswordEncodeUtilsTest {
         assertThat(salt.endsWith("==")).isTrue();
     }
 
+    @Test
+    @DisplayName("비밀번호를 암호화할 수 있다. 이 때, salt와 비밀번호가 같으면 항상 같은 암호화된 비밀번호가 나온다.")
+    void t2() throws Exception {
+        //given
+        String testPassword = "1111";
+        String salt = passwordEncodeUtils.createSalt();
+        //when
+        String testPw1 = passwordEncodeUtils.encodePassword(testPassword, salt);
+        String testPw2 = passwordEncodeUtils.encodePassword(testPassword, salt);
 
+        //then
+        assertThat(testPw1).isEqualTo(testPw2);
+    }
 
 
     @TestConfiguration
