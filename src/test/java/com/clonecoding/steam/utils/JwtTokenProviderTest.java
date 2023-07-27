@@ -64,7 +64,7 @@ public class JwtTokenProviderTest {
     void t2() throws Exception {
         //given
         User testUser = User.builder()
-                .uid("test")
+                .uid("JMBGR6CDT3")
                 .userRole(UserAuthority.ROLE_USER)
                 .username("testUserId")
                 .build();
