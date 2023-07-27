@@ -4,7 +4,7 @@ package com.clonecoding.steam.config;
 import com.clonecoding.steam.filter.CustomUsernamePasswordAuthenticationFilter;
 import com.clonecoding.steam.filter.ExceptionHandlerFilter;
 import com.clonecoding.steam.filter.JwtAuthenticationFilter;
-import com.clonecoding.steam.utils.CustomPbkdf2PasswordEncoder;
+import com.clonecoding.steam.utils.CustomPasswordEncoder;
 import com.clonecoding.steam.utils.PasswordEncodeUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -61,7 +61,7 @@ public class SecurityConfig{
 
     @Bean
     public PasswordEncoder passwordEncoder(){
-        return new CustomPbkdf2PasswordEncoder("", HASH_WIDTH, ITERATIONS, Pbkdf2PasswordEncoder.SecretKeyFactoryAlgorithm.PBKDF2WithHmacSHA512, passwordEncodeUtils);
+        return new CustomPasswordEncoder("", HASH_WIDTH, ITERATIONS, Pbkdf2PasswordEncoder.SecretKeyFactoryAlgorithm.PBKDF2WithHmacSHA512, passwordEncodeUtils);
     }
 
     @Bean

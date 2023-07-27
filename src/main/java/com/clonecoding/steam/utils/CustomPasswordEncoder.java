@@ -4,16 +4,12 @@ import com.clonecoding.steam.exceptions.ExceptionMessages;
 import com.clonecoding.steam.exceptions.UnAuthorizedException;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-import java.util.Base64;
-
-public class CustomPbkdf2PasswordEncoder extends Pbkdf2PasswordEncoder {
+public class CustomPasswordEncoder extends Pbkdf2PasswordEncoder {
 
 
     private final PasswordEncodeUtils passwordEncodeUtils;
 
-    public CustomPbkdf2PasswordEncoder(CharSequence secret, int saltLength, int iterations, SecretKeyFactoryAlgorithm secretKeyFactoryAlgorithm, PasswordEncodeUtils passwordEncodeUtils) {
+    public CustomPasswordEncoder(CharSequence secret, int saltLength, int iterations, SecretKeyFactoryAlgorithm secretKeyFactoryAlgorithm, PasswordEncodeUtils passwordEncodeUtils) {
         super(secret, saltLength, iterations, secretKeyFactoryAlgorithm);
         this.passwordEncodeUtils = passwordEncodeUtils;
     }
