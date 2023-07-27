@@ -1,26 +1,49 @@
 package com.clonecoding.steam.entity;
 
 
+import com.clonecoding.steam.enums.LoginType;
 import com.clonecoding.steam.enums.UserAuthority;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Table(name = "users")
 public class User {
 
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
 
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "wallet_id")
+    private UserWallet wallet;
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "country_id")
+    private Country country;
+
+
+    @Column(name = "nickname")
     private String name;
+
+    private Integer age;
+
+    private String email;
+
+    @Enumerated(EnumType.STRING)
+    private LoginType loginType;
+
+    private String profile_image;
+
 
     private String username;
 
@@ -31,4 +54,12 @@ public class User {
     private UserAuthority userRole;
 
     private String salt;
+
+    private LocalDateTime lastLoginTime;
+
+
+    @Builder.Default
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+
 }
