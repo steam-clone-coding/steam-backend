@@ -3,6 +3,7 @@ package com.clonecoding.steam.filter;
 import com.clonecoding.steam.exceptions.ExceptionMessages;
 import com.clonecoding.steam.exceptions.UnAuthorizedException;
 import com.clonecoding.steam.utils.JwtTokenProvider;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,7 +32,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
      */
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException, JwtException {
         // Http Header로 부터 토큰을 받아온다.
         if(request.getHeader(HttpHeaders.AUTHORIZATION) == null){
             filterChain.doFilter(request, response);

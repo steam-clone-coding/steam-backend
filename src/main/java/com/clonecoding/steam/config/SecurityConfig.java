@@ -99,8 +99,8 @@ public class SecurityConfig{
                 // 로그인 핸들러 추가(로그인 url : /api/login)
                 .addFilterAt(usernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 // 로그인 실패시 호출되는 Exception Filter 추가 : 로그인 실패시 아래 필터에서 Response 응답 후 리턴
-                .addFilterBefore(exceptionHandlerFilter,UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(jwtAuthenticationFilter, exceptionHandlerFilter.getClass())
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(exceptionHandlerFilter, jwtAuthenticationFilter.getClass())
                 .build();
     }
 
