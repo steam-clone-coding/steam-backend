@@ -1,19 +1,16 @@
 package com.clonecoding.steam.dto.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Data
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor
 @Builder
-public class ApiResponse {
+public class ApiResponse<T> {
 
-    private String message;
+    private T data;
 
     @Builder.Default
     private LocalDateTime time = LocalDateTime.now();

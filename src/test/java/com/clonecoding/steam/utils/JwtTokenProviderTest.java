@@ -23,7 +23,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.Date;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -77,7 +76,7 @@ public class JwtTokenProviderTest {
 
         //then
         assertThat(result).extracting("uid", "userID", "userRole")
-                .containsExactly("test", "testUserId", UserAuthority.ROLE_USER);
+                .containsExactly("JMBGR6CDT3", "testUserId", UserAuthority.ROLE_USER);
 
     }
 
