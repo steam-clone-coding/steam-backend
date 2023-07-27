@@ -1,5 +1,15 @@
 
 jwt:
-  secret: secretKeysecretKeysecretKeysecretKeysecretKeysecretKeysecretKeysecretKeysecretKeysecretKey
-  access-token-expire-time: 600000
-  refresh-token-expire-time: 1800000
+  secret: ${jwt.secret}
+  access-token-expire-time: ${jwt.access-token-expire-time}
+  refresh-token-expire-time: ${jwt.refresh-token-expire-time}
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${spring.datasource.url}
+    username: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+  security:
+    pbkdf2:
+      hashwidth: ${spring.security.pbkdf2.hashwidth}
+      iterations: ${spring.security.pbkdf2.iterations}

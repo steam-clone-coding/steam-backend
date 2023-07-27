@@ -1,5 +1,7 @@
 package com.clonecoding.steam.filter;
 
+import com.clonecoding.steam.exceptions.ExceptionMessages;
+import com.clonecoding.steam.exceptions.UnAuthorizedException;
 import com.clonecoding.steam.utils.JwtTokenProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -31,8 +33,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // Http Header로 부터 토큰을 받아온다.
-        String[] header = request.getHeader(HttpHeaders.AUTHORIZATION).split(" ");
-        String jwtToken = header[1];
+        if(request.getHeader(HttpHeaders.AUTHORIZATION) == null){
+            filterChain.doFilter(request, response);
+            return;
+        }
+        String jwtToken = getAccessToken(request);
 
         // JWT Token의 유효성을 검증한다.
         JwtTokenProvider.TokenVerificationResult verificationResult = tokenProvider.verify(jwtToken);
@@ -42,5 +47,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
 
+    }
+
+    private String getAccessToken(HttpServletRequest request) {
+        if(!request.getHeader(HttpHeaders.AUTHORIZATION).startsWith("Bearer ")){
+            throw new UnAuthorizedException(ExceptionMessages.INVALID_TOKEN.getMessage());
+        }
+
+        String[] header = request.getHeader(HttpHeaders.AUTHORIZATION).split(" ");
+        return header[1];
     }
 }
