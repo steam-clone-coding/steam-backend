@@ -4,6 +4,7 @@ package com.clonecoding.steam.config;
 import com.clonecoding.steam.filter.CustomUsernamePasswordAuthenticationFilter;
 import com.clonecoding.steam.filter.ExceptionHandlerFilter;
 import com.clonecoding.steam.filter.JwtAuthenticationFilter;
+import com.clonecoding.steam.service.PrincipalOauth2UserService;
 import com.clonecoding.steam.utils.CustomPbkdf2PasswordEncoder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
@@ -37,6 +39,9 @@ public class SecurityConfig{
     private final UserDetailsService userDetailsService;
     private final AuthenticationEntryPoint authenticationEntryPoint;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    private final PrincipalOauth2UserService oauth2UserService;
+    private final AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
 
     private static final RequestMatcher LOGIN_REQUEST_MATCHER = new AntPathRequestMatcher("/api/login","POST");
 
@@ -84,7 +89,13 @@ public class SecurityConfig{
                     authorizeHttpRequest
                             .requestMatchers("/api/login").permitAll()
                             .requestMatchers("/v3/api-docs/**", "/swagger-ui/**" ).permitAll()
-                            .anyRequest().authenticated();
+                            .anyRequest().permitAll();
+                })
+                .oauth2Login(oauth2Login->{
+                    oauth2Login
+                            .authorizationEndpoint(config->config.baseUri("/oauth2/authorization"))
+                            .userInfoEndpoint(userInfo->userInfo.userService(oauth2UserService))
+                            .successHandler(oAuth2AuthenticationSuccessHandler);
                 })
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
