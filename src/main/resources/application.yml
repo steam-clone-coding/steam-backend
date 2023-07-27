@@ -13,3 +13,6 @@ spring:
     pbkdf2:
       hashwidth: ${spring.security.pbkdf2.hashwidth}
       iterations: ${spring.security.pbkdf2.iterations}
+      algorithm: ${spring.security.pbkdf2.algorithm}
+    salt:
+      algorithm: ${spring.security.salt.algorithm}

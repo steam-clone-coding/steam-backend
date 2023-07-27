@@ -20,3 +20,10 @@ spring:
     hibernate:
       ddl-auto: update
     open-in-view: false
+  security:
+    pbkdf2:
+      hashwidth: 16
+      iterations: 1024
+      algorithm: PBKDF2WithHmacSHA512
+    salt:
+      algorithm: SHA1PRNG
