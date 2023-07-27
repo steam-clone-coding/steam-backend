@@ -1,14 +1,19 @@
 package com.clonecoding.steam.entity;
 
 
+import com.clonecoding.steam.enums.UserAuthority;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@NoArgsConstructor
+@Builder
 public class User {
 
 
@@ -23,6 +28,8 @@ public class User {
     private String password;
 
     private String uid;
+
+    private UserAuthority userRole;
 
     private String salt;
 }
