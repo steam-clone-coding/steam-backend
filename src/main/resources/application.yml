@@ -1,0 +1,5 @@
+
+jwt:
+  secret: secretKeysecretKeysecretKeysecretKeysecretKeysecretKeysecretKeysecretKeysecretKeysecretKey
+  access-token-expire-time: 600000
+  refresh-token-expire-time: 1800000

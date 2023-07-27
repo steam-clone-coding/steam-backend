@@ -3,6 +3,7 @@ package com.clonecoding.steam.config;
 
 import com.clonecoding.steam.filter.CustomUsernamePasswordAuthenticationFilter;
 import com.clonecoding.steam.filter.ExceptionHandlerFilter;
+import com.clonecoding.steam.filter.JwtAuthenticationFilter;
 import com.clonecoding.steam.utils.CustomPbkdf2PasswordEncoder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,7 +36,7 @@ public class SecurityConfig{
     private final ExceptionHandlerFilter exceptionHandlerFilter;
     private final UserDetailsService userDetailsService;
     private final AuthenticationEntryPoint authenticationEntryPoint;
-
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     private static final RequestMatcher LOGIN_REQUEST_MATCHER = new AntPathRequestMatcher("/api/login","POST");
 
@@ -95,10 +96,11 @@ public class SecurityConfig{
                 .sessionManagement(sessionManagement->{
                     sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
                 })
-                // 로그인 핸들러 추가(로그인 url : /nextrend/login)
+                // 로그인 핸들러 추가(로그인 url : /api/login)
                 .addFilterAt(usernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 // 로그인 실패시 호출되는 Exception Filter 추가 : 로그인 실패시 아래 필터에서 Response 응답 후 리턴
                 .addFilterBefore(exceptionHandlerFilter,UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthenticationFilter, exceptionHandlerFilter.getClass())
                 .build();
     }
 

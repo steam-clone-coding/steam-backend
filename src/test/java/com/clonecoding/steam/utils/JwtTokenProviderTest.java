@@ -15,12 +15,15 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.Date;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -73,8 +76,8 @@ public class JwtTokenProviderTest {
         JwtTokenProvider.TokenVerificationResult result = jwtTokenProvider.verify(accessToken);
 
         //then
-        assertThat(result).extracting("ok", "uid", "userID", "userRole")
-                .containsExactly(true, "test", "testUserId", UserAuthority.ROLE_USER);
+        assertThat(result).extracting("uid", "userID", "userRole")
+                .containsExactly("test", "testUserId", UserAuthority.ROLE_USER);
 
     }
 
@@ -110,6 +113,28 @@ public class JwtTokenProviderTest {
                 .hasMessage(ExceptionMessages.INVALID_TOKEN.getMessage());
     }
 
+
+    @Test
+    @DisplayName("Jwt Token으로 부터 유저 정보를 받아 Authentication 객체를 생성할 수 있다.")
+    void t5() throws Exception {
+        //given
+        User testUser = User.builder()
+                .id(1L)
+                .userRole(UserAuthority.ROLE_USER)
+                .username("Hello")
+                .uid("test")
+                .build();
+
+        Date now = new Date();
+        String accessToken = jwtTokenProvider.sign(testUser, now);
+        //when
+        final Authentication authentication = jwtTokenProvider.getAuthentication(testUser.getUid(),testUser.getUserRole());
+        //then
+        assertThat(authentication.getPrincipal()).isEqualTo(testUser.getUid());
+        assertThat(authentication.getAuthorities()
+                .contains(new SimpleGrantedAuthority(testUser.getUserRole().name()))).isTrue();
+
+    }
 
 
     @TestConfiguration

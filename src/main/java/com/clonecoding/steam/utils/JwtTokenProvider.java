@@ -8,9 +8,13 @@ import io.jsonwebtoken.*;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.core.env.Environment;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.List;
 
 @Component
 public class JwtTokenProvider {
@@ -60,13 +64,14 @@ public class JwtTokenProvider {
      *
      * @param : String Token - 해독하려는 토큰
      * @return : 해독하려는 토큰의 해독 결과
+     * @exception ExpiredJwtException 토큰이 만료되었을 떄
+     * @exception JwtException 토큰을 읽는 중 오류가 있을 때
      */
-    public TokenVerificationResult verify(String token) {
+    public TokenVerificationResult verify(String token) throws ExpiredJwtException, JwtException{
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
 
             return TokenVerificationResult.builder()
-                    .ok(true)
                     .uid(claims.getBody().get("uid").toString())
                     .userID(claims.getBody().getSubject())
                     .userRole(UserAuthority.valueOf((String)claims.getBody().get("userRole")))
@@ -106,10 +111,27 @@ public class JwtTokenProvider {
     }
 
 
+
+    /**
+     * @methodName getAuthentication
+     * @author Minseok kim
+     * @description token으로 부터 유저 정보를 추출해 Authentication 객체를 생성하는 메서드
+     *
+     * @param  uid Jwt Token에서 추출된 uid
+     * @param userAuthority Jwt Token에서 추출된 사용자의 권한
+     * @return Spring Security Context에 저장할 Authentication 객체
+     */
+
+    public Authentication getAuthentication(String uid,  UserAuthority userAuthority){
+
+        SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(userAuthority.name());
+
+        return new UsernamePasswordAuthenticationToken(uid, "",List.of(simpleGrantedAuthority));
+    }
+
     @Getter
     @Builder
     public static class TokenVerificationResult {
-        private boolean ok;
         private String uid;
         private String userID;
         private UserAuthority userRole;
