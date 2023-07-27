@@ -26,12 +26,15 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security:3.0.4'
 
 
-	//Spring Libraries
+	//Spring Implementations
 	compileOnly 'org.projectlombok:lombok:1.18.26'
 	annotationProcessor 'org.projectlombok:lombok:1.18.26'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	//Database Implementations
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.0.4'
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis:3.0.4'
+	implementation 'org.postgresql:postgresql:42.6.0'
 
 	//test Implementations
 	testImplementation 'org.springframework.boot:spring-boot-starter-test:3.1.0'
