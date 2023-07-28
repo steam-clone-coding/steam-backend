@@ -60,7 +60,6 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         String provider = userRequest.getClientRegistration().getRegistrationId();
         OAuth2UserInfo oAuth2UserInfo = oAuth2UserInfoFactory.getOAuth2UserInfo(provider, oAuth2User.getAttributes());
         User user = findOrCreateUser(oAuth2UserInfo, provider);
-        log.info("{}", user);
 
         return oAuth2User;
     }
@@ -90,7 +89,6 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
                     .uid(oAuth2UserInfo.getUid())
                     .userRole(UserAuthority.ROLE_USER)
                     .build();
-            log.info("user : {}", user);
             userRepository.save(user);
             return user;
         }
