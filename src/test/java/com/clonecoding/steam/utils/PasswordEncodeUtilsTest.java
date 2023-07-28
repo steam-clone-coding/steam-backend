@@ -1,6 +1,7 @@
 package com.clonecoding.steam.utils;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +27,6 @@ public class PasswordEncodeUtilsTest {
     @Autowired
     private PasswordEncodeUtils passwordEncodeUtils;
 
-    @Value("${spring.security.pbkdf2.hashwidth}")
-    private Integer saltLength;
 
     @Test
     @DisplayName("salt를 생성할 수 있다.")
@@ -40,7 +39,7 @@ public class PasswordEncodeUtilsTest {
         assertThat(salt.endsWith("==")).isTrue();
     }
 
-    @Test
+    @RepeatedTest(value = 50)
     @DisplayName("비밀번호를 암호화할 수 있다. 이 때, salt와 비밀번호가 같으면 항상 같은 암호화된 비밀번호가 나온다.")
     void t2() throws Exception {
         //given
