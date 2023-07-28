@@ -52,4 +52,20 @@ class UserRepositoryTest {
                 .containsExactly(testUser.getUsername(), testUser.getEmail(), testUser.getUid());
     }
 
+    @Test
+    @DisplayName("UID로 유저를 조회할 수 있다.")
+    void t2() throws Exception {
+        //given
+
+        //when
+        User user = userRepository.findUserByUid(testUser.getUid())
+                .orElseThrow(() -> new RuntimeException("유저를 찾아야 합니다."));
+
+        //then
+        assertThat(user).extracting("username", "email", "uid")
+                .containsExactly(testUser.getUsername(), testUser.getEmail(), testUser.getUid());
+    }
+
+
+
 }
