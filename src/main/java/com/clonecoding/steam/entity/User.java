@@ -43,7 +43,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private LoginType loginType;
 
-    private String profile_image;
+    private String profileImage;
 
     @Column(unique = true)
     private String username;

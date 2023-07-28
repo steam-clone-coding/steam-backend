@@ -1,6 +1,8 @@
 package com.clonecoding.steam.dto;
 
 
+import com.clonecoding.steam.entity.User;
+import com.clonecoding.steam.entity.UserWallet;
 import com.clonecoding.steam.enums.LoginType;
 import com.clonecoding.steam.enums.UserAuthority;
 import lombok.AccessLevel;
@@ -32,5 +34,27 @@ public class UserRegisterDto {
 
     @Builder.Default
     private UserAuthority userRole = UserAuthority.ROLE_USER;
+
+
+
+    public User toEntity(String uid, String encodedPassword, String salt, UserWallet wallet){
+        return User.builder()
+                .username(username)
+                .password(encodedPassword)
+                .salt(salt)
+                .uid(uid)
+                .wallet(wallet)
+                .profileImage(null)
+                .name()
+                .loginType()
+                .lastLoginTime()
+                .createdAt()
+                .country()
+                .userRole()
+                .email()
+                .loginType()
+                .name()
+                .build();
+    }
 
 }
