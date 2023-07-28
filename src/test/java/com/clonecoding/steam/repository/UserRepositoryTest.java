@@ -67,5 +67,17 @@ class UserRepositoryTest {
     }
 
 
+    @Test
+    @DisplayName("email로 유저를 조회할 수 있다.")
+    void t3() throws Exception {
+        //given
 
+        //when
+        User user = userRepository.findUserByEmail(testUser.getEmail())
+                .orElseThrow(() -> new RuntimeException("유저를 찾아야 합니다."));
+
+        //then
+        assertThat(user).extracting("username", "email", "uid")
+                .containsExactly(testUser.getUsername(), testUser.getEmail(), testUser.getUid());
+    }
 }
