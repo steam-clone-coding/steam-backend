@@ -37,6 +37,7 @@ public class User {
 
     private Integer age;
 
+    @Column(unique = true)
     private String email;
 
     @Enumerated(EnumType.STRING)
@@ -44,10 +45,12 @@ public class User {
 
     private String profile_image;
 
+    @Column(unique = true)
     private String username;
 
     private String password;
 
+    @Column(unique = true)
     private String uid;
 
     private UserAuthority userRole;
