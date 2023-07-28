@@ -12,6 +12,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
@@ -83,6 +85,27 @@ public class UserServiceTest {
                 .isInstanceOf(UserInfoConflictException.class)
                 .hasMessage(ExceptionMessages.USERNAME_DUPLICATED.getMessage());
     }
+
+    @ParameterizedTest
+    @CsvSource(value = {"aa,false", "aaaaaaaa,false", "12345678,false", "a1234567,false", "a123456!,true"})
+    @DisplayName("비밀번호가 최소 8자, 하나 이상의 문자, 하나의 숫자 및 하나의 특수 문자를 포함하지 않으면 오류를 throw한다.")
+    void t3(String password, boolean expectedTrue) throws Exception {
+        //given
+        final UserRegisterDto dto = UserRegisterDto.builder()
+                .email("passwordTest@email.com")
+                .username("passwordTestUsername")
+                .password(password)
+                .build();
+        //when & then
+        if(expectedTrue){
+            assertThatCode(()->userService.register(dto)).doesNotThrowAnyException();
+            return;
+        }
+        assertThatThrownBy(()->userService.register(dto))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage(ExceptionMessages.INVALID_PASSWORD.getMessage());
+    }
+
 
 
     @TestConfiguration
