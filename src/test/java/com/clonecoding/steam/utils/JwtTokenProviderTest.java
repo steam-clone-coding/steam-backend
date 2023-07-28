@@ -85,7 +85,6 @@ public class JwtTokenProviderTest {
     void t3() throws Exception {
         //given
         User testUser = User.builder()
-                .id(1L)
                 .userRole(UserAuthority.ROLE_USER)
                 .username("Hello")
                 .build();
