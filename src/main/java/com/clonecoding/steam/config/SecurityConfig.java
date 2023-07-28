@@ -4,7 +4,8 @@ package com.clonecoding.steam.config;
 import com.clonecoding.steam.filter.CustomUsernamePasswordAuthenticationFilter;
 import com.clonecoding.steam.filter.ExceptionHandlerFilter;
 import com.clonecoding.steam.filter.JwtAuthenticationFilter;
-import com.clonecoding.steam.utils.CustomPbkdf2PasswordEncoder;
+import com.clonecoding.steam.utils.CustomPasswordEncoder;
+import com.clonecoding.steam.utils.PasswordEncodeUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -37,7 +38,7 @@ public class SecurityConfig{
     private final UserDetailsService userDetailsService;
     private final AuthenticationEntryPoint authenticationEntryPoint;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-
+    private final PasswordEncodeUtils passwordEncodeUtils;
     private static final RequestMatcher LOGIN_REQUEST_MATCHER = new AntPathRequestMatcher("/api/login","POST");
 
 
@@ -60,7 +61,7 @@ public class SecurityConfig{
 
     @Bean
     public PasswordEncoder passwordEncoder(){
-        return new CustomPbkdf2PasswordEncoder("", HASH_WIDTH, ITERATIONS, Pbkdf2PasswordEncoder.SecretKeyFactoryAlgorithm.PBKDF2WithHmacSHA512);
+        return new CustomPasswordEncoder("", HASH_WIDTH, ITERATIONS, Pbkdf2PasswordEncoder.SecretKeyFactoryAlgorithm.PBKDF2WithHmacSHA512, passwordEncodeUtils);
     }
 
     @Bean

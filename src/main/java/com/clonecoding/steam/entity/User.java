@@ -44,7 +44,6 @@ public class User {
 
     private String profile_image;
 
-
     private String username;
 
     private String password;
@@ -55,8 +54,8 @@ public class User {
 
     private String salt;
 
-    private LocalDateTime lastLoginTime;
-
+    @Builder.Default
+    private LocalDateTime lastLoginTime = LocalDateTime.now();
 
     @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
