@@ -13,3 +13,6 @@ spring:
     pbkdf2:
       hashwidth: ${spring.security.pbkdf2.hashwidth}
       iterations: ${spring.security.pbkdf2.iterations}
+  redis:
+    host: ${spring.redis.host}
+    port: ${spring.redis.port}

@@ -4,6 +4,7 @@ package com.clonecoding.steam.utils;
 import com.clonecoding.steam.entity.User;
 import com.clonecoding.steam.enums.UserAuthority;
 import com.clonecoding.steam.exceptions.ExceptionMessages;
+import com.clonecoding.steam.service.RedisService;
 import io.jsonwebtoken.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,13 +24,15 @@ public class JwtTokenProvider {
 
 
     private final Long ACCESS_TOKEN_EXPIRE_TIME;
-
     private final Long REFRESH_TOKEN_EXPIRE_TIME;
 
-    public JwtTokenProvider(Environment env) {
+    private final RedisService redisService;
+
+    public JwtTokenProvider(Environment envm, RedisService redisService) {
         secretKey = env.getProperty("jwt.secret");
         ACCESS_TOKEN_EXPIRE_TIME = Long.parseLong(env.getProperty("jwt.access-token-expire-time"));
         REFRESH_TOKEN_EXPIRE_TIME = Long.parseLong(env.getProperty("jwt.refresh-token-expire-time"));
+        this.redisService = redisService;
     }
 
     /**
