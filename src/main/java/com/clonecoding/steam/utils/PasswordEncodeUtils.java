@@ -24,6 +24,9 @@ public class PasswordEncodeUtils {
     @Value("${spring.security.pbkdf2.hashwidth}")
     private Integer HASH_WIDTH;
 
+    @Value("${spring.security.pbkdf2.digest-size}")
+    private Integer ENCODED_DIGEST_SIZE;
+
     @Value("${spring.security.pbkdf2.iterations}")
     private Integer ITERATIONS;
 
@@ -40,7 +43,7 @@ public class PasswordEncodeUtils {
     public String encodePassword(String rawPassword, String salt) throws NoSuchAlgorithmException, InvalidKeySpecException {
         byte[] saltByte = Base64.getDecoder().decode(salt);
 
-        PBEKeySpec spec = new PBEKeySpec(rawPassword.toCharArray(), saltByte, ITERATIONS , HASH_WIDTH * 8);
+        PBEKeySpec spec = new PBEKeySpec(rawPassword.toCharArray(), saltByte, ITERATIONS , ENCODED_DIGEST_SIZE);
         SecretKeyFactory skf = SecretKeyFactory.getInstance(ENCODE_ALGORITHM);
         byte[] hashedPassword = skf.generateSecret(spec).getEncoded();
 
