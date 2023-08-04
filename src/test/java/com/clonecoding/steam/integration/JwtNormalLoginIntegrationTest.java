@@ -190,5 +190,41 @@ public class JwtNormalLoginIntegrationTest {
 
     }
 
+    //TODO : 회원가입 로직 완성시 활성화
+    @Disabled
+    @Test
+    @DisplayName("유저가입시 중복되는 email이라면 409 코드와 오류 메시지를 리턴한다.")
+    void t6() throws Exception {
+        //given
+        //이미 저장된 유저를 위해 유저를 저장
+        final UserRegisterDto testUser = UserRegisterDto.builder()
+                .email("testEmail@naver.com")
+                .username("test")
+                .password("a1234567!")
+                .loginType(LoginType.NORMAL)
+                .age(22)
+                .userRole(UserAuthority.ROLE_USER)
+                .countryId(null)
+                .profileImage(null)
+                .build();
 
+        userService.register(testUser);
+
+        final UserRegisterRequest reqBody = UserRegisterRequest.builder()
+                .username("te22st")
+                //.email("testEmail@naver.com")
+                .password("21321@1ca")
+                .build();
+
+        //when & then
+        mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .post("/api/user/new")
+                                .content(objectMapper.writeValueAsString(reqBody))
+                )
+                .andDo(print())
+                .andExpect(MockMvcResultMatchers.status().isConflict())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(ExceptionMessages.EMAIL_DUPLICATED.getMessage()));
+
+    }
 }
