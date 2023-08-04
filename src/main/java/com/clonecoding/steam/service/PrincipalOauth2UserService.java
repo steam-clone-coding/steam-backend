@@ -62,7 +62,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
             User newUser = User.builder()
                     .name(oAuth2UserInfo.getName())
                     .nickname("OAuth2TestUserNickName")
-                    .age(23)
+                    .age(null)
                     .email(oAuth2UserInfo.getEmail())
                     .profile_image(oAuth2UserInfo.getProfileImage())
                     .loginType(loginType)
