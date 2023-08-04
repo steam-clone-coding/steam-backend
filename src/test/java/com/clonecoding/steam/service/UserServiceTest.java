@@ -11,7 +11,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +37,9 @@ public class UserServiceTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncodeUtils passwordEncodeUtils;
 
     private User testUser;
 
@@ -89,7 +91,7 @@ public class UserServiceTest {
     @ParameterizedTest
     @CsvSource(value = {"aa,false", "aaaaaaaa,false", "12345678,false", "a1234567,false", "a123456!,true"})
     @DisplayName("비밀번호가 최소 8자, 하나 이상의 문자, 하나의 숫자 및 하나의 특수 문자를 포함하지 않으면 오류를 throw한다.")
-    void t3(String password, boolean expectedTrue) throws Exception {
+    void t3(String password, boolean expected) throws Exception {
         //given
         final UserRegisterDto dto = UserRegisterDto.builder()
                 .email("passwordTest@email.com")
@@ -97,7 +99,7 @@ public class UserServiceTest {
                 .password(password)
                 .build();
         //when & then
-        if(expectedTrue){
+        if(expected){
             assertThatCode(()->userService.register(dto)).doesNotThrowAnyException();
             return;
         }
@@ -106,6 +108,32 @@ public class UserServiceTest {
                 .hasMessage(ExceptionMessages.INVALID_PASSWORD.getMessage());
     }
 
+//    @Test
+//    @DisplayName("비밀번호 조건, 이메일, username이 중복되지 않은 새로운 유저 정보를 저장할 수 있다.")
+//    void t4() throws Exception {
+//        //given
+//        final String testEmail = "registertest@email.com";
+//        final String testUsername = "registertest";
+//        final String testPassword = "a123456!";
+//
+//        final UserRegisterDto dto = UserRegisterDto.builder()
+//                .email(testEmail)
+//                .username(testUsername)
+//                .password(testPassword)
+//                .build();
+//
+//
+//        //when
+//        userService.register(dto);
+//        //then
+//        final User findUser = userRepository.findUserByEmail(testEmail)
+//                .orElseThrow(() -> new RuntimeException("유저가 저장되지 않았습니다."));
+//        final String encodedPassword = passwordEncodeUtils.encodePassword(testPassword, findUser.getSalt());
+//
+//        assertThat(findUser).extracting("email", "username", "password")
+//                .containsExactly(testEmail, testUsername, encodedPassword);
+//
+//    }
 
 
     @TestConfiguration

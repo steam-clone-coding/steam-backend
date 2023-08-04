@@ -1,6 +1,7 @@
 package com.clonecoding.steam.dto;
 
 
+import com.clonecoding.steam.entity.Country;
 import com.clonecoding.steam.entity.User;
 import com.clonecoding.steam.entity.UserWallet;
 import com.clonecoding.steam.enums.LoginType;
@@ -9,6 +10,8 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -37,7 +40,7 @@ public class UserRegisterDto {
 
 
 
-    public User toEntity(String uid, String encodedPassword, String salt, UserWallet wallet){
+    public User toEntity(String uid, String encodedPassword, String salt, UserWallet wallet, Country country){
         return User.builder()
                 .username(username)
                 .password(encodedPassword)
@@ -45,15 +48,14 @@ public class UserRegisterDto {
                 .uid(uid)
                 .wallet(wallet)
                 .profileImage(null)
-                .name()
-                .loginType()
-                .lastLoginTime()
-                .createdAt()
-                .country()
-                .userRole()
-                .email()
-                .loginType()
-                .name()
+                .name(name)
+                .loginType(loginType)
+                .lastLoginTime(LocalDateTime.now())
+                .createdAt(LocalDateTime.now())
+                .country(country)
+                .userRole(userRole)
+                .email(email)
+                .loginType(loginType)
                 .build();
     }
 
