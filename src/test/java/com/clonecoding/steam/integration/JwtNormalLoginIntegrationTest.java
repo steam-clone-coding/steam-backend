@@ -3,6 +3,7 @@ package com.clonecoding.steam.integration;
 
 import com.clonecoding.steam.dto.UserRegisterDto;
 import com.clonecoding.steam.dto.request.LoginRequest;
+import com.clonecoding.steam.dto.request.UserRegisterRequest;
 import com.clonecoding.steam.enums.LoginType;
 import com.clonecoding.steam.enums.UserAuthority;
 import com.clonecoding.steam.exceptions.ExceptionMessages;
@@ -57,6 +58,8 @@ public class JwtNormalLoginIntegrationTest {
     void t2() throws Exception {
         //given
         // 로그인 하기 위해 먼저 회원가입 진행
+
+        //TODO : Country에 대한 처리 필요
         final UserRegisterDto testUser = UserRegisterDto.builder()
                 .email("testEmail@naver.com")
                 .username("test")
@@ -149,5 +152,43 @@ public class JwtNormalLoginIntegrationTest {
                 .andExpect(MockMvcResultMatchers.status().isUnauthorized())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(ExceptionMessages.LOGIN_FAILURE.getMessage()));
     }
+
+    //TODO : 회원가입 로직 완성시 활성화
+    @Disabled
+    @Test
+    @DisplayName("유저 회원가입시 중복되는 username이라면 409 에러코드와 오류 메시지를 리턴한다.")
+    void t5() throws Exception {
+        //given
+        //이미 저장된 유저를 위해 유저를 저장
+        final UserRegisterDto testUser = UserRegisterDto.builder()
+                .email("testEmail@naver.com")
+                .username("test")
+                .password("a1234567!")
+                .loginType(LoginType.NORMAL)
+                .age(22)
+                .userRole(UserAuthority.ROLE_USER)
+                .countryId(null)
+                .profileImage(null)
+                .build();
+
+        userService.register(testUser);
+
+        final UserRegisterRequest reqBody = UserRegisterRequest.builder()
+                .username("test")
+                .password("21321@1ca")
+                .build();
+
+        //when & then
+        mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .post("/api/user/new")
+                                .content(objectMapper.writeValueAsString(reqBody))
+                )
+                .andDo(print())
+                .andExpect(MockMvcResultMatchers.status().isConflict())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(ExceptionMessages.USERNAME_DUPLICATED.getMessage()));
+
+    }
+
 
 }
