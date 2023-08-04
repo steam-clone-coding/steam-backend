@@ -1,13 +1,22 @@
 package com.clonecoding.steam.utils;
 
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
+
 import java.security.SecureRandom;
 
+@Component
 public class NanoIdProvider {
-    private static final char[] ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".toCharArray();
-    private static final int ID_LENGTH = 21;
-    private static final SecureRandom RANDOM = new SecureRandom();
+    private final char[] ALPHABET;
+    private final int ID_LENGTH;
+    private final SecureRandom RANDOM = new SecureRandom();
 
-    public static String randomNanoId() {
+    public NanoIdProvider(Environment env) {
+            ALPHABET = env.getProperty("nanoId.alphabet").toCharArray();
+            ID_LENGTH = Integer.parseInt(env.getProperty("nanoId.length"));
+    }
+
+    public String createNanoId() {
         char[] buffer = new char[ID_LENGTH];
         for (int idx = 0; idx < ID_LENGTH; ++idx) {
             buffer[idx] = ALPHABET[RANDOM.nextInt(ALPHABET.length)];

@@ -4,6 +4,10 @@ jwt:
   access-token-expire-time: 600000
   refresh-token-expire-time: 1800000
 
+nanoId:
+  alphabet: ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789
+  length: 21
+
 
 spring:
   datasource:

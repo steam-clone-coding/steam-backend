@@ -2,6 +2,10 @@ jwt:
   secret: ${jwt.secret}
   access-token-expire-time: ${jwt.access-token-expire-time}
   refresh-token-expire-time: ${jwt.refresh-token-expire-time}
+nanoId:
+  alphabet: ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789
+  length: 21
+
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
