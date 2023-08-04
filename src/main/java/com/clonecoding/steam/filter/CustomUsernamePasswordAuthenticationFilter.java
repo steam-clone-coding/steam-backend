@@ -5,6 +5,7 @@ import com.clonecoding.steam.dto.response.LoginResponse;
 import com.clonecoding.steam.entity.User;
 import com.clonecoding.steam.exceptions.UnAuthorizedException;
 import com.clonecoding.steam.service.PrincipalUserDetailService;
+import com.clonecoding.steam.service.RedisService;
 import com.clonecoding.steam.utils.JwtTokenProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
@@ -12,6 +13,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -30,10 +32,12 @@ public class CustomUsernamePasswordAuthenticationFilter extends AbstractAuthenti
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
+    @Autowired
+    private RedisService redisService;
+
 
     public CustomUsernamePasswordAuthenticationFilter(RequestMatcher requestMatcher, AuthenticationManager authenticationManager) {
         super(requestMatcher, authenticationManager);
-
     }
 
 
@@ -90,13 +94,14 @@ public class CustomUsernamePasswordAuthenticationFilter extends AbstractAuthenti
         String accessToken = jwtTokenProvider.sign(user, tokenCreationTime);
         String refreshToken = jwtTokenProvider.createRefresh(tokenCreationTime);
 
+        // Save refresh token to Redis
+        redisService.setValuesWithTimeout(user.getUid(), refreshToken, jwtTokenProvider.getREFRESH_TOKEN_EXPIRE_TIME());
 
         LoginResponse resBody = LoginResponse.builder()
                 .uid(user.getUid())
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
-
 
         response.setHeader(HttpHeaders.CONTENT_TYPE, "application/json; charset=UTF-8");
         response.getWriter().write(objectMapper.writeValueAsString(resBody));

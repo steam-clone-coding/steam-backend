@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.List;
 
 @Component
+@Getter
 public class JwtTokenProvider {
 
     private String secretKey;
@@ -28,7 +29,7 @@ public class JwtTokenProvider {
 
     private final RedisService redisService;
 
-    public JwtTokenProvider(Environment envm, RedisService redisService) {
+    public JwtTokenProvider(Environment env, RedisService redisService) {
         secretKey = env.getProperty("jwt.secret");
         ACCESS_TOKEN_EXPIRE_TIME = Long.parseLong(env.getProperty("jwt.access-token-expire-time"));
         REFRESH_TOKEN_EXPIRE_TIME = Long.parseLong(env.getProperty("jwt.refresh-token-expire-time"));
@@ -89,6 +90,25 @@ public class JwtTokenProvider {
     }
 
     /**
+     * methodName : verifyRefreshToken
+     * Author : Jinyeong Seol
+     * description : Refresh Token의 값을 읽고 결과값을 반환하는 메서드
+     *
+     * @param : String refreshToken - 해독하려는 Refresh Token
+     * @exception ExpiredJwtException 토큰이 만료되었을 때
+     * @exception JwtException 토큰을 읽는 중 오류가 있을 때
+     */
+    public void verifyRefreshToken(String refreshToken) throws ExpiredJwtException, JwtException {
+        try {
+            Jwts.parser().setSigningKey(secretKey).parseClaimsJws(refreshToken);
+        } catch (ExpiredJwtException e) {
+            throw e;
+        } catch (JwtException | IllegalArgumentException e) {
+            throw new JwtException("Invalid refresh token", e);
+        }
+    }
+
+    /**
      * methodName : refresh
      * Author : Minseok Kim
      * description : Refresh Token을 생성하는 메서드
@@ -114,7 +134,6 @@ public class JwtTokenProvider {
     }
 
 
-
     /**
      * @methodName getAuthentication
      * @author Minseok kim
@@ -124,7 +143,6 @@ public class JwtTokenProvider {
      * @param userAuthority Jwt Token에서 추출된 사용자의 권한
      * @return Spring Security Context에 저장할 Authentication 객체
      */
-
     public Authentication getAuthentication(String uid,  UserAuthority userAuthority){
 
         SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(userAuthority.name());

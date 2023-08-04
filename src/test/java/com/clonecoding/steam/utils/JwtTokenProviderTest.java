@@ -3,6 +3,7 @@ package com.clonecoding.steam.utils;
 import com.clonecoding.steam.entity.User;
 import com.clonecoding.steam.enums.UserAuthority;
 import com.clonecoding.steam.exceptions.ExceptionMessages;
+import com.clonecoding.steam.service.RedisService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import org.assertj.core.api.ThrowableAssert;
@@ -30,9 +31,8 @@ import static org.assertj.core.api.Assertions.*;
 @ContextConfiguration(initializers = ConfigDataApplicationContextInitializer.class)
 @ExtendWith(SpringExtension.class)
 @Import(JwtTokenProviderTest.TestConfig.class)
+
 public class JwtTokenProviderTest {
-
-
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
@@ -142,9 +142,12 @@ public class JwtTokenProviderTest {
         @Autowired
         private Environment environment;
 
+        @Autowired
+        private RedisService redisService;
+
         @Bean
         public JwtTokenProvider jwtTokenProvider(){
-            return new JwtTokenProvider(environment);
+            return new JwtTokenProvider(environment, redisService);
         }
     }
 }
