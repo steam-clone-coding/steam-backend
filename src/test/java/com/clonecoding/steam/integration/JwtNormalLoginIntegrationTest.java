@@ -4,9 +4,11 @@ package com.clonecoding.steam.integration;
 import com.clonecoding.steam.dto.UserRegisterDto;
 import com.clonecoding.steam.dto.request.LoginRequest;
 import com.clonecoding.steam.dto.request.UserRegisterRequest;
+import com.clonecoding.steam.entity.User;
 import com.clonecoding.steam.enums.LoginType;
 import com.clonecoding.steam.enums.UserAuthority;
 import com.clonecoding.steam.exceptions.ExceptionMessages;
+import com.clonecoding.steam.repository.UserRepository;
 import com.clonecoding.steam.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Disabled;
@@ -22,6 +24,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.assertj.core.api.Assertions.*;
+
 /**
 * @className JwtNormalLoginIntegrationTest
 * @author : Minseok Kim
@@ -38,6 +42,9 @@ public class JwtNormalLoginIntegrationTest {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -212,6 +219,7 @@ public class JwtNormalLoginIntegrationTest {
 
         final UserRegisterRequest reqBody = UserRegisterRequest.builder()
                 .username("te22st")
+                // TODO :Request 객체에 필드를 추가해야함.
                 //.email("testEmail@naver.com")
                 .password("21321@1ca")
                 .build();
@@ -226,5 +234,62 @@ public class JwtNormalLoginIntegrationTest {
                 .andExpect(MockMvcResultMatchers.status().isConflict())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(ExceptionMessages.EMAIL_DUPLICATED.getMessage()));
 
+    }
+
+
+    //TODO : 회원가입 로직 완성시 활성화
+    @Disabled
+    @Test
+    @DisplayName("회원가입시 비밀번호가 8자 이하, 영어, 숫자, 특수문자 1자이하 라면 400 오류와 오류 메시지를 출력한다.")
+    void t7() throws Exception {
+        //given
+
+        final UserRegisterRequest reqBody = UserRegisterRequest.builder()
+                .username("te22st")
+                // TODO :Request 객체에 필드를 추가해야함.
+                //.email("testEmail@naver.com")
+                .password("1")
+                .build();
+
+        //when & then
+        mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .post("/api/user/new")
+                                .content(objectMapper.writeValueAsString(reqBody))
+                )
+                .andDo(print())
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(ExceptionMessages.INVALID_PASSWORD.getMessage()));
+
+    }
+
+    //TODO : 회원가입 로직 완성시 활성화
+    @Disabled
+    @Test
+    @DisplayName("회원가입시 200코드와 함께 DB에서 유저를 조회할 수있다.")
+    void t8() throws Exception {
+        //given
+        final UserRegisterRequest reqBody = UserRegisterRequest.builder()
+                .username("te22st")
+                // TODO :Request 객체에 필드를 추가해야함.
+                //.email("testEmail@naver.com")
+                .password("a123456!")
+                .build();
+
+        //when & then
+        mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .post("/api/user/new")
+                                .content(objectMapper.writeValueAsString(reqBody))
+                )
+                .andDo(print())
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+        final User findUser = userRepository.findUserByUid("te22st")
+                .orElseThrow(() -> new RuntimeException("유저가 조회되어야 합니다."));
+
+        //TODO : Request 객체에 필드 추가하면서 여기도 필드 추가 필요
+        assertThat(findUser).extracting("username", "email")
+                .containsExactly("te22st", "testEmail@naver.com");
     }
 }
