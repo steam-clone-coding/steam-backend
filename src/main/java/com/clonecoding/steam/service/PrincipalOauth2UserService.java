@@ -28,6 +28,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
     private final OAuth2UserInfoFactory oAuth2UserInfoFactory;
+    private final NanoIdProvider nanoIdProvider;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -65,7 +66,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
                     .email(oAuth2UserInfo.getEmail())
                     .profile_image(oAuth2UserInfo.getProfileImage())
                     .loginType(loginType)
-                    .uid(oAuth2UserInfo.getUid())
+                    .uid(nanoIdProvider.createNanoId())
                     .userRole(UserAuthority.ROLE_USER)
                     .build();
             userRepository.save(newUser);

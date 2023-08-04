@@ -40,7 +40,7 @@ class NanoIdProviderTest {
     @RepeatedTest(value = 100)
     @DisplayName("설정한 길이의 nanoId를 얻을 수 있다.")
     void t2() throws Exception {
-        assertThat(nanoIdProvider.createNanoId().length()).isEqualTo(21);
+        assertThat(nanoIdProvider.createNanoId().length()).isEqualTo(10);
 
     }
 
@@ -59,7 +59,7 @@ class NanoIdProviderTest {
     @DisplayName("nanoId는 알파벳과 숫자로만 구성되어 있다")
     void t4() throws Exception {
         String nanoId = nanoIdProvider.createNanoId();
-        assertThat(nanoId).matches("^[A-Za-z0-9]{21}$");
+        assertThat(nanoId).matches("^[A-Za-z0-9]{10}$");
     }
 
     @TestConfiguration

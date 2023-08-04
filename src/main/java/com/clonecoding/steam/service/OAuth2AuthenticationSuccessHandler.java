@@ -29,10 +29,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        String uid = ((OAuth2UserInfo) authentication.getPrincipal()).getUid();
+        String email = ((OAuth2UserInfo) authentication.getPrincipal()).getEmail();
 
-        User findUser = userRepository.findUserByUid(uid)
-                .orElseThrow(() -> new IllegalArgumentException("UID 값을 찾을 수 없습니다."));
+        User findUser = userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("email 값으로 유저를 찾을 수 없습니다"));
 
         Date now = new Date();
 
