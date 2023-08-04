@@ -7,10 +7,7 @@ import com.clonecoding.steam.exceptions.ExceptionMessages;
 import com.clonecoding.steam.exceptions.UserInfoConflictException;
 import com.clonecoding.steam.repository.UserRepository;
 import com.clonecoding.steam.utils.PasswordEncodeUtils;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,32 +105,34 @@ public class UserServiceTest {
                 .hasMessage(ExceptionMessages.INVALID_PASSWORD.getMessage());
     }
 
-//    @Test
-//    @DisplayName("비밀번호 조건, 이메일, username이 중복되지 않은 새로운 유저 정보를 저장할 수 있다.")
-//    void t4() throws Exception {
-//        //given
-//        final String testEmail = "registertest@email.com";
-//        final String testUsername = "registertest";
-//        final String testPassword = "a123456!";
-//
-//        final UserRegisterDto dto = UserRegisterDto.builder()
-//                .email(testEmail)
-//                .username(testUsername)
-//                .password(testPassword)
-//                .build();
-//
-//
-//        //when
-//        userService.register(dto);
-//        //then
-//        final User findUser = userRepository.findUserByEmail(testEmail)
-//                .orElseThrow(() -> new RuntimeException("유저가 저장되지 않았습니다."));
-//        final String encodedPassword = passwordEncodeUtils.encodePassword(testPassword, findUser.getSalt());
-//
-//        assertThat(findUser).extracting("email", "username", "password")
-//                .containsExactly(testEmail, testUsername, encodedPassword);
-//
-//    }
+    //TODO : 회원가입 로직 완성시 활성화
+    @Disabled
+    @Test
+    @DisplayName("비밀번호 조건, 이메일, username이 중복되지 않은 새로운 유저 정보를 저장할 수 있다.")
+    void t4() throws Exception {
+        //given
+        final String testEmail = "registertest@email.com";
+        final String testUsername = "registertest";
+        final String testPassword = "a123456!";
+
+        final UserRegisterDto dto = UserRegisterDto.builder()
+                .email(testEmail)
+                .username(testUsername)
+                .password(testPassword)
+                .build();
+
+
+        //when
+        userService.register(dto);
+        //then
+        final User findUser = userRepository.findUserByEmail(testEmail)
+                .orElseThrow(() -> new RuntimeException("유저가 저장되지 않았습니다."));
+        final String encodedPassword = passwordEncodeUtils.encodePassword(testPassword, findUser.getSalt());
+
+        assertThat(findUser).extracting("email", "username", "password")
+                .containsExactly(testEmail, testUsername, encodedPassword);
+
+    }
 
 
     @TestConfiguration
