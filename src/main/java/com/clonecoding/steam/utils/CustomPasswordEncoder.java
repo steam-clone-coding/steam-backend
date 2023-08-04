@@ -32,7 +32,7 @@ public class CustomPasswordEncoder extends Pbkdf2PasswordEncoder {
             String storedPassword = parts[1];
 
             // 사용자가 입력한 비밀번호를 암호화
-            String hashedPassword = passwordEncodeUtils.encodePassword(storedPassword, salt);
+            String hashedPassword = passwordEncodeUtils.encodePassword(rawPassword.toString() , salt);
 
             // 위에서 암호화된 비밀번호와, 저장된 비밀번호를 비교
 
