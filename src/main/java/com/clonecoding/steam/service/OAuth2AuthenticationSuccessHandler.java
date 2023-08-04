@@ -5,6 +5,7 @@ import com.clonecoding.steam.entity.User;
 import com.clonecoding.steam.repository.UserRepository;
 import com.clonecoding.steam.utils.JwtTokenProvider;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -39,9 +40,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         String refreshToken = jwtTokenProvider.sign(findUser, now);
 
         response.addHeader(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", accessToken));
-        //response.addCookie(new Cookie("refresh-token", refreshToken));
+        response.addCookie(new Cookie("refresh-token", refreshToken));
 
-        //개발 편리성을 위한 log
         log.info("사용자 Access 토큰 : {} ", accessToken);
 
         getRedirectStrategy().sendRedirect(request, response, String.format("http://localhost:8080/token=%s", accessToken));

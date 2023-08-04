@@ -7,6 +7,7 @@ import com.clonecoding.steam.enums.UserAuthority;
 import com.clonecoding.steam.factory.OAuth2UserInfoFactory;
 import com.clonecoding.steam.repository.UserRepository;
 import com.clonecoding.steam.utils.NanoIdProvider;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -22,6 +23,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
@@ -46,12 +48,17 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
     }
 
 
-    private void saveUserIfNotExist(OAuth2UserInfo oAuth2UserInfo, String provider) {
+    void saveUserIfNotExist(OAuth2UserInfo oAuth2UserInfo, String provider) {
         Optional<User> optionalUser = userRepository.findUserByEmail(oAuth2UserInfo.getEmail());
         LoginType loginType = LoginType.fromString(provider);
 
-        if (optionalUser.isEmpty()) {
-            User user = User.builder()
+        if (optionalUser.isPresent()) {
+            User existingUser = optionalUser.get();
+            existingUser.setName(oAuth2UserInfo.getName());
+            existingUser.setProfile_image(oAuth2UserInfo.getProfileImage());
+            log.info("User updated: {}", existingUser);
+        } else {
+            User newUser = User.builder()
                     .name(oAuth2UserInfo.getName())
                     .nickname("OAuth2TestUserNickName")
                     .age(23)
@@ -59,13 +66,12 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
                     .profile_image(oAuth2UserInfo.getProfileImage())
                     .loginType(loginType)
                     .uid(oAuth2UserInfo.getUid())
-//                    .uid(NanoIdProvider.randomNanoId())
                     .userRole(UserAuthority.ROLE_USER)
                     .build();
-            userRepository.save(user);
+            userRepository.save(newUser);
+            log.info("User created: {}", newUser);
         }
 
     }
-
 
 }

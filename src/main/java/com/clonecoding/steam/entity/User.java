@@ -5,14 +5,17 @@ import com.clonecoding.steam.enums.LoginType;
 import com.clonecoding.steam.enums.UserAuthority;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@DynamicUpdate
 @Table(name = "users")
 public class User {
 
