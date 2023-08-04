@@ -17,7 +17,8 @@ import java.time.LocalDateTime;
 public class User {
 
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_id_seq")
+    @SequenceGenerator(name = "users_id_seq", sequenceName = "users_id_seq", allocationSize = 1)
     @Column(name = "user_id")
     private Long id;
 
@@ -31,8 +32,6 @@ public class User {
     @JoinColumn(name = "country_id")
     private Country country;
 
-
-    @Column(name = "nickname")
     private String name;
 
     private Integer age;
@@ -44,18 +43,23 @@ public class User {
 
     private String profile_image;
 
+    private String nickname;
+
+
     private String username;
 
     private String password;
 
     private String uid;
 
+    @Enumerated(EnumType.STRING)
     private UserAuthority userRole;
 
     private String salt;
 
     @Builder.Default
     private LocalDateTime lastLoginTime = LocalDateTime.now();
+
 
     @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
