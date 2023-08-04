@@ -94,7 +94,7 @@ public class JwtNormalLoginIntegrationTest {
 
 
     @Test
-    @DisplayName("Normal 로그인시 존재하지않는 username이라면 401오류를 리턴한다.")
+    @DisplayName("Normal 로그인시 존재하지않는 username이라면 로그인 실패 메시지와 401오류를 리턴한다.")
     void t3() throws Exception {
         //given
         LoginRequest testLoginRequestBody = LoginRequest.builder()
@@ -111,4 +111,43 @@ public class JwtNormalLoginIntegrationTest {
                 .andExpect(MockMvcResultMatchers.status().isUnauthorized())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(ExceptionMessages.LOGIN_FAILURE.getMessage()));
     }
+
+    //TODO : 회원가입 로직 완성시 활성화
+    @Disabled
+    @Test
+    @DisplayName("Normal 로그인시 비밀번호가 잘못되었다면 로그인실패 메시지와 401오류를 리턴한다.")
+    void t4() throws Exception {
+        //given
+        // 로그인 하기 위해 먼저 회원가입 진행
+        final UserRegisterDto testUser = UserRegisterDto.builder()
+                .email("testEmail@naver.com")
+                .username("test")
+                .password("a1234567!")
+                .loginType(LoginType.NORMAL)
+                .age(22)
+                .userRole(UserAuthority.ROLE_USER)
+                .countryId(null)
+                .profileImage(null)
+                .build();
+
+        userService.register(testUser);
+
+        // 그 후 요청 생성
+        final LoginRequest testLoginRequestBody = LoginRequest.builder()
+                .username("test")
+                .password("a").build();
+
+
+        //when & then
+        // 401 Code와 함께 에러 메시지를 리턴하는지 확인
+        mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .post("/api/login")
+                                .content(objectMapper.writeValueAsString(testLoginRequestBody))
+                )
+                .andDo(print())
+                .andExpect(MockMvcResultMatchers.status().isUnauthorized())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(ExceptionMessages.LOGIN_FAILURE.getMessage()));
+    }
+
 }
