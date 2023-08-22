@@ -2,6 +2,7 @@ package com.clonecoding.steam.service;
 
 import com.clonecoding.steam.dto.fileserver.MultipleImageUploadResult;
 import com.clonecoding.steam.dto.fileserver.SingleImageUploadResult;
+import com.clonecoding.steam.dto.fileserver.UploadedImageInfo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
@@ -68,6 +69,31 @@ class ImageServerServiceTest {
         //then
         assertThat(actual.getCode()).isEqualTo(200);
         assertThat(actual.getMessage()).isEqualTo("File(s) successfully uploaded.");
+    }
+
+    @Test
+    @DisplayName("JSON으로 Single Image Upload DTO 객체를 생성한다음, serverUrl을 set 해 uploadedImageInfo에서 이미지의 FULL PATH를 가져올 수 있다.")
+    public void t3() throws Exception{
+        //given
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        String testJsonString = "{\n" +
+                "    \"code\": 200,\n" +
+                "    \"message\": \"File(s) successfully uploaded.\",\n" +
+                "    \"data\": {\n" +
+                "        \"file_name\": \"bts_jk.gif\",\n" +
+                "        \"file_id\": \"b7436194d5034bb69767688807393e48\"\n" +
+                "    }\n" +
+                "}";
+        SingleImageUploadResult testJsonObject = objectMapper.readValue(testJsonString, SingleImageUploadResult.class);
+        testJsonObject.setServerUrl("http://test.com");
+        //when
+        UploadedImageInfo actual = testJsonObject.getUploadedImageInfo();
+
+        //then
+        assertThat(actual.getFileName()).isEqualTo("bts_jk.gif");
+        assertThat(actual.getFileId()).isEqualTo("b7436194d5034bb69767688807393e48");
+        assertThat(actual.getFullPath()).isEqualTo("http://test.com/images/b7436194d5034bb69767688807393e48");
     }
 
 
