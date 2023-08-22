@@ -3,12 +3,22 @@ package com.clonecoding.steam.service;
 import com.clonecoding.steam.dto.fileserver.MultipleImageUploadResult;
 import com.clonecoding.steam.dto.fileserver.SingleImageUploadResult;
 import com.clonecoding.steam.dto.fileserver.UploadedImageInfo;
+import org.apache.http.HttpHeaders;
 import org.junit.jupiter.api.*;
 import org.mockserver.integration.ClientAndServer;
+import org.mockserver.model.HttpRequest;
+import org.mockserver.model.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.web.multipart.MultipartFile;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.File;
+import java.io.FileInputStream;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockserver.integration.ClientAndServer.startClientAndServer;
@@ -131,12 +141,54 @@ class ImageServerServiceTest {
                 "    }\n" +
                 "}";
         SingleImageUploadResult testJsonObject = objectMapper.readValue(testJsonString, SingleImageUploadResult.class);
-        //when
+        //when & then
         assertThatThrownBy(()->testJsonObject.getUploadedImageInfo())
                 .isInstanceOf(IllegalStateException.class);
+    }
+
+    @Test
+    @DisplayName("Single Image Upload를 호출해 정상적인 업로드 성공 결과를 받아올 수 있다.")
+    public void t5() throws Exception{
+        //given
+        String testResponseBody = "{\n" +
+                "    \"code\": 200,\n" +
+                "    \"message\": \"File(s) successfully uploaded.\",\n" +
+                "    \"data\": {\n" +
+                "        \"file_name\": \"bts_jk.gif\",\n" +
+                "        \"file_id\": \"b7436194d5034bb69767688807393e48\"\n" +
+                "    }\n" +
+                "}";
+
+        mockServer.when(
+                HttpRequest.request()
+                        .withMethod("POST")
+                        .withPath("/images/upload")
+                        .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA_VALUE)
+        ).respond(
+                HttpResponse.response()
+                        .withStatusCode(HttpStatus.OK.value())
+                        .withBody(testResponseBody)
+        );
+
+        FileInputStream fileInputStream = new FileInputStream(new File("testImage.png"));
+        MultipartFile multipartFile = new MockMultipartFile("testImage.png", fileInputStream);
+
+
+        //when
+        SingleImageUploadResult actual = imageServerService.upload(multipartFile);
+        actual.setServerUrl("http://localhost:1080");
+
 
         //then
+        assertThat(actual.getCode()).isEqualTo(200);
+        assertThat(actual.getMessage()).isEqualTo("File(s) successfully uploaded.");
+
+        assertThat(actual.getUploadedImageInfo().getFileName()).isEqualTo("bts_jk.gif");
+        assertThat(actual.getUploadedImageInfo().getFileId()).isEqualTo("b7436194d5034bb69767688807393e48");
+        assertThat(actual.getUploadedImageInfo().getFullPath()).isEqualTo("http://test.com/images/b7436194d5034bb69767688807393e48");
+
 
     }
+
 
 }
