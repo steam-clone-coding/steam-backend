@@ -9,6 +9,7 @@ static:
   single-file-upload-uri: /images/upload
   multi-file-upload-uri: /images/upload_many
   delete-uri: /images
+  access-token: c95a5024651547fa82e1eebc0daa52a2
 
 spring:
   datasource:

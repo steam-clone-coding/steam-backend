@@ -163,6 +163,7 @@ class ImageServerServiceTest {
                 HttpRequest.request()
                         .withMethod("POST")
                         .withPath("/images/upload")
+                        .withHeader("X-Access-Token", "c95a5024651547fa82e1eebc0daa52a2")
                         .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA_VALUE)
         ).respond(
                 HttpResponse.response()
@@ -176,7 +177,6 @@ class ImageServerServiceTest {
 
         //when
         SingleImageUploadResult actual = imageServerService.upload(multipartFile);
-        actual.setServerUrl("http://localhost:1080");
 
 
         //then
@@ -185,7 +185,7 @@ class ImageServerServiceTest {
 
         assertThat(actual.getUploadedImageInfo().getFileName()).isEqualTo("bts_jk.gif");
         assertThat(actual.getUploadedImageInfo().getFileId()).isEqualTo("b7436194d5034bb69767688807393e48");
-        assertThat(actual.getUploadedImageInfo().getFullPath()).isEqualTo("http://test.com/images/b7436194d5034bb69767688807393e48");
+        assertThat(actual.getUploadedImageInfo().getFullPath()).isEqualTo("http://localhost:1080/images/b7436194d5034bb69767688807393e48");
 
 
     }
