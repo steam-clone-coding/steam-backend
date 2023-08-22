@@ -31,6 +31,6 @@ class ImageServerServiceTest {
         SingleImageUploadResult actual = objectMapper.readValue(testJsonString, SingleImageUploadResult.class);
         //then
         assertThat(actual.getCode()).isEqualTo(200);
-
+        assertThat(actual.getMessage()).isEqualTo("File(s) successfully uploaded.");
     }
 }
