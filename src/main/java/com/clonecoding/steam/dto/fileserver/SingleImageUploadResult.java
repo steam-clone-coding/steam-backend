@@ -1,0 +1,31 @@
+package com.clonecoding.steam.dto.fileserver;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+
+
+@Getter
+public class SingleImageUploadResult {
+
+    private Integer code;
+    private String message;
+
+
+    @JsonProperty("data")
+    private UploadedImageInfo uploadedImageInfo;
+
+    private String serverUrl;
+
+
+
+    public UploadedImageInfo getUploadedImageInfo(){
+        uploadedImageInfo.setFullPath(String.format("%s/images/%s", serverUrl, uploadedImageInfo.getFileId()));
+
+        return uploadedImageInfo;
+    }
+
+
+    public void setServerUrl(String serverUrl) {
+        this.serverUrl = serverUrl;
+    }
+}
