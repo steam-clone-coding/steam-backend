@@ -3,16 +3,36 @@ package com.clonecoding.steam.service;
 import com.clonecoding.steam.dto.fileserver.MultipleImageUploadResult;
 import com.clonecoding.steam.dto.fileserver.SingleImageUploadResult;
 import com.clonecoding.steam.dto.fileserver.UploadedImageInfo;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+import org.mockserver.integration.ClientAndServer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockserver.integration.ClientAndServer.startClientAndServer;
 
 
+@SpringBootTest
+@ActiveProfiles("test")
 class ImageServerServiceTest {
 
+    private ClientAndServer mockServer;
 
+
+    @Autowired
+    private ImageServerService imageServerService;
+
+    @BeforeEach
+    void setUp() {
+        mockServer = startClientAndServer(1080);
+    }
+
+    @AfterEach
+    void tearDown() {
+        mockServer.stop();
+    }
 
     @Test
     @DisplayName("JSON을 사용해서 Single Upload의 응답을 DTO객체로 변환할 수 있다.")

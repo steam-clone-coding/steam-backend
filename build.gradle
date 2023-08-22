@@ -45,6 +45,8 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test:6.0.2'
 	testImplementation 'org.testcontainers:elasticsearch:1.17.6'
 	testImplementation 'com.h2database:h2:2.2.220'
+	testImplementation 'org.mock-server:mockserver-netty:5.15.0'
+
 }
 
 tasks.named('test') {
