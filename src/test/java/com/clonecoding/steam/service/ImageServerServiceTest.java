@@ -3,9 +3,11 @@ package com.clonecoding.steam.service;
 import com.clonecoding.steam.dto.fileserver.MultipleImageUploadResult;
 import com.clonecoding.steam.dto.fileserver.SingleImageUploadResult;
 import com.clonecoding.steam.dto.fileserver.UploadedImageInfo;
+import com.clonecoding.steam.exceptions.InternalServerException;
 import org.apache.http.HttpHeaders;
 import org.junit.jupiter.api.*;
 import org.mockserver.integration.ClientAndServer;
+import org.mockserver.model.Body;
 import org.mockserver.model.HttpRequest;
 import org.mockserver.model.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -187,6 +189,30 @@ class ImageServerServiceTest {
         assertThat(actual.getUploadedImageInfo().getFileId()).isEqualTo("b7436194d5034bb69767688807393e48");
         assertThat(actual.getUploadedImageInfo().getFullPath()).isEqualTo("http://localhost:1080/images/b7436194d5034bb69767688807393e48");
 
+
+    }
+
+    @Test
+    @DisplayName("이미지 서버가 200이 아닌 상태코드를 날렸을 때, InternalServerException을 throw 한다.")
+    public void t6() throws Exception{
+        //given
+        mockServer.when(
+                HttpRequest.request()
+                        .withMethod("POST")
+                        .withPath("/images/upload")
+                        .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA_VALUE)
+        ).respond(
+                HttpResponse.response()
+                        .withStatusCode(HttpStatus.FORBIDDEN.value())
+        );
+
+        FileInputStream fileInputStream = new FileInputStream(new File("testImage.png"));
+        MultipartFile multipartFile = new MockMultipartFile("testImage.png", fileInputStream);
+
+        //when & then
+        assertThatThrownBy(()->imageServerService.upload(multipartFile))
+                .isInstanceOf(InternalServerException.class)
+                .hasMessage("이미지 서버가 200이 아닌 상태 코드를 남겼습니다: 403");
 
     }
 

@@ -8,8 +8,6 @@ import com.clonecoding.steam.exceptions.InternalServerException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.FileEntity;
 import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.springframework.core.env.Environment;
@@ -50,6 +48,14 @@ public class ImageServerService {
     }
 
 
+
+    /**
+     * @author minseok kim
+     * @description 인자로 이미지를 정적서버에 업로드하는 메서드
+     * @param image 저장하고자 하는 Image
+     * @return 정적서버의 API 호출 결과. SingleImageUploadImage.getFullPath()를 통해 이미지로 접근가능한 URL을 알 수 있음.
+     * @exception InternalServerException IOException 발생시, 이미지 정적 서버에서 200이 아닌 응답코드를 남겼을 시
+    */
     public SingleImageUploadResult upload(MultipartFile image){
         try{
             HttpPost httpPost = new HttpPost(imageServerUrl + singleFileUploadUri);
@@ -61,6 +67,11 @@ public class ImageServerService {
             CloseableHttpResponse response = httpClient.execute(httpPost);
 
             int responseStatusCode = getResponseStatusCode(response);
+
+            if(responseStatusCode != 200){
+                throw new InternalServerException("이미지 서버가 200이 아닌 상태 코드를 남겼습니다: " + responseStatusCode);
+            }
+
             String responseBody = getResponseBody(response);
 
 
