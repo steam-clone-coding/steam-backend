@@ -19,6 +19,10 @@ public class SingleImageUploadResult {
 
 
     public UploadedImageInfo getUploadedImageInfo(){
+        if(serverUrl == null || serverUrl.isBlank()){
+            throw new IllegalStateException("server URL이 설정되지 않아서 FULL PATH를 생성할 수 없습니다.");
+        }
+
         uploadedImageInfo.setFullPath(String.format("%s/images/%s", serverUrl, uploadedImageInfo.getFileId()));
 
         return uploadedImageInfo;

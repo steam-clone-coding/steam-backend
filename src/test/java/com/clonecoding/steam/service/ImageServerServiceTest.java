@@ -96,6 +96,27 @@ class ImageServerServiceTest {
         assertThat(actual.getFullPath()).isEqualTo("http://test.com/images/b7436194d5034bb69767688807393e48");
     }
 
+    @Test
+    @DisplayName("이미지의 FULL PATH를 가져오고자 했지만, serverURL이 설정되어 있지 않다면 IllegalStateException을 throw 한다.")
+    public void t4() throws Exception{
+        //given
+        ObjectMapper objectMapper = new ObjectMapper();
 
+        String testJsonString = "{\n" +
+                "    \"code\": 200,\n" +
+                "    \"message\": \"File(s) successfully uploaded.\",\n" +
+                "    \"data\": {\n" +
+                "        \"file_name\": \"bts_jk.gif\",\n" +
+                "        \"file_id\": \"b7436194d5034bb69767688807393e48\"\n" +
+                "    }\n" +
+                "}";
+        SingleImageUploadResult testJsonObject = objectMapper.readValue(testJsonString, SingleImageUploadResult.class);
+        //when
+        assertThatThrownBy(()->testJsonObject.getUploadedImageInfo())
+                .isInstanceOf(IllegalStateException.class);
+
+        //then
+
+    }
 
 }
