@@ -50,7 +50,6 @@ public class JwtTokenProvider {
         claims.put("uid", user.getUid());
         claims.put("userRole", user.getUserRole());
 
-
         Date expiryDate = new Date(now.getTime() + ACCESS_TOKEN_EXPIRE_TIME);
 
         return Jwts.builder()
@@ -63,7 +62,7 @@ public class JwtTokenProvider {
 
     /**
      * methodName : verify
-     * Author : minseok Kim
+     * Author : Jinyeong Seol
      * description : 엑세스 토큰의 값을 읽고 결과값을 반환하는 함수
      *
      * @param : String Token - 해독하려는 토큰
@@ -81,10 +80,12 @@ public class JwtTokenProvider {
                     .userRole(UserAuthority.valueOf((String)claims.getBody().get("userRole")))
                     .build();
 
-            // 토큰이 만료된 경우와, 순수 JWT 토큰 오류를 구별해 Exception을 Throw한다.
-        }catch (ExpiredJwtException e){
+            // 토큰이 만료된 경우와, 순수 JWT 토큰 오류를 구별해 Exception을 Throw
+        }catch (ExpiredJwtException e) {
+            // 토큰 만료의 경우는 AuthenticationFilter 에서 상황에 따른 유연한 처리 진행
             throw e;
         } catch (JwtException | IllegalArgumentException e) {
+            // 토큰 자체의 문제(유효하지 않거나 존재하지 않음)
             throw new JwtException(ExceptionMessages.INVALID_TOKEN.getMessage(), e);
         }
     }
@@ -102,7 +103,7 @@ public class JwtTokenProvider {
         try {
             Jwts.parser().setSigningKey(secretKey).parseClaimsJws(refreshToken);
         } catch (ExpiredJwtException e) {
-            throw e;
+            throw new JwtException(ExceptionMessages.EXPIRED_REFRESH_TOKEN.getMessage(), e);
         } catch (JwtException | IllegalArgumentException e) {
             throw new JwtException("Invalid refresh token", e);
         }
@@ -110,7 +111,7 @@ public class JwtTokenProvider {
 
     /**
      * methodName : refresh
-     * Author : Minseok Kim
+     * Author : Jinyeong Seol
      * description : Refresh Token을 생성하는 메서드
      *
      * @param : Date now - Refresh Token을 생성할 시간

@@ -10,6 +10,7 @@ import com.clonecoding.steam.utils.JwtTokenProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,10 +98,20 @@ public class CustomUsernamePasswordAuthenticationFilter extends AbstractAuthenti
         // Save refresh token to Redis
         redisService.setValuesWithTimeout(user.getUid(), refreshToken, jwtTokenProvider.getREFRESH_TOKEN_EXPIRE_TIME());
 
+
+        // refreshToken을 쿠키로 전송
+        Cookie refreshTokenCookie = new Cookie("refresh_token", refreshToken);
+        refreshTokenCookie.setHttpOnly(true);
+        // TODO: TOKEN_EXPIRE_TIME은 Long 이나 maxAge를 int 범위로 주어야 함.
+        //  TOKEN_EXPIRE_TIME 이 만약 int범위를 넘어서면 ArithmeticException 이 발생함 (당장 문제 없으나 해결 필요)
+        refreshTokenCookie.setMaxAge(Math.toIntExact(jwtTokenProvider.getREFRESH_TOKEN_EXPIRE_TIME())); // Set the cookie expiration time
+        refreshTokenCookie.setPath("/"); // Set the cookie path
+
+        response.addCookie(refreshTokenCookie);
+
         LoginResponse resBody = LoginResponse.builder()
                 .uid(user.getUid())
                 .accessToken(accessToken)
-                .refreshToken(refreshToken)
                 .build();
 
         response.setHeader(HttpHeaders.CONTENT_TYPE, "application/json; charset=UTF-8");
