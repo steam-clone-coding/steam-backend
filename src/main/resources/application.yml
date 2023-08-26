@@ -1,4 +1,3 @@
-
 jwt:
   secret: ${jwt.secret}
   access-token-expire-time: ${jwt.access-token-expire-time}
@@ -17,6 +16,7 @@ spring:
       digest-size : ${spring.security.pbkdf2.digest-size}
     salt:
       algorithm: ${spring.security.salt.algorithm}
-  redis:
-    host: ${spring.redis.host}
-    port: ${spring.redis.port}
+  data:
+    redis:
+      host: ${spring.data.redis.host}
+      port: ${spring.data.redis.port}

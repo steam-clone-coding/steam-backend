@@ -27,3 +27,7 @@ spring:
       algorithm: PBKDF2WithHmacSHA512
     salt:
       algorithm: SHA1PRNG
+  data:
+    redis:
+      host: ${spring.data.redis.host}
+      port: ${spring.data.redis.port}
