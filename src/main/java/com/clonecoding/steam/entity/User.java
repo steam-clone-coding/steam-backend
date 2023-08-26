@@ -5,19 +5,23 @@ import com.clonecoding.steam.enums.LoginType;
 import com.clonecoding.steam.enums.UserAuthority;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Setter
+@NoArgsConstructor
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@DynamicUpdate
 @Table(name = "users")
 public class User {
 
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_id_seq")
+    @SequenceGenerator(name = "users_id_seq", sequenceName = "users_id_seq", allocationSize = 1)
     @Column(name = "user_id")
     private Long id;
 
@@ -31,8 +35,6 @@ public class User {
     @JoinColumn(name = "country_id")
     private Country country;
 
-
-    @Column(name = "nickname")
     private String name;
 
     private Integer age;
@@ -43,6 +45,9 @@ public class User {
     private LoginType loginType;
 
     private String profile_image;
+
+    private String nickname;
+
 
     private String username;
 
@@ -57,6 +62,7 @@ public class User {
 
     @Builder.Default
     private LocalDateTime lastLoginTime = LocalDateTime.now();
+
 
     @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
