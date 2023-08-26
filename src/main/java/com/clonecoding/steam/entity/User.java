@@ -50,6 +50,7 @@ public class User {
 
     private String uid;
 
+    @Enumerated(EnumType.STRING)
     private UserAuthority userRole;
 
     private String salt;
