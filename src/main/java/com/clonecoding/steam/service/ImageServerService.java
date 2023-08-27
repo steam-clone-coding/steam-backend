@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.InputStreamEntity;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
@@ -88,7 +89,20 @@ public class ImageServerService {
 
 
     public MultipleImageUploadResult upload(MultipartFile[] image){
-        return null;
+        try{
+            HttpPost httpPost = new HttpPost(imageServerUrl + multiFileUploadUri);
+
+            httpPost.addHeader("X-Access-Token", accessToken);
+            httpPost.addHeader("Content-Type", MediaType.MULTIPART_FORM_DATA_VALUE);
+
+            MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
+
+            m
+
+
+        }catch (IOException e){
+
+        }
     }
 
 
