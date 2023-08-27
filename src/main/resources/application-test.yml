@@ -68,18 +68,18 @@ spring:
             authorization-grant-type: authorization_code
             redirect-uri: ${spring.security.oauth2.client.registration.naver.redirect-uri}
 
-            provider:
-              kakao:
-                authorization-uri: ${spring.security.oauth2.client.provider.kakao.authorization-uri}
-                token-uri: ${spring.security.oauth2.client.provider.kakao.token-uri}
-                user-info-uri: ${spring.security.oauth2.client.provider.kakao.user-info-uri}
-                user-name-attribute: ${spring.security.oauth2.client.provider.kakao.user-name-attribute}
+        provider:
+          kakao:
+            authorization-uri: ${spring.security.oauth2.client.provider.kakao.authorization-uri}
+            token-uri: ${spring.security.oauth2.client.provider.kakao.token-uri}
+            user-info-uri: ${spring.security.oauth2.client.provider.kakao.user-info-uri}
+            user-name-attribute: ${spring.security.oauth2.client.provider.kakao.user-name-attribute}
 
-              naver:
-                authorization-uri: ${spring.security.oauth2.client.provider.naver.authorization-uri}
-                token-uri: ${spring.security.oauth2.client.provider.naver.token-uri}
-                user-info-uri: ${spring.security.oauth2.client.provider.naver.user-info-uri}
-                user-name-attribute: ${spring.security.oauth2.client.provider.naver.user-name-attribute}
+          naver:
+            authorization-uri: ${spring.security.oauth2.client.provider.naver.authorization-uri}
+            token-uri: ${spring.security.oauth2.client.provider.naver.token-uri}
+            user-info-uri: ${spring.security.oauth2.client.provider.naver.user-info-uri}
+            user-name-attribute: ${spring.security.oauth2.client.provider.naver.user-name-attribute}
 
   data:
     redis:
