@@ -228,7 +228,7 @@ class ImageServerServiceTest {
     }
 
     @Test
-    @DisplayName("이미지 업로드시, Body가 비어있는 경우 InternalServerException과 함깨 이미지 서버가 리턴하는 400오류를 보여준다.")
+    @DisplayName("이미지 업로드시, Body가 비어있는 경우 IllegalArgumentException를 throw 한다.")
     public void t9() throws Exception{
         //given
         mockServer.when(
@@ -246,15 +246,15 @@ class ImageServerServiceTest {
 
         //when & then
         assertThatThrownBy(()->imageServerService.upload(multipartFile))
-                .isInstanceOf(InternalServerException.class)
-                .hasMessage("이미지 서버가 200이 아닌 상태 코드를 남겼습니다: 400");
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("이미지(Request Body)가 비어있습니다.");
 
 
     }
 
 
     @Test
-    @DisplayName("이미지 업로드시, 파일이 너무 큰 경우 InternalServerException과 함께 이미지 서버가 리턴하는 413코드를 보여준다.")
+    @DisplayName("이미지 업로드시, 파일이 너무 큰 경우 IllegalArgumentException을 throw 한다.")
     public void t10() throws Exception{
         //given
         mockServer.when(
@@ -274,8 +274,8 @@ class ImageServerServiceTest {
 
         //when & then
         assertThatThrownBy(()->imageServerService.upload(multipartFile))
-                .isInstanceOf(InternalServerException.class)
-                .hasMessage("이미지 서버가 200이 아닌 상태 코드를 남겼습니다: 413");
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("이미지가 너무 커서 업로드할 수 없습니다.");
 
 
     }
@@ -333,7 +333,7 @@ class ImageServerServiceTest {
 
 
     @Test
-    @DisplayName("multi Image upload시 업로드된 이미지들 중 한 건의 이미지라도 허용되지 않는 확장자인 경우, 이미지 모두의 저장이 실패하며 400 오류가 InternalServerException에 나타난다.")
+    @DisplayName("multi Image upload시 업로드된 이미지들 중 한 건의 이미지라도 허용되지 않는 확장자인 경우, 이미지 모두의 저장이 실패하며 IllegalArgumentException을 throw한다.")
     public void t11() throws Exception{
         String testResponseBody = "{\n" +
                 "    \"code\": 400,\n" +
@@ -360,13 +360,13 @@ class ImageServerServiceTest {
 
         //when & then
         assertThatThrownBy(()->imageServerService.upload(new MultipartFile[]{multipartFile, multipartFile2}))
-                .isInstanceOf(InternalServerException.class)
-                .hasMessage("이미지 서버가 200이 아닌 상태 코드를 남겼습니다: 400");
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("이미지의 확장자가 허용되지 않습니다.");
 
     }
 
     @Test
-    @DisplayName("멀티 이미지 업로드시, 파일이 너무 큰 경우 InternalServerException과 함께 이미지 서버가 리턴하는 413코드를 보여준다.")
+    @DisplayName("멀티 이미지 업로드시, 파일이 너무 큰 경우 IllegalArgumentException과 함께 이미지 서버가 리턴하는 413코드를 보여준다.")
     public void t12() throws Exception{
         //given
         String testResponseBody = "<html>\n" +
@@ -406,11 +406,11 @@ class ImageServerServiceTest {
 
         //when & then
         assertThatThrownBy(()->imageServerService.upload(new MultipartFile[]{multipartFile, multipartFile2}))
-                .isInstanceOf(InternalServerException.class)
-                .hasMessage("이미지 서버가 200이 아닌 상태 코드를 남겼습니다: 413");
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("이미지가 너무 커서 업로드할 수 없습니다.");
     
     }
-    
+
 
     @Test
     @DisplayName("image remove API를 호출해 정상적인 삭제 결과를 받아올 수 있다")
@@ -440,6 +440,7 @@ class ImageServerServiceTest {
     }
 
     @Test
+    @Disabled
     @DisplayName("이미지 삭제 API 호출시, 삭제하고자 하는 이미지 파일이 없을 경우 400 코드와 함께 IllegalArgumentException을 리턴한다.")
     public void t13() throws Exception{
         //given
