@@ -327,9 +327,45 @@ class ImageServerServiceTest {
                         tuple("testImage.png", "b3b2bc5b075f434692f71657afbae2c9"),
                         tuple("testImage2.png", "20995dfcf94a49e7b6d34ccce744609c")
                 );
+
+
     }
 
-    
+
+    @Test
+    @DisplayName("multi Image upload시 업로드된 이미지들 중 한 건의 이미지라도 허용되지 않는 확장자인 경우, 이미지 모두의 저장이 실패하며 400 오류가 InternalServerException에 나타난다.")
+    public void t11() throws Exception{
+        String testResponseBody = "{\n" +
+                "    \"code\": 400,\n" +
+                "    \"message\": \"File extension of file webp_jk.webp not allowed.\"\n" +
+                "}";
+
+        mockServer.when(
+                HttpRequest.request()
+                        .withMethod("POST")
+                        .withPath("/images/upload_many")
+                        .withHeader("X-Access-Token", "c95a5024651547fa82e1eebc0daa52a2")
+                        .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA_VALUE)
+        ).respond(
+                HttpResponse.response()
+                        .withStatusCode(HttpStatus.BAD_REQUEST.value())
+                        .withBody(testResponseBody)
+        );
+
+        FileInputStream fileInputStream = new FileInputStream(new File("testImage.png"));
+        MultipartFile multipartFile = new MockMultipartFile("testImage.png", fileInputStream);
+
+        FileInputStream fileInputStream2 = new FileInputStream(new File("testImage2.png"));
+        MultipartFile multipartFile2 = new MockMultipartFile("testImage2.png", fileInputStream2);
+
+        //when & then
+        assertThatThrownBy(()->imageServerService.upload(new MultipartFile[]{multipartFile, multipartFile2}))
+                .isInstanceOf(InternalServerException.class)
+                .hasMessage("이미지 서버가 200이 아닌 상태 코드를 남겼습니다: 400");
+
+    }
+
+
     @Test
     @DisplayName("image remove API를 호출해 정상적인 삭제 결과를 받아올 수 있다")
     public void t8() throws Exception{
