@@ -235,21 +235,13 @@ class ImageServerServiceTest {
                 "    \"message\": \"File(s) successfully uploaded.\",\n" +
                 "    \"data\": [\n" +
                 "        {\n" +
-                "            \"file_name\": \"jpeg_jk3.jpg\",\n" +
+                "            \"file_name\": \"testImage.png\",\n" +
                 "            \"file_id\": \"b3b2bc5b075f434692f71657afbae2c9\"\n" +
                 "        },\n" +
                 "        {\n" +
-                "            \"file_name\": \"png_jk.png\",\n" +
+                "            \"file_name\": \"testImage2.png\",\n" +
                 "            \"file_id\": \"20995dfcf94a49e7b6d34ccce744609c\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "            \"file_name\": \"png_bts.png\",\n" +
-                "            \"file_id\": \"9d15ce7799dd499181bbc8cace4761b7\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "            \"file_name\": \"jpg_cat.jpg\",\n" +
-                "            \"file_id\": \"5fd0f71238ed4086b9bb58859ac3b271\"\n" +
-                "        }\n" +
+                "        }" +
                 "    ]\n" +
                 "}";
 
@@ -274,7 +266,11 @@ class ImageServerServiceTest {
         MultipleImageUploadResult actual = imageServerService.upload(new MultipartFile[]{multipartFile, multipartFile2});
         //then
         assertThat(actual.getCode()).isEqualTo(200);
-
+        assertThat(actual.getUploadedImageInfo()).extracting( "fileName", "fileId")
+                .contains(
+                        tuple("testImage.png", "b3b2bc5b075f434692f71657afbae2c9"),
+                        tuple("testImage2.png", "20995dfcf94a49e7b6d34ccce744609c")
+                );
     }
 
 }
