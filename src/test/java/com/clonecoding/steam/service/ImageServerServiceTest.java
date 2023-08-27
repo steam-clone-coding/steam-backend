@@ -209,6 +209,7 @@ class ImageServerServiceTest {
                 HttpRequest.request()
                         .withMethod("POST")
                         .withPath("/images/upload")
+                        // 잘못된 토큰이라고 가정
                         .withHeader("X-Access-Token", "c95a5024651547fa82e1eebc0daa52a2")
                         .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA_VALUE)
         ).respond(
@@ -225,6 +226,33 @@ class ImageServerServiceTest {
                 .hasMessage("이미지 서버가 200이 아닌 상태 코드를 남겼습니다: 403");
 
     }
+
+    @Test
+    @DisplayName("이미지 업로드시, Body가 비어있는 경우 InternalServerException과 함깨 이미지 서버가 리턴하는 400오류를 보여준다.")
+    public void t9() throws Exception{
+        //given
+        mockServer.when(
+                HttpRequest.request()
+                        .withMethod("POST")
+                        .withPath("/images/upload")
+                        .withHeader("X-Access-Token", "c95a5024651547fa82e1eebc0daa52a2")
+                        .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA_VALUE)
+        ).respond(
+                HttpResponse.response()
+                        .withStatusCode(HttpStatus.BAD_REQUEST.value())
+        );
+        // 빈 이미지 전달
+        MultipartFile multipartFile = new MockMultipartFile("testImage.png", new byte[]{});
+
+        //when & then
+        assertThatThrownBy(()->imageServerService.upload(multipartFile))
+                .isInstanceOf(InternalServerException.class)
+                .hasMessage("이미지 서버가 200이 아닌 상태 코드를 남겼습니다: 400");
+
+
+    }
+
+
 
 
     @Test
