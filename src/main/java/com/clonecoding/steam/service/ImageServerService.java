@@ -152,6 +152,11 @@ public class ImageServerService {
 
             int responseStatusCode = getResponseStatusCode(response);
 
+
+            if(responseStatusCode == 400){
+                throw new IllegalArgumentException("삭제하고자 하는 이미지 파일이 존재하지 않습니다.");
+            }
+
             if(responseStatusCode != 200){
                 throw new InternalServerException("이미지 서버가 200이 아닌 상태 코드를 남겼습니다: " + responseStatusCode);
             }

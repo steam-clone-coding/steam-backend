@@ -438,5 +438,31 @@ class ImageServerServiceTest {
         assertThat(actual.getCode()).isEqualTo(200);
         assertThat(actual.getMessage()).isEqualTo("File b3b2bc5b075f434692f71657afbae2c9 successfully deleted.");
     }
-    
+
+    @Test
+    @DisplayName("이미지 삭제 API 호출시, 삭제하고자 하는 이미지 파일이 없을 경우 400 코드와 함께 IllegalArgumentException을 리턴한다.")
+    public void t13() throws Exception{
+        //given
+        String testResponseBody = "{\n" +
+                "    \"code\": 400,\n" +
+                "    \"message\": \"File 20995dfcf94a49e7b6d34ccce744609c does not exists.\"\n" +
+                "}";
+
+        mockServer.when(
+                HttpRequest.request()
+                        .withMethod("POST")
+                        .withPath("/images/delete/b3b2bc5b075f434692f71657afbae2c9")
+                        .withHeader("X-Access-Token", "c95a5024651547fa82e1eebc0daa52a2")
+        ).respond(
+                HttpResponse.response()
+                        .withStatusCode(HttpStatus.BAD_REQUEST.value())
+                        .withBody(testResponseBody)
+        );
+        //when & then
+        assertThatThrownBy(()->imageServerService.remove("b3b2bc5b075f434692f71657afbae2c9"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("삭제하고자 하는 이미지 파일이 존재하지 않습니다.");
+
+    }
+
 }
