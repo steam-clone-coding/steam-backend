@@ -5,9 +5,10 @@ import com.clonecoding.steam.dto.fileserver.SingleImageUploadResult;
 import com.clonecoding.steam.dto.fileserver.UploadedImageInfo;
 import com.clonecoding.steam.exceptions.InternalServerException;
 import org.apache.http.HttpHeaders;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.*;
 import org.mockserver.integration.ClientAndServer;
-import org.mockserver.model.Body;
 import org.mockserver.model.HttpRequest;
 import org.mockserver.model.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,20 +31,27 @@ import static org.mockserver.integration.ClientAndServer.startClientAndServer;
 @ActiveProfiles("test")
 class ImageServerServiceTest {
 
-    private ClientAndServer mockServer;
+    private static ClientAndServer mockServer;
 
 
     @Autowired
     private ImageServerService imageServerService;
 
-    @BeforeEach
-    void setUp() {
+
+    @BeforeAll
+    static void beforeAll() {
         mockServer = startClientAndServer(1080);
     }
 
-    @AfterEach
-    void tearDown() {
-        mockServer.stop();
+    @BeforeEach
+    public void setUp() {
+        mockServer.reset();
+    }
+
+
+    @AfterAll
+    static void afterAll() {
+        mockServer.close();
     }
 
     @Test
@@ -200,6 +208,7 @@ class ImageServerServiceTest {
                 HttpRequest.request()
                         .withMethod("POST")
                         .withPath("/images/upload")
+                        .withHeader("X-Access-Token", "c95a5024651547fa82e1eebc0daa52a2")
                         .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA_VALUE)
         ).respond(
                 HttpResponse.response()

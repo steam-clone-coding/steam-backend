@@ -82,7 +82,6 @@ public class ImageServerService {
             return singleImageUploadResult;
         }catch (IOException e){
             throw new InternalServerException(ExceptionMessages.IMAGE_SERVER_PROCESS_FAILED.getMessage(), e);
-
         }
 
     }
