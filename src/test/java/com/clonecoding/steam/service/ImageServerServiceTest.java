@@ -254,7 +254,7 @@ class ImageServerServiceTest {
 
 
     @Test
-    @DisplayName("이미지 업로드시, 파일이 너무 큰 경우 InternalServerException과 함께 이미지 서버가 리턴하는 401코드를 보여준다.")
+    @DisplayName("이미지 업로드시, 파일이 너무 큰 경우 InternalServerException과 함께 이미지 서버가 리턴하는 413코드를 보여준다.")
     public void t10() throws Exception{
         //given
         mockServer.when(
@@ -365,6 +365,52 @@ class ImageServerServiceTest {
 
     }
 
+    @Test
+    @DisplayName("멀티 이미지 업로드시, 파일이 너무 큰 경우 InternalServerException과 함께 이미지 서버가 리턴하는 413코드를 보여준다.")
+    public void t12() throws Exception{
+        //given
+        String testResponseBody = "<html>\n" +
+                "\n" +
+                "<head>\n" +
+                "  <title>413 Request Entity Too Large</title>\n" +
+                "</head>\n" +
+                "\n" +
+                "<body>\n" +
+                "  <center>\n" +
+                "    <h1>413 Request Entity Too Large</h1>\n" +
+                "  </center>\n" +
+                "  <hr>\n" +
+                "  <center>nginx/1.20.2</center>\n" +
+                "</body>\n" +
+                "\n" +
+                "</html>";
+
+        mockServer.when(
+                HttpRequest.request()
+                        .withMethod("POST")
+                        .withPath("/images/upload_many")
+                        .withHeader("X-Access-Token", "c95a5024651547fa82e1eebc0daa52a2")
+                        .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA_VALUE)
+        ).respond(
+                HttpResponse.response()
+                        .withStatusCode(HttpStatus.REQUEST_ENTITY_TOO_LARGE.value())
+                        .withBody(testResponseBody)
+        );
+
+        FileInputStream fileInputStream = new FileInputStream(new File("testImage.png"));
+        MultipartFile multipartFile = new MockMultipartFile("testImage.png", fileInputStream);
+
+        FileInputStream fileInputStream2 = new FileInputStream(new File("testImage2.png"));
+        MultipartFile multipartFile2 = new MockMultipartFile("testImage2.png", fileInputStream2);
+
+
+        //when & then
+        assertThatThrownBy(()->imageServerService.upload(new MultipartFile[]{multipartFile, multipartFile2}))
+                .isInstanceOf(InternalServerException.class)
+                .hasMessage("이미지 서버가 200이 아닌 상태 코드를 남겼습니다: 413");
+    
+    }
+    
 
     @Test
     @DisplayName("image remove API를 호출해 정상적인 삭제 결과를 받아올 수 있다")
