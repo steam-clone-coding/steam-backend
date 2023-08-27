@@ -1,5 +1,6 @@
 package com.clonecoding.steam.service;
 
+import com.clonecoding.steam.dto.fileserver.ImageRemoveResult;
 import com.clonecoding.steam.dto.fileserver.MultipleImageUploadResult;
 import com.clonecoding.steam.dto.fileserver.SingleImageUploadResult;
 import com.clonecoding.steam.dto.fileserver.UploadedImageInfo;
@@ -201,7 +202,7 @@ class ImageServerServiceTest {
     }
 
     @Test
-    @DisplayName("이미지 서버가 200이 아닌 상태코드를 날렸을 때, InternalServerException을 throw 한다.")
+    @DisplayName("이미지 서버의 Access Token이 잘못되었을 때, InternalServerException을 throw 하며 403 오류코드를 보여준다.")
     public void t6() throws Exception{
         //given
         mockServer.when(
@@ -273,4 +274,32 @@ class ImageServerServiceTest {
                 );
     }
 
+    
+    @Test
+    @DisplayName("image remove API를 호출해 정상적인 삭제 결과를 받아올 수 있다")
+    public void t8() throws Exception{
+        //given
+        String testResponseBody = "{\n" +
+                "    \"code\": 200,\n" +
+                "    \"message\": \"File b3b2bc5b075f434692f71657afbae2c9 successfully deleted.\"\n" +
+                "}";
+
+        mockServer.when(
+                HttpRequest.request()
+                        .withMethod("POST")
+                        .withPath("/images/delete/b3b2bc5b075f434692f71657afbae2c9")
+                        .withHeader("X-Access-Token", "c95a5024651547fa82e1eebc0daa52a2")
+        ).respond(
+                HttpResponse.response()
+                        .withStatusCode(HttpStatus.OK.value())
+                        .withBody(testResponseBody)
+        );
+        //when
+        ImageRemoveResult actual = imageServerService.remove("b3b2bc5b075f434692f71657afbae2c9");
+
+        //then
+        assertThat(actual.getCode()).isEqualTo(200);
+        assertThat(actual.getMessage()).isEqualTo("File b3b2bc5b075f434692f71657afbae2c9 successfully deleted.");
+    }
+    
 }

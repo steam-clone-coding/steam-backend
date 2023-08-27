@@ -1,6 +1,7 @@
 package com.clonecoding.steam.service;
 
 
+import com.clonecoding.steam.dto.fileserver.ImageRemoveResult;
 import com.clonecoding.steam.dto.fileserver.MultipleImageUploadResult;
 import com.clonecoding.steam.dto.fileserver.SingleImageUploadResult;
 import com.clonecoding.steam.exceptions.ExceptionMessages;
@@ -30,7 +31,7 @@ public class ImageServerService {
 
     private final String multiFileUploadUri;
 
-    private final String deleteFileUri;
+    private final String removeFileUri;
 
     private final String accessToken;
 
@@ -45,7 +46,7 @@ public class ImageServerService {
         this.singleFileUploadUri = environment.getProperty("static.single-file-upload-uri", String.class);
         this.multiFileUploadUri = environment.getProperty("static.multi-file-upload-uri", String.class);
         this.accessToken = environment.getProperty("static.access-token");
-        this.deleteFileUri = environment.getProperty("static.delete-uri", String.class);
+        this.removeFileUri = environment.getProperty("static.delete-uri", String.class);
 
     }
 
@@ -140,6 +141,33 @@ public class ImageServerService {
     }
 
 
+    public ImageRemoveResult remove(String fileId) {
+        try{
+            // 기본 url, header 설정
+            HttpPost httpPost = new HttpPost(imageServerUrl + removeFileUri + "/" +fileId);
+            httpPost.addHeader("X-Access-Token", accessToken);
+
+            // API 서버로 요청 및 응답 파싱
+            CloseableHttpResponse response = httpClient.execute(httpPost);
+
+            int responseStatusCode = getResponseStatusCode(response);
+
+            if(responseStatusCode != 200){
+                throw new InternalServerException("이미지 서버가 200이 아닌 상태 코드를 남겼습니다: " + responseStatusCode);
+            }
+
+            String responseBody = getResponseBody(response);
+
+            return objectMapper.readValue(responseBody, ImageRemoveResult.class);
+
+
+        }catch (IOException e){
+            throw new InternalServerException(ExceptionMessages.IMAGE_SERVER_PROCESS_FAILED.getMessage(), e);
+        }
+
+
+    }
+
 
     private int getResponseStatusCode(CloseableHttpResponse response){
         return response.getStatusLine().getStatusCode();
@@ -163,4 +191,5 @@ public class ImageServerService {
         }
 
     }
+
 }
