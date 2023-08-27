@@ -226,4 +226,55 @@ class ImageServerServiceTest {
     }
 
 
+    @Test
+    @DisplayName("multi Image upload API를 호출해 정상적인 업로드 성공 결과를 받아올 수 있다.")
+    public void t7() throws Exception{
+        //given
+        String testResponseBody = "{\n" +
+                "    \"code\": 200,\n" +
+                "    \"message\": \"File(s) successfully uploaded.\",\n" +
+                "    \"data\": [\n" +
+                "        {\n" +
+                "            \"file_name\": \"jpeg_jk3.jpg\",\n" +
+                "            \"file_id\": \"b3b2bc5b075f434692f71657afbae2c9\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"file_name\": \"png_jk.png\",\n" +
+                "            \"file_id\": \"20995dfcf94a49e7b6d34ccce744609c\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"file_name\": \"png_bts.png\",\n" +
+                "            \"file_id\": \"9d15ce7799dd499181bbc8cace4761b7\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"file_name\": \"jpg_cat.jpg\",\n" +
+                "            \"file_id\": \"5fd0f71238ed4086b9bb58859ac3b271\"\n" +
+                "        }\n" +
+                "    ]\n" +
+                "}";
+
+        mockServer.when(
+                HttpRequest.request()
+                        .withMethod("POST")
+                        .withPath("/images/upload_many")
+                        .withHeader("X-Access-Token", "c95a5024651547fa82e1eebc0daa52a2")
+                        .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA_VALUE)
+        ).respond(
+                HttpResponse.response()
+                        .withStatusCode(HttpStatus.OK.value())
+                        .withBody(testResponseBody)
+        );
+
+        FileInputStream fileInputStream = new FileInputStream(new File("testImage.png"));
+        MultipartFile multipartFile = new MockMultipartFile("testImage.png", fileInputStream);
+
+        FileInputStream fileInputStream2 = new FileInputStream(new File("testImage2.png"));
+        MultipartFile multipartFile2 = new MockMultipartFile("testImage2.png", fileInputStream2);
+        //when
+        MultipleImageUploadResult actual = imageServerService.upload(new MultipartFile[]{multipartFile, multipartFile2});
+        //then
+        assertThat(actual.getCode()).isEqualTo(200);
+
+    }
+
 }

@@ -6,6 +6,7 @@ import com.clonecoding.steam.dto.fileserver.SingleImageUploadResult;
 import com.clonecoding.steam.exceptions.ExceptionMessages;
 import com.clonecoding.steam.exceptions.InternalServerException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.InputStreamEntity;
@@ -59,12 +60,18 @@ public class ImageServerService {
     */
     public SingleImageUploadResult upload(MultipartFile image){
         try{
+
+            // 기본 url, header 설정
             HttpPost httpPost = new HttpPost(imageServerUrl + singleFileUploadUri);
 
             httpPost.addHeader("X-Access-Token", accessToken);
             httpPost.addHeader("Content-Type", MediaType.MULTIPART_FORM_DATA_VALUE);
+
+            // body(multipart/form-data) 설정
             httpPost.setEntity(new InputStreamEntity(image.getInputStream()));
 
+
+            // API 서버로 요청 및 응답 파싱
             CloseableHttpResponse response = httpClient.execute(httpPost);
 
             int responseStatusCode = getResponseStatusCode(response);
@@ -78,6 +85,7 @@ public class ImageServerService {
 
             SingleImageUploadResult singleImageUploadResult = objectMapper.readValue(responseBody, SingleImageUploadResult.class);
 
+            // 클라이언트가 Full Path를 알기 위해 server url 설정
             singleImageUploadResult.setServerUrl(imageServerUrl);
 
             return singleImageUploadResult;
@@ -88,20 +96,46 @@ public class ImageServerService {
     }
 
 
-    public MultipleImageUploadResult upload(MultipartFile[] image){
+    public MultipleImageUploadResult upload(MultipartFile[] images){
         try{
+            // 기본 url, header 설정
             HttpPost httpPost = new HttpPost(imageServerUrl + multiFileUploadUri);
 
             httpPost.addHeader("X-Access-Token", accessToken);
             httpPost.addHeader("Content-Type", MediaType.MULTIPART_FORM_DATA_VALUE);
 
+
+            // body(multipart/form-data) 설정
             MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
 
-            m
+            for(MultipartFile image : images){
+                multipartEntityBuilder.addBinaryBody("images", image.getInputStream());
+            }
 
+            HttpEntity multipartEntity = multipartEntityBuilder.build();
+
+            httpPost.setEntity(multipartEntity);
+
+            // API 서버로 요청 및 응답 파싱
+            CloseableHttpResponse response = httpClient.execute(httpPost);
+
+            int responseStatusCode = getResponseStatusCode(response);
+
+            if(responseStatusCode != 200){
+                throw new InternalServerException("이미지 서버가 200이 아닌 상태 코드를 남겼습니다: " + responseStatusCode);
+            }
+
+            String responseBody = getResponseBody(response);
+
+            MultipleImageUploadResult multipleImageUploadResult = objectMapper.readValue(responseBody, MultipleImageUploadResult.class);
+
+            // 클라이언트가 Full Path를 알기 위해 server url 설정
+            multipleImageUploadResult.setServerUrl(imageServerUrl);
+
+            return multipleImageUploadResult;
 
         }catch (IOException e){
-
+            throw new InternalServerException(ExceptionMessages.IMAGE_SERVER_PROCESS_FAILED.getMessage(), e);
         }
     }
 
