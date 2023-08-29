@@ -4,7 +4,10 @@ package com.clonecoding.steam.config;
 import com.clonecoding.steam.filter.CustomUsernamePasswordAuthenticationFilter;
 import com.clonecoding.steam.filter.ExceptionHandlerFilter;
 import com.clonecoding.steam.filter.JwtAuthenticationFilter;
-import com.clonecoding.steam.utils.CustomPbkdf2PasswordEncoder;
+import com.clonecoding.steam.service.OAuth2AuthenticationSuccessHandler;
+import com.clonecoding.steam.service.PrincipalOauth2UserService;
+import com.clonecoding.steam.utils.CustomPasswordEncoder;
+import com.clonecoding.steam.utils.PasswordEncodeUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -37,6 +40,10 @@ public class SecurityConfig{
     private final UserDetailsService userDetailsService;
     private final AuthenticationEntryPoint authenticationEntryPoint;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final PasswordEncodeUtils passwordEncodeUtils;
+
+    private final PrincipalOauth2UserService oauth2UserService;
+    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
 
     private static final RequestMatcher LOGIN_REQUEST_MATCHER = new AntPathRequestMatcher("/api/login","POST");
 
@@ -60,7 +67,7 @@ public class SecurityConfig{
 
     @Bean
     public PasswordEncoder passwordEncoder(){
-        return new CustomPbkdf2PasswordEncoder("", HASH_WIDTH, ITERATIONS, Pbkdf2PasswordEncoder.SecretKeyFactoryAlgorithm.PBKDF2WithHmacSHA512);
+        return new CustomPasswordEncoder("", HASH_WIDTH, ITERATIONS, Pbkdf2PasswordEncoder.SecretKeyFactoryAlgorithm.PBKDF2WithHmacSHA512, passwordEncodeUtils);
     }
 
     @Bean
@@ -82,10 +89,15 @@ public class SecurityConfig{
                 .cors(cors-> cors.configurationSource(corsConfigurationSource))
                 .authorizeHttpRequests((authorizeHttpRequest)->{
                     authorizeHttpRequest
-                            .anyRequest().permitAll();
-//                            .requestMatchers("/api/login").permitAll()
-//                            .requestMatchers("/v3/api-docs/**", "/swagger-ui/**" ).permitAll()
-//                            .anyRequest().authenticated();
+                            .requestMatchers("/api/login/**").permitAll()
+                            .requestMatchers("/v3/api-docs/**", "/swagger-ui/**" ).permitAll()
+                            .anyRequest().authenticated();
+                })
+                .oauth2Login(oauth2Login->{
+                    oauth2Login
+                            .authorizationEndpoint(config->config.baseUri("/oauth2/authorization"))
+                            .userInfoEndpoint(userInfo->userInfo.userService(oauth2UserService))
+                            .successHandler(oAuth2AuthenticationSuccessHandler);
                 })
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
