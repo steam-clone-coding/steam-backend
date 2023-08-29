@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.ConfigDataApplicationContextInitial
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.env.Environment;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -25,7 +26,6 @@ public class PasswordEncodeUtilsTest {
 
     @Autowired
     private PasswordEncodeUtils passwordEncodeUtils;
-
 
     @Test
     @DisplayName("salt를 생성할 수 있다.")
@@ -56,9 +56,12 @@ public class PasswordEncodeUtilsTest {
     @TestConfiguration
     public static class PasswordEncodeUtilsTestConfig {
 
+        @Autowired
+        private Environment environment;
+
         @Bean
         public PasswordEncodeUtils passwordEncodeUtils(){
-            return new PasswordEncodeUtils();
+            return new PasswordEncodeUtils(environment);
         }
     }
 }
