@@ -43,8 +43,8 @@ public class JwtTokenProvider {
      */
     public String sign(User user, Date now) {
         Claims claims = Jwts.claims().setSubject(user.getUsername());
-        claims.put("uid", user.getUid());
-        claims.put("userRole", user.getUserRole());
+//        claims.put("uid", user.getUid());
+//        claims.put("userRole", user.getUserRole());
 
 
         Date expiryDate = new Date(now.getTime() + ACCESS_TOKEN_EXPIRE_TIME);

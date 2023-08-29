@@ -82,9 +82,10 @@ public class SecurityConfig{
                 .cors(cors-> cors.configurationSource(corsConfigurationSource))
                 .authorizeHttpRequests((authorizeHttpRequest)->{
                     authorizeHttpRequest
-                            .requestMatchers("/api/login").permitAll()
-                            .requestMatchers("/v3/api-docs/**", "/swagger-ui/**" ).permitAll()
-                            .anyRequest().authenticated();
+                            .anyRequest().permitAll();
+//                            .requestMatchers("/api/login").permitAll()
+//                            .requestMatchers("/v3/api-docs/**", "/swagger-ui/**" ).permitAll()
+//                            .anyRequest().authenticated();
                 })
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)

@@ -1,4 +1,3 @@
-
 jwt:
   secret: ${jwt.secret}
   access-token-expire-time: ${jwt.access-token-expire-time}
@@ -13,3 +12,20 @@ spring:
     pbkdf2:
       hashwidth: ${spring.security.pbkdf2.hashwidth}
       iterations: ${spring.security.pbkdf2.iterations}
+  #메일 인증 관련 세팅
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${spring.mail.username}
+    password: ${spring.mail.password}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+    auth-code-expiration-millis: 1800000  # 30 * 60 * 1000 == 30분

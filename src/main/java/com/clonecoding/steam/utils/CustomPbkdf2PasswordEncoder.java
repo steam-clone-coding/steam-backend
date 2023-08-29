@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
+import java.security.SecureRandom;
 import java.util.Base64;
 
 public class CustomPbkdf2PasswordEncoder extends Pbkdf2PasswordEncoder {
@@ -58,4 +59,10 @@ public class CustomPbkdf2PasswordEncoder extends Pbkdf2PasswordEncoder {
         }
     }
 
+    public String generateSalt() {
+        SecureRandom random = new SecureRandom();
+        byte[] salt = new byte[saltLength];
+        random.nextBytes(salt);
+        return Base64.getEncoder().encodeToString(salt);
+    }
 }
