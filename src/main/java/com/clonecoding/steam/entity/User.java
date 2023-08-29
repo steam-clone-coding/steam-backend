@@ -51,6 +51,7 @@ public class User {
 
     private String username;
 
+    @Column(length = 3000)
     private String password;
 
     private String uid;

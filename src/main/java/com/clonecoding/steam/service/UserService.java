@@ -21,15 +21,9 @@ public class UserService {
         if(isUsernamePresent(dto)){
             throw new ConflictException(ExceptionMessages.USERNAME_DUPLICATED.getMessage());
         }
-
-
     }
 
     private boolean isUsernamePresent(UserRegisterDto dto) {
         return userRepository.findUserByUsername(dto.getUsername()).isPresent();
     }
-
-
-
-
 }
