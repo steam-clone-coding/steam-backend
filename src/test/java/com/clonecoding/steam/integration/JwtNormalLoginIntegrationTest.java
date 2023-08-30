@@ -1,8 +1,8 @@
 package com.clonecoding.steam.integration;
 
 
-import com.clonecoding.steam.dto.UserRegisterDto;
 import com.clonecoding.steam.dto.request.LoginRequest;
+import com.clonecoding.steam.dto.request.UserRegisterDTO;
 import com.clonecoding.steam.dto.request.UserRegisterRequest;
 import com.clonecoding.steam.entity.User;
 import com.clonecoding.steam.enums.LoginType;
@@ -67,7 +67,7 @@ public class JwtNormalLoginIntegrationTest {
         // 로그인 하기 위해 먼저 회원가입 진행
 
         //TODO : Country에 대한 처리 필요
-        final UserRegisterDto testUser = UserRegisterDto.builder()
+        final UserRegisterDTO testUser = UserRegisterDTO.builder()
                 .email("testEmail@naver.com")
                 .username("test")
                 .password("a1234567!")
@@ -129,7 +129,7 @@ public class JwtNormalLoginIntegrationTest {
     void t4() throws Exception {
         //given
         // 로그인 하기 위해 먼저 회원가입 진행
-        final UserRegisterDto testUser = UserRegisterDto.builder()
+        final UserRegisterDTO testUser = UserRegisterDTO.builder()
                 .email("testEmail@naver.com")
                 .username("test")
                 .password("a1234567!")
@@ -167,7 +167,7 @@ public class JwtNormalLoginIntegrationTest {
     void t5() throws Exception {
         //given
         //이미 저장된 유저를 위해 유저를 저장
-        final UserRegisterDto testUser = UserRegisterDto.builder()
+        final UserRegisterDTO testUser = UserRegisterDTO.builder()
                 .email("testEmail@naver.com")
                 .username("test")
                 .password("a1234567!")
@@ -204,7 +204,7 @@ public class JwtNormalLoginIntegrationTest {
     void t6() throws Exception {
         //given
         //이미 저장된 유저를 위해 유저를 저장
-        final UserRegisterDto testUser = UserRegisterDto.builder()
+        final UserRegisterDTO testUser = UserRegisterDTO.builder()
                 .email("testEmail@naver.com")
                 .username("test")
                 .password("a1234567!")

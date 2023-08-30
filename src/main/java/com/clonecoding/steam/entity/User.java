@@ -39,13 +39,12 @@ public class User {
 
     private Integer age;
 
-    @Column(unique = true)
     private String email;
 
     @Enumerated(EnumType.STRING)
     private LoginType loginType;
 
-    private String profileImage;
+    private String profile_image;
 
     @Column(unique = true)
     private String nickname;
@@ -55,7 +54,6 @@ public class User {
     @Column(length = 3000)
     private String password;
 
-    @Column(unique = true)
     private String uid;
 
     @Enumerated(EnumType.STRING)
@@ -69,6 +67,4 @@ public class User {
 
     @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
-
-
 }

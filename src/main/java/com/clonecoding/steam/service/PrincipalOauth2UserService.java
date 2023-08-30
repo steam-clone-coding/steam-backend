@@ -56,7 +56,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         if (optionalUser.isPresent()) {
             User existingUser = optionalUser.get();
             existingUser.setName(oAuth2UserInfo.getName());
-            existingUser.setProfileImage(oAuth2UserInfo.getProfileImage());
+            existingUser.setProfile_image(oAuth2UserInfo.getProfileImage());
             log.info("User updated: {}", existingUser);
         } else {
             User newUser = User.builder()
@@ -64,7 +64,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
                     .nickname("OAuth2TestUserNickName")
                     .age(null)
                     .email(oAuth2UserInfo.getEmail())
-                    .profileImage(oAuth2UserInfo.getProfileImage())
+                    .profile_image(oAuth2UserInfo.getProfileImage())
                     .loginType(loginType)
                     .uid(nanoIdProvider.createNanoId())
                     .userRole(UserAuthority.ROLE_USER)
