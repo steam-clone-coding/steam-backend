@@ -14,5 +14,14 @@ spring:
       hashwidth: ${spring.security.pbkdf2.hashwidth}
       iterations: ${spring.security.pbkdf2.iterations}
       algorithm: ${spring.security.pbkdf2.algorithm}
+      digest-size : ${spring.security.pbkdf2.digest-size}
     salt:
       algorithm: ${spring.security.salt.algorithm}
+
+static:
+  image-server-uri: ${static.image-server-uri}
+  single-file-upload-uri: ${static.single-file-upload-uri}
+  multi-file-upload-uri: ${static.multi-file-upload-uri}
+  delete-uri: ${static.delete-uri}
+  access-token: ${static.access-token}
+
