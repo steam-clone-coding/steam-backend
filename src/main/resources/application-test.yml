@@ -53,3 +53,4 @@ spring:
       algorithm: PBKDF2WithHmacSHA512
     salt:
       algorithm: SHA1PRNG
+
