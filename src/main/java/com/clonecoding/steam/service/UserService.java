@@ -18,8 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.util.Date;
 
 @Slf4j
@@ -28,6 +26,7 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class UserService {
 
+    // 상수와 멤버 변수
     private static final String DEFAULT_IMAGE_PATH = "profile.jpg";
     private static final LoginType DEFAULT_LOGIN_TYPE = LoginType.NORMAL;
 
@@ -37,17 +36,17 @@ public class UserService {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserValidator userValidator;
 
+    // 사용자 등록
     public void register(UserRegisterDTO dto) {
         userValidator.validate(dto);
         User newUser = createUser(dto);
         userRepository.save(newUser);
     }
 
-    @Transactional(readOnly = true)
-    public LoginResponse login(UserLoginDTO req) {
-        User user = findUserByUsername(req.username());
-        validatePassword(req, user);
-
+    // 로그인
+    public LoginResponse login(UserLoginDTO dto) {
+        User user = findUserByUsername(dto.username());
+        validatePassword(dto, user);
         return generateLoginResponse(user);
     }
 
@@ -56,6 +55,7 @@ public class UserService {
         return buildUser(dto, encryptedData[0], encryptedData[1]);
     }
 
+    // User 객체를 생성
     private User buildUser(UserRegisterDTO dto, String encodedPassword, String salt) {
         return User.builder()
                 .username(dto.getUsername())
@@ -72,38 +72,51 @@ public class UserService {
                 .build();
     }
 
+    // 비밀번호 암호화
     private String[] encryptPassword(String password) {
         try {
-            String salt = passwordEncoder.createSalt();
-            String encodedPassword = passwordEncoder.encodePassword(password, salt);
-            return new String[]{encodedPassword, salt};
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            throw new EncodeException("Password encoding failed", e);
+            return doEncryptPassword(password);
+        } catch (Exception e) {
+            throw new EncodeException(ExceptionMessages.PASSWORD_ENCODING_FAILED.getMessage());
         }
     }
 
+    // 실제 암호화 로직
+    private String[] doEncryptPassword(String password) throws Exception {
+        String salt = passwordEncoder.createSalt();
+        String encodedPassword = passwordEncoder.encodePassword(password, salt);
+        return new String[]{encodedPassword, salt};
+    }
+
+    // UID 생성
     private String generateUID() {
         return nanoIdProvider.createNanoId();
     }
 
+    // 사용자 이름으로 사용자 찾기
     private User findUserByUsername(String username) {
         return userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new UnAuthorizedException(ExceptionMessages.USER_NOT_FOUND.getMessage()));
     }
 
-    private void validatePassword(UserLoginDTO req, User user) {
-        boolean isPasswordMatch;
-        try {
-            isPasswordMatch = passwordEncoder.verifyPassword(req.Password(), user.getPassword(), user.getSalt());
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            throw new EncodeException("Password encoding failed", e);
-        }
-
-        if (!isPasswordMatch) {
+    // 비밀번호 검증
+    private void validatePassword(UserLoginDTO dto, User user) {
+        if (!verifyPassword(dto, user)) {
             throw new UnAuthorizedException(ExceptionMessages.PASSWORD_NOT_FOUND.getMessage());
         }
     }
 
+    // 사용자 비밀번호 검증
+    private boolean verifyPassword(UserLoginDTO dto, User user) {
+        try {
+            return passwordEncoder.verifyPassword(dto.password(), user.getPassword(), user.getSalt());
+        } catch (Exception e) {
+            throw new EncodeException(ExceptionMessages.PASSWORD_ENCODING_FAILED.getMessage());
+        }
+    }
+
+
+    // 로그인 응답 생성
     private LoginResponse generateLoginResponse(User user) {
         Date now = new Date();
         String accessToken = jwtTokenProvider.sign(user, now);
@@ -113,3 +126,4 @@ public class UserService {
                 .build();
     }
 }
+

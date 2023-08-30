@@ -5,6 +5,7 @@ import com.clonecoding.steam.dto.request.UserRegisterDTO;
 import com.clonecoding.steam.dto.response.LoginResponse;
 import com.clonecoding.steam.entity.User;
 import com.clonecoding.steam.enums.UserAuthority;
+import com.clonecoding.steam.exceptions.EncodeException;
 import com.clonecoding.steam.exceptions.ExceptionMessages;
 import com.clonecoding.steam.exceptions.UnAuthorizedException;
 import com.clonecoding.steam.exceptions.UserInfoConflictException;
@@ -14,10 +15,7 @@ import com.clonecoding.steam.utils.NanoIdProvider;
 import com.clonecoding.steam.utils.PasswordEncodeUtils;
 import com.clonecoding.steam.utils.UserValidator;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +56,8 @@ public class UserServiceTest {
     private User testUser;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws Exception {
+        // 사용자 정보 설정
         testUser = User.builder()
                 .userRole(UserAuthority.ROLE_USER)
                 .username("testUsername")
@@ -67,6 +66,12 @@ public class UserServiceTest {
                 .uid("testuid")
                 .build();
 
+        String salt = passwordEncodeUtils.createSalt();
+        String encodedPassword = passwordEncodeUtils.encodePassword(testUser.getPassword(), salt);
+        testUser.setSalt(salt);
+        testUser.setPassword(encodedPassword);
+
+        // 유저 저장
         userRepository.save(testUser);
     }
 
@@ -162,26 +167,10 @@ public class UserServiceTest {
                 .hasMessage(ExceptionMessages.USER_NOT_FOUND.getMessage());
     }
 
-    @Test
-    @DisplayName("로그인 시 비밀번호가 틀리면 UnAuthorizedException을 throw한다.")
-    void t6() throws NoSuchAlgorithmException, InvalidKeySpecException {
-        // given
-        UserLoginDTO dto = new UserLoginDTO(testUser.getUsername(), "wrongPassword");
-        String salt = "yourSaltHere"; // 실제 테스트 상황에 맞는 salt 값을 설정해야 합니다.
-        String encodedPassword = passwordEncodeUtils.encodePassword("testPassword", salt);
-        testUser.setSalt(salt);
-        testUser.setPassword(encodedPassword);
-        userRepository.save(testUser);
-
-        // when & then
-        assertThatThrownBy(() -> userService.login(dto))
-                .isInstanceOf(UnAuthorizedException.class)
-                .hasMessage(ExceptionMessages.PASSWORD_NOT_FOUND.getMessage());
-    }
 
     @Test
     @DisplayName("로그인 성공 시 LoginResponse를 반환한다.")
-    void t7() throws NoSuchAlgorithmException, InvalidKeySpecException {
+    void t6() throws NoSuchAlgorithmException, InvalidKeySpecException {
         // given
         UserLoginDTO dto = new UserLoginDTO(testUser.getUsername(), "testPassword");
         String salt = "yourSaltHere"; // 실제 테스트 상황에 맞는 salt 값을 설정해야 합니다.
@@ -196,6 +185,18 @@ public class UserServiceTest {
         // then
         assertThat(loginResponse.getAccessToken()).isNotNull(); // 토큰이 null이 아닌지만 검사합니다.
         assertThat(loginResponse.getUid()).isEqualTo(testUser.getUid());
+    }
+
+    @Test
+    @DisplayName("로그인 과정에서 비밀번호가 일치하지 않으면 UnAuthorizedException을 throw한다.")
+    void t7()  {
+        // given
+        UserLoginDTO dto = new UserLoginDTO(testUser.getUsername(), "wrongPassword");
+
+        // when & then
+        assertThatThrownBy(() -> userService.login(dto))
+                .isInstanceOf(UnAuthorizedException.class)
+                .hasMessage(ExceptionMessages.PASSWORD_NOT_FOUND.getMessage());
     }
 
     @TestConfiguration
