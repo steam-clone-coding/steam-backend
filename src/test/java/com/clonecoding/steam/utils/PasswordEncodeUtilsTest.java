@@ -5,7 +5,6 @@ import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -22,7 +21,7 @@ import static org.assertj.core.api.Assertions.*;
 @ActiveProfiles("test")
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(initializers = ConfigDataApplicationContextInitializer.class)
-@Import(PasswordEncodeUtilsTest.TestConfig.class)
+@Import(PasswordEncodeUtilsTest.PasswordEncodeUtilsTestConfig.class)
 public class PasswordEncodeUtilsTest {
 
     @Autowired
@@ -55,7 +54,7 @@ public class PasswordEncodeUtilsTest {
 
 
     @TestConfiguration
-    public static class TestConfig{
+    public static class PasswordEncodeUtilsTestConfig {
 
         @Autowired
         private Environment environment;

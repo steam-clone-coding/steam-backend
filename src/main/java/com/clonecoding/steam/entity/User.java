@@ -48,7 +48,6 @@ public class User {
 
     private String nickname;
 
-
     private String username;
 
     @Column(length = 3000)
@@ -67,6 +66,4 @@ public class User {
 
     @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
-
-
 }
