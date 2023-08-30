@@ -140,7 +140,7 @@ public class ApacheImageServerService implements ImageServerService {
      * @author minseok kim
     */
     @Override
-    public ImageRemoveResult remove(String fileId) {
+    public void remove(String fileId) {
         try{
             // 기본 url, header 설정
             HttpPost httpPost = new HttpPost(imageServerUrl + removeFileUri + "/" +fileId);
@@ -159,11 +159,6 @@ public class ApacheImageServerService implements ImageServerService {
             if(responseStatusCode != 200){
                 throw new InternalServerException("이미지 서버가 200이 아닌 상태 코드를 남겼습니다: " + responseStatusCode);
             }
-
-            String responseBody = getResponseBody(response);
-
-            return objectMapper.readValue(responseBody, ImageRemoveResult.class);
-
 
         }catch (IOException e){
             throw new InternalServerException(ExceptionMessages.IMAGE_SERVER_PROCESS_FAILED.getMessage(), e);

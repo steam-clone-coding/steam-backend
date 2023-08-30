@@ -40,5 +40,5 @@ public interface ImageServerService {
      * @exception IllegalArgumentException 삭제하고자 하는 이미지 파일이 존재하지 않을 때
      * @exception InternalServerException IOException 발생시, 이미지 정적 서버에서 200이 아닌 나머지 응답코드를 남겼을 시
      */
-    ImageRemoveResult remove(String fileId);
+    void remove(String fileId);
 }

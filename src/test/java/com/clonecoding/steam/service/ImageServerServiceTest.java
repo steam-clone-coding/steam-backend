@@ -409,7 +409,7 @@ class ImageServerServiceTest {
 
 
     @Test
-    @DisplayName("image remove API를 호출해 정상적인 삭제 결과를 받아올 수 있다")
+    @DisplayName("image remove API를 호출해 정상적으로 삭제되었을 시 아무 오류를 throw하지 않는다.")
     public void t8() throws Exception{
         //given
         String testResponseBody = "{\n" +
@@ -427,12 +427,11 @@ class ImageServerServiceTest {
                         .withStatusCode(HttpStatus.OK.value())
                         .withBody(testResponseBody)
         );
-        //when
-        ImageRemoveResult actual = imageServerService.remove("b3b2bc5b075f434692f71657afbae2c9");
+        //when & then
+        assertThatCode(()->imageServerService.remove("b3b2bc5b075f434692f71657afbae2c9"))
+                .doesNotThrowAnyException();
 
-        //then
-        assertThat(actual.getCode()).isEqualTo(200);
-        assertThat(actual.getMessage()).isEqualTo("File b3b2bc5b075f434692f71657afbae2c9 successfully deleted.");
+
     }
 
     @Test
