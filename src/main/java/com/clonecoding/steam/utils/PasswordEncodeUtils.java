@@ -50,4 +50,8 @@ public class PasswordEncodeUtils {
 
     }
 
+    public boolean verifyPassword(String plainTextPassword, String hashedPassword, String salt) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        String calculatedHash = encodePassword(plainTextPassword, salt);
+        return calculatedHash.equals(hashedPassword);
+    }
 }

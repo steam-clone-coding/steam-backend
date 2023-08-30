@@ -48,7 +48,6 @@ public class User {
 
     private String nickname;
 
-
     private String username;
 
     @Column(length = 3000)

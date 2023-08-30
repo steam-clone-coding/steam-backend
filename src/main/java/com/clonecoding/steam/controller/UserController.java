@@ -1,33 +1,32 @@
 package com.clonecoding.steam.controller;
 
-import com.clonecoding.steam.dto.UserRegisterDto;
-import com.clonecoding.steam.dto.request.UserRegisterRequest;
-import com.clonecoding.steam.dto.response.ApiResponse;
+import com.clonecoding.steam.dto.request.UserLoginDTO;
+import com.clonecoding.steam.dto.request.UserRegisterDTO;
+import com.clonecoding.steam.dto.response.LoginResponse;
 import com.clonecoding.steam.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 
 @RestController
-@RequestMapping("api/user")
+@RequestMapping("/api/user")
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
 
     @PostMapping("/new")
-    public ResponseEntity<ApiResponse<String>> register(@RequestBody UserRegisterDto req){
+    public ResponseEntity<Void> register(@RequestBody UserRegisterDTO req) {
 
         userService.register(req);
 
-        ApiResponse<String> respBody = ApiResponse.<String>builder()
-                .data("회원가입에 성공했습니다.")
-                .build();
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
 
-        return new ResponseEntity<>(respBody, HttpStatus.OK);
+    @PostMapping("/login")
+    public LoginResponse register(@RequestBody UserLoginDTO req) {
+        return userService.login(req);
     }
 }
