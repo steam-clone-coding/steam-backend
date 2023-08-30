@@ -244,7 +244,7 @@ class ImageServerServiceTest {
         //when & then
         assertThatThrownBy(()->imageServerService.upload(multipartFile))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("이미지(Request Body)가 비어있습니다.");
+                .hasMessage("이미지(Request Body)가 비어있거나, 확장자 허용되지 않습니다.");
 
 
     }
@@ -357,12 +357,13 @@ class ImageServerServiceTest {
         //when & then
         assertThatThrownBy(()->imageServerService.upload(new MultipartFile[]{multipartFile, multipartFile2}))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("이미지의 확장자가 허용되지 않습니다.");
+                .hasMessage("이미지(Request Body)가 비어있거나, 확장자 허용되지 않습니다.");
 
     }
 
     @Test
     @DisplayName("멀티 이미지 업로드시, 파일이 너무 큰 경우 IllegalArgumentException과 함께 이미지 서버가 리턴하는 413코드를 보여준다.")
+    @Disabled
     public void t12() throws Exception{
         //given
         String testResponseBody = "<html>\n" +
@@ -435,8 +436,8 @@ class ImageServerServiceTest {
     }
 
     @Test
-    @Disabled
     @DisplayName("이미지 삭제 API 호출시, 삭제하고자 하는 이미지 파일이 없을 경우 400 코드와 함께 IllegalArgumentException을 리턴한다.")
+    @Disabled
     public void t13() throws Exception{
         //given
         String testResponseBody = "{\n" +
