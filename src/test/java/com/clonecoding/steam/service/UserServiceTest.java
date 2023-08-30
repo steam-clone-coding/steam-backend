@@ -16,6 +16,7 @@ import org.springframework.boot.test.context.ConfigDataApplicationContextInitial
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.env.Environment;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -141,9 +142,12 @@ public class UserServiceTest {
         @Autowired
         private UserRepository userRepository;
 
+        @Autowired
+        private Environment environment;
+
         @Bean
         public PasswordEncodeUtils passwordEncodeUtils(){
-            return new PasswordEncodeUtils();
+            return new PasswordEncodeUtils(environment);
         }
 
         @Bean

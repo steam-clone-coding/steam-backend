@@ -7,12 +7,14 @@ import com.clonecoding.steam.dto.fileserver.SingleImageUploadResult;
 import com.clonecoding.steam.exceptions.ExceptionMessages;
 import com.clonecoding.steam.exceptions.InternalServerException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -23,34 +25,30 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 @Service
+@RequiredArgsConstructor
 public class ApacheImageServerService implements ImageServerService {
 
-    private final String imageServerUrl;
 
-    private final String singleFileUploadUri;
+    @Value("${static.image-server-uri}")
+    private String imageServerUrl;
 
-    private final String multiFileUploadUri;
+    @Value("${static.single-file-upload-uri}")
+    private String singleFileUploadUri;
 
-    private final String removeFileUri;
+    @Value("${static.multi-file-upload-uri}")
+    private String multiFileUploadUri;
 
-    private final String accessToken;
+    @Value("${static.delete-uri}")
+    private String removeFileUri;
+
+    @Value("${static.access-token}")
+    private String accessToken;
 
     private final CloseableHttpClient httpClient;
 
     private final ObjectMapper objectMapper;
 
 
-    public ApacheImageServerService(Environment environment, CloseableHttpClient httpClient, ObjectMapper objectMapper) {
-        this.httpClient = httpClient;
-        this.objectMapper = objectMapper;
-
-        this.imageServerUrl = environment.getProperty("static.image-server-uri", String.class);
-        this.singleFileUploadUri = environment.getProperty("static.single-file-upload-uri", String.class);
-        this.multiFileUploadUri = environment.getProperty("static.multi-file-upload-uri", String.class);
-        this.accessToken = environment.getProperty("static.access-token");
-        this.removeFileUri = environment.getProperty("static.delete-uri", String.class);
-
-    }
 
 
 
@@ -82,9 +80,8 @@ public class ApacheImageServerService implements ImageServerService {
             int responseStatusCode = getResponseStatusCode(response);
 
 
-            // TODO : 400일 때 확장자 오류, 빈 이미지 오류를 나누어 메시지를 전달해야함.
             if(responseStatusCode == 400){
-                throw new IllegalArgumentException("이미지(Request Body)가 비어있습니다.");
+                throw new IllegalArgumentException("이미지(Request Body)가 비어있거나, 확장자 허용되지 않습니다.");
             }
             else if(responseStatusCode == 413){
                 throw new IllegalArgumentException("이미지가 너무 커서 업로드할 수 없습니다.");
@@ -142,10 +139,8 @@ public class ApacheImageServerService implements ImageServerService {
 
             int responseStatusCode = getResponseStatusCode(response);
 
-
-            // TODO : 400일 때 확장자 오류, 빈 이미지 오류를 나누어 메시지를 전달해야함.
             if(responseStatusCode == 400){
-                throw new IllegalArgumentException("이미지의 확장자가 허용되지 않습니다.");
+                throw new IllegalArgumentException("이미지(Request Body)가 비어있거나, 확장자 허용되지 않습니다.");
             }
             else if(responseStatusCode == 413){
                 throw new IllegalArgumentException("이미지가 너무 커서 업로드할 수 없습니다.");

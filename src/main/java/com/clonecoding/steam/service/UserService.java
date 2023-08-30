@@ -39,18 +39,14 @@ public class UserService {
 
 
 
-
     }
 
     private boolean isEmailPresent(String email) {
         return userRepository.findUserByEmail(email).isPresent();
+
     }
 
     private boolean isUsernamePresent(String username) {
         return userRepository.findUserByUsername(username).isPresent();
     }
-
-
-
-
 }

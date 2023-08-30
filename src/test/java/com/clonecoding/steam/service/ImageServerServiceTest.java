@@ -265,7 +265,7 @@ class ImageServerServiceTest {
         ).respond(
                 //이미지가 너무 크다고 가정
                 HttpResponse.response()
-                        .withStatusCode(HttpStatus.REQUEST_ENTITY_TOO_LARGE.value())
+                        .withStatusCode(413)
         );
 
         FileInputStream fileInputStream = new FileInputStream(new File("testImage.png"));
@@ -392,7 +392,7 @@ class ImageServerServiceTest {
                         .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA_VALUE)
         ).respond(
                 HttpResponse.response()
-                        .withStatusCode(HttpStatus.REQUEST_ENTITY_TOO_LARGE.value())
+                        .withStatusCode(413)
                         .withBody(testResponseBody)
         );
 

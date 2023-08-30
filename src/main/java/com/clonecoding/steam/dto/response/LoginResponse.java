@@ -10,6 +10,4 @@ public class LoginResponse {
 
     private String uid;
     private String accessToken;
-    private String refreshToken;
-
 }

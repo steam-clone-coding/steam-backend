@@ -27,7 +27,6 @@ public class PasswordEncodeUtilsTest {
     @Autowired
     private PasswordEncodeUtils passwordEncodeUtils;
 
-
     @Test
     @DisplayName("salt를 생성할 수 있다.")
     void t1() throws Exception {
@@ -59,6 +58,7 @@ public class PasswordEncodeUtilsTest {
 
         @Autowired
         private Environment environment;
+
         @Bean
         public PasswordEncodeUtils passwordEncodeUtils(){
             return new PasswordEncodeUtils(environment);
