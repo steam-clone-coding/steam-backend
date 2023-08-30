@@ -12,7 +12,7 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-public class OAuth2Contoller {
+public class OAuth2Controller {
     @GetMapping("/login/kakao")
     public void kakaoLogin(HttpServletResponse res) throws IOException {
 
