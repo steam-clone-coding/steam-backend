@@ -13,8 +13,10 @@ import com.clonecoding.steam.repository.UserRepository;
 import com.clonecoding.steam.utils.JwtTokenProvider;
 import com.clonecoding.steam.utils.NanoIdProvider;
 import com.clonecoding.steam.utils.PasswordEncodeUtils;
+
 import com.clonecoding.steam.utils.UserValidator;
 import lombok.extern.slf4j.Slf4j;
+
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -26,8 +28,9 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
+
 import org.springframework.data.redis.core.RedisTemplate;
+
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -128,6 +131,8 @@ public class UserServiceTest {
                 .hasMessage(ExceptionMessages.INVALID_PASSWORD.getMessage());
     }
 
+
+
     @Test
     @DisplayName("비밀번호 조건, 이메일, username이 중복되지 않은 새로운 유저 정보를 저장할 수 있다.")
     void t4() throws Exception {
@@ -135,6 +140,7 @@ public class UserServiceTest {
         final String testEmail = "registertest@email.com";
         final String testUsername = "registertest";
         final String testPassword = "a123456!";
+
 
         final UserRegisterDTO dto = UserRegisterDTO.builder()
                 .email(testEmail)
@@ -205,8 +211,10 @@ public class UserServiceTest {
         @Autowired
         private Environment environment;
 
+
         @Bean
         public PasswordEncodeUtils passwordEncodeUtils() {
+
             return new PasswordEncodeUtils(environment);
         }
 

@@ -17,6 +17,8 @@ public enum ExceptionMessages {
     EMAIL_DUPLICATED("이메일이 중복됩니다."),
     INVALID_PASSWORD("비밀번호가 최소 8자, 하나 이상의 문자, 하나의 숫자 및 하나의 특수 문자를 포함해야합니다."),
     USERNAME_DUPLICATED("username이 중복됩니다."),
+    EMPTY_ARRAY("빈 배열입니다."),
+    IMAGE_SERVER_PROCESS_FAILED("이미지 서버와의 통신 중 오류가 있습니다"),
     USER_NOT_FOUND("username에 맞는 사용자를 찾을 수 없습니다"),
     PASSWORD_NOT_FOUND("비밀번호에 맞는 사용자가 존재하지 않습니다."),
     PASSWORD_ENCODING_FAILED("비밀번호 인코딩에 실패하였습니다."),

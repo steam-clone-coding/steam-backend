@@ -46,6 +46,7 @@ public class User {
 
     private String profile_image;
 
+    @Column(unique = true)
     private String nickname;
 
     private String username;

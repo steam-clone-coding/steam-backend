@@ -36,6 +36,7 @@ public class UserService {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserValidator userValidator;
 
+
     // 사용자 등록
     public void register(UserRegisterDTO dto) {
         userValidator.validate(dto);
