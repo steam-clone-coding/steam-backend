@@ -1,13 +1,17 @@
-
 jwt:
   secret: secretKeysecretKeysecretKeysecretKeysecretKeysecretKeysecretKeysecretKeysecretKeysecretKey
   access-token-expire-time: 600000
   refresh-token-expire-time: 1800000
 
+static:
+  image-server-uri: http://localhost:1080
+  single-file-upload-uri: /images/upload
+  multi-file-upload-uri: /images/upload_many
+  delete-uri: /images/delete
+  access-token: c95a5024651547fa82e1eebc0daa52a2
 nanoId:
   alphabet: ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789
   length: 10
-
 
 spring:
   datasource:
@@ -15,15 +19,33 @@ spring:
     url: jdbc:h2:mem:testdb
     username: sa
     password:
+
+  #메일 인증 관련 세팅
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+
   h2:
     console:
       enabled: true
+
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     database: h2
     hibernate:
       ddl-auto: update
     open-in-view: false
+
   security:
     pbkdf2:
       hashwidth: 16

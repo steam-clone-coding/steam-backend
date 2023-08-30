@@ -46,11 +46,12 @@ public class User {
 
     private String profile_image;
 
+    @Column(unique = true)
     private String nickname;
-
 
     private String username;
 
+    @Column(length = 3000)
     private String password;
 
     private String uid;
