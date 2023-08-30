@@ -22,6 +22,7 @@ import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockserver.integration.ClientAndServer.startClientAndServer;
@@ -186,16 +187,13 @@ class ImageServerServiceTest {
 
 
         //when
-        SingleImageUploadResult actual = imageServerService.upload(multipartFile);
+        final UploadedImageInfo actual = imageServerService.upload(multipartFile);
 
 
         //then
-        assertThat(actual.getCode()).isEqualTo(200);
-        assertThat(actual.getMessage()).isEqualTo("File(s) successfully uploaded.");
-
-        assertThat(actual.getUploadedImageInfo().getFileName()).isEqualTo("bts_jk.gif");
-        assertThat(actual.getUploadedImageInfo().getFileId()).isEqualTo("b7436194d5034bb69767688807393e48");
-        assertThat(actual.getUploadedImageInfo().getFullPath()).isEqualTo("http://localhost:1080/images/b7436194d5034bb69767688807393e48");
+        assertThat(actual.getFileName()).isEqualTo("bts_jk.gif");
+        assertThat(actual.getFileId()).isEqualTo("b7436194d5034bb69767688807393e48");
+        assertThat(actual.getFullPath()).isEqualTo("http://localhost:1080/images/b7436194d5034bb69767688807393e48");
 
 
     }
@@ -318,10 +316,9 @@ class ImageServerServiceTest {
         FileInputStream fileInputStream2 = new FileInputStream(new File("testImage2.png"));
         MultipartFile multipartFile2 = new MockMultipartFile("testImage2.png", fileInputStream2);
         //when
-        MultipleImageUploadResult actual = imageServerService.upload(new MultipartFile[]{multipartFile, multipartFile2});
+        final List<UploadedImageInfo> actual = imageServerService.upload(new MultipartFile[]{multipartFile, multipartFile2});
         //then
-        assertThat(actual.getCode()).isEqualTo(200);
-        assertThat(actual.getUploadedImageInfo()).extracting( "fileName", "fileId")
+        assertThat(actual).extracting( "fileName", "fileId")
                 .contains(
                         tuple("testImage.png", "b3b2bc5b075f434692f71657afbae2c9"),
                         tuple("testImage2.png", "20995dfcf94a49e7b6d34ccce744609c")
