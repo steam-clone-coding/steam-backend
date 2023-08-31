@@ -230,7 +230,7 @@ public class UserServiceTest {
 
         @Bean
         public JwtTokenProvider jwtTokenProvider(RedisService redisService) {
-            return new JwtTokenProvider(environment, redisService);
+            return new JwtTokenProvider(environment);
         }
 
         @Bean
