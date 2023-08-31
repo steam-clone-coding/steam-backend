@@ -11,6 +11,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.web.DefaultRedirectStrategy;
+import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
@@ -38,15 +40,13 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         String accessToken = jwtTokenProvider.sign(user, tokenCreationTime);
         String refreshToken = jwtTokenProvider.createRefresh(tokenCreationTime);
         Cookie refreshTokenCookie = createRefreshTokenCookie(refreshToken, jwtTokenProvider.getREFRESH_TOKEN_EXPIRE_TIME());
-        response.addCookie(refreshTokenCookie);
 
         // Save refresh token to Redis
         redisService.setValuesWithTimeout(user.getUid(), refreshToken, jwtTokenProvider.getREFRESH_TOKEN_EXPIRE_TIME());
 
         log.info("사용자 Access 토큰 : {} ", accessToken);
-
+        response.addCookie(refreshTokenCookie);
         getRedirectStrategy().sendRedirect(request, response, String.format("http://localhost:3000/callback?token=%s", accessToken));
-
     }
 
     private User getUser(Authentication authentication) {
