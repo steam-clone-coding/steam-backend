@@ -1,0 +1,50 @@
+jwt:
+  secret: secretKeysecretKeysecretKeysecretKeysecretKeysecretKeysecretKeysecretKeysecretKeysecretKey
+  access-token-expire-time: 600000
+  refresh-token-expire-time: 1800000
+
+nanoId:
+  alphabet: ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789
+  length: 10
+
+
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password:
+
+  #메일 인증 관련 세팅
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+
+  h2:
+    console:
+      enabled: true
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    database: h2
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+
+  security:
+    pbkdf2:
+      hashwidth: 16
+      iterations: 1024
+      algorithm: PBKDF2WithHmacSHA512
+    salt:
+      algorithm: SHA1PRNG
