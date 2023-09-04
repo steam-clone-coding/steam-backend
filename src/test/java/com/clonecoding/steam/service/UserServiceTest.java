@@ -158,52 +158,7 @@ public class UserServiceTest {
 
         assertThat(findUser).extracting("email", "username", "password")
                 .containsExactly(testEmail, testUsername, encodedPassword);
-    }
-
-
-    @Test
-    @DisplayName("로그인 시 사용자를 찾을 수 없으면 UnAuthorizedException을 throw한다.")
-    void t5() {
-        // given
-        UserLoginDTO dto = new UserLoginDTO("unknownUser", "password");
-
-        // when & then
-        assertThatThrownBy(() -> userService.login(dto))
-                .isInstanceOf(UnAuthorizedException.class)
-                .hasMessage(ExceptionMessages.USER_NOT_FOUND.getMessage());
-    }
-
-
-    @Test
-    @DisplayName("로그인 성공 시 LoginResponse를 반환한다.")
-    void t6() throws NoSuchAlgorithmException, InvalidKeySpecException {
-        // given
-        UserLoginDTO dto = new UserLoginDTO(testUser.getUsername(), "testPassword");
-        String salt = "yourSaltHere"; // 실제 테스트 상황에 맞는 salt 값을 설정해야 합니다.
-        String encodedPassword = passwordEncodeUtils.encodePassword("testPassword", salt);
-        testUser.setSalt(salt);
-        testUser.setPassword(encodedPassword);
-        userRepository.save(testUser);
-
-        // when
-        LoginResponse loginResponse = userService.login(dto);
-
-        // then
-        assertThat(loginResponse.getAccessToken()).isNotNull(); // 토큰이 null이 아닌지만 검사합니다.
-        assertThat(loginResponse.getUid()).isEqualTo(testUser.getUid());
-    }
-
-    @Test
-    @DisplayName("로그인 과정에서 비밀번호가 일치하지 않으면 UnAuthorizedException을 throw한다.")
-    void t7()  {
-        // given
-        UserLoginDTO dto = new UserLoginDTO(testUser.getUsername(), "wrongPassword");
-
-        // when & then
-        assertThatThrownBy(() -> userService.login(dto))
-                .isInstanceOf(UnAuthorizedException.class)
-                .hasMessage(ExceptionMessages.PASSWORD_NOT_FOUND.getMessage());
-    }
+    }c
 
     @TestConfiguration
     @DataRedisTest
