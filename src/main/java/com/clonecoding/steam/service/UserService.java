@@ -6,7 +6,6 @@ import com.clonecoding.steam.dto.response.LoginResponse;
 import com.clonecoding.steam.entity.User;
 import com.clonecoding.steam.enums.LoginType;
 import com.clonecoding.steam.exceptions.EncodeException;
-import com.clonecoding.steam.exceptions.UnAuthorizedException;
 import com.clonecoding.steam.exceptions.ExceptionMessages;
 import com.clonecoding.steam.repository.UserRepository;
 import com.clonecoding.steam.utils.JwtTokenProvider;
@@ -27,7 +26,7 @@ import java.util.Date;
 public class UserService {
 
     // 상수와 멤버 변수
-    private static final String DEFAULT_IMAGE_PATH = "profile.jpg";
+    private static final String DEFAULT_IMAGE_PATH = "http://49.50.163.215/images/e4065d551a514f9e9cf2edd21a3a5ff1";
     private static final LoginType DEFAULT_LOGIN_TYPE = LoginType.NORMAL;
 
     private final UserRepository userRepository;
@@ -41,13 +40,6 @@ public class UserService {
         userValidator.validate(dto);
         User newUser = createUser(dto);
         userRepository.save(newUser);
-    }
-
-    // 로그인
-    public LoginResponse login(UserLoginDTO dto) {
-        User user = findUserByUsername(dto.username());
-        validatePassword(dto, user);
-        return generateLoginResponse(user);
     }
 
     private User createUser(UserRegisterDTO dto) {
@@ -91,39 +83,6 @@ public class UserService {
     // UID 생성
     private String generateUID() {
         return nanoIdProvider.createNanoId();
-    }
-
-    // 사용자 이름으로 사용자 찾기
-    private User findUserByUsername(String username) {
-        return userRepository.findUserByUsername(username)
-                .orElseThrow(() -> new UnAuthorizedException(ExceptionMessages.USER_NOT_FOUND.getMessage()));
-    }
-
-    // 비밀번호 검증
-    private void validatePassword(UserLoginDTO dto, User user) {
-        if (!verifyPassword(dto, user)) {
-            throw new UnAuthorizedException(ExceptionMessages.PASSWORD_NOT_FOUND.getMessage());
-        }
-    }
-
-    // 사용자 비밀번호 검증
-    private boolean verifyPassword(UserLoginDTO dto, User user) {
-        try {
-            return passwordEncoder.verifyPassword(dto.password(), user.getPassword(), user.getSalt());
-        } catch (Exception e) {
-            throw new EncodeException(ExceptionMessages.PASSWORD_ENCODING_FAILED.getMessage());
-        }
-    }
-
-
-    // 로그인 응답 생성
-    private LoginResponse generateLoginResponse(User user) {
-        Date now = new Date();
-        String accessToken = jwtTokenProvider.sign(user, now);
-        return LoginResponse.builder()
-                .accessToken(accessToken)
-                .uid(user.getUid())
-                .build();
     }
 }
 
