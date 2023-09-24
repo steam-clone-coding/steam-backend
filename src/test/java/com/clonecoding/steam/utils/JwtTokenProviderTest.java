@@ -3,7 +3,6 @@ package com.clonecoding.steam.utils;
 import com.clonecoding.steam.entity.User;
 import com.clonecoding.steam.enums.UserAuthority;
 import com.clonecoding.steam.exceptions.ExceptionMessages;
-import com.clonecoding.steam.service.RedisService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import org.assertj.core.api.ThrowableAssert;
@@ -27,6 +26,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.util.Date;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @ActiveProfiles("test")
 @ContextConfiguration(initializers = ConfigDataApplicationContextInitializer.class)
@@ -135,6 +135,28 @@ public class JwtTokenProviderTest {
 
     }
 
+    @Test
+    @DisplayName("Refresh Token을 해독하는 과정에서 예외가 발생하지 않는다.")
+    void t6() throws Exception {
+        // given
+        Date now = new Date();
+        String refreshToken = jwtTokenProvider.createRefresh(now);
+
+        // when, then
+        assertDoesNotThrow(() -> jwtTokenProvider.verifyRefreshToken(refreshToken));
+    }
+
+    @Test
+    @DisplayName("RefreshToken이 만료되면 JwtException이 throw된다.")
+    void t7() throws Exception {
+        // 주어진 시간(now)을 이용하여 만료된 Refresh Token을 생성합니다.
+        Date now = new Date();
+        String expiredRefreshToken = jwtTokenProvider.createRefresh(new Date(now.getTime() - testRefreshTokenExpireTime));
+
+        // 만료된 Refresh Token을 이용하여 verifyRefreshToken() 메서드를 호출하면 ExpiredJwtException이 발생해야 합니다.
+        assertThatThrownBy(() -> jwtTokenProvider.verifyRefreshToken(expiredRefreshToken))
+                .isInstanceOf(JwtException.class);
+    }
 
     @TestConfiguration
     public static class TestConfig{
@@ -142,12 +164,10 @@ public class JwtTokenProviderTest {
         @Autowired
         private Environment environment;
 
-        @MockBean
-        private RedisService redisService;
 
         @Bean
         public JwtTokenProvider jwtTokenProvider(){
-            return new JwtTokenProvider(environment, redisService);
+            return new JwtTokenProvider(environment);
         }
     }
 }

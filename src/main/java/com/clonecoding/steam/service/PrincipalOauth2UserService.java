@@ -3,7 +3,6 @@ package com.clonecoding.steam.service;
 import com.clonecoding.steam.auth.OAuth2UserInfo;
 import com.clonecoding.steam.entity.User;
 import com.clonecoding.steam.enums.LoginType;
-import com.clonecoding.steam.enums.UserAuthority;
 import com.clonecoding.steam.factory.OAuth2UserInfoFactory;
 import com.clonecoding.steam.repository.UserRepository;
 import com.clonecoding.steam.utils.NanoIdProvider;
@@ -18,8 +17,10 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
+import static com.clonecoding.steam.entity.User.createUser;
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -49,30 +50,24 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
     }
 
 
-    void saveUserIfNotExist(OAuth2UserInfo oAuth2UserInfo, String provider) {
+    private void saveUserIfNotExist(OAuth2UserInfo oAuth2UserInfo, String provider) {
         Optional<User> optionalUser = userRepository.findUserByEmail(oAuth2UserInfo.getEmail());
-        LoginType loginType = LoginType.fromString(provider);
 
         if (optionalUser.isPresent()) {
             User existingUser = optionalUser.get();
             existingUser.setName(oAuth2UserInfo.getName());
             existingUser.setProfile_image(oAuth2UserInfo.getProfileImage());
-            log.info("User updated: {}", existingUser);
+            existingUser.setLastLoginTime(LocalDateTime.now());
         } else {
-            User newUser = User.builder()
-                    .name(oAuth2UserInfo.getName())
-                    .nickname("OAuth2TestUserNickName")
-                    .age(null)
-                    .email(oAuth2UserInfo.getEmail())
-                    .profile_image(oAuth2UserInfo.getProfileImage())
-                    .loginType(loginType)
-                    .uid(nanoIdProvider.createNanoId())
-                    .userRole(UserAuthority.ROLE_USER)
-                    .build();
+            User newUser = createUser(
+                    oAuth2UserInfo.getName(),
+                    oAuth2UserInfo.getEmail(),
+                    oAuth2UserInfo.getProfileImage(),
+                    LoginType.fromString(provider),
+                    nanoIdProvider.createNanoId()
+            );
             userRepository.save(newUser);
-            log.info("User created: {}", newUser);
         }
-
     }
 
 }

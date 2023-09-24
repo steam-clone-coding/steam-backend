@@ -67,4 +67,18 @@ public class User {
 
     @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    public static User createUser(String name, String email, String profileImage, LoginType loginType, String uid){
+        return User.builder()
+                .name(name)
+                .nickname("OAuth2TestUserNickName")
+                .age(null)
+                .email(email)
+                .profile_image(profileImage)
+                .loginType(loginType)
+                .uid(uid)
+                .userRole(UserAuthority.ROLE_USER)
+                .build();
+    }
+
 }
