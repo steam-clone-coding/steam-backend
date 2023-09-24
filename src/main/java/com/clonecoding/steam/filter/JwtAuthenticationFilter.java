@@ -54,6 +54,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
+
         String jwtToken = getAccessToken(request);
         JwtTokenProvider.TokenVerificationResult verificationResult;
 

@@ -76,6 +76,8 @@ public class UserServiceTest {
 
         // 유저 저장
         userRepository.save(testUser);
+
+
     }
 
     @AfterEach
