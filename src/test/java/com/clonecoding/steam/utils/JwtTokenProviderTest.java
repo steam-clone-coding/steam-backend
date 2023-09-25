@@ -1,8 +1,9 @@
 package com.clonecoding.steam.utils;
 
-import com.clonecoding.steam.entity.User;
-import com.clonecoding.steam.enums.UserAuthority;
+import com.clonecoding.steam.entity.user.User;
+import com.clonecoding.steam.enums.user.UserAuthority;
 import com.clonecoding.steam.exceptions.ExceptionMessages;
+import com.clonecoding.steam.utils.auth.JwtTokenProvider;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import org.assertj.core.api.ThrowableAssert;
@@ -12,7 +13,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
 import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;

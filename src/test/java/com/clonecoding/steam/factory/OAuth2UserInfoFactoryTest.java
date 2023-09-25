@@ -1,11 +1,12 @@
 package com.clonecoding.steam.factory;
 
 import com.clonecoding.steam.IntegrationTestSupport;
-import com.clonecoding.steam.auth.GoogleUserInfo;
-import com.clonecoding.steam.auth.KakaoUserInfo;
-import com.clonecoding.steam.auth.NaverUserInfo;
-import com.clonecoding.steam.auth.OAuth2UserInfo;
+import com.clonecoding.steam.dto.auth.GoogleUserInfo;
+import com.clonecoding.steam.dto.auth.KakaoUserInfo;
+import com.clonecoding.steam.dto.auth.NaverUserInfo;
+import com.clonecoding.steam.dto.auth.OAuth2UserInfo;
 
+import com.clonecoding.steam.factory.auth.OAuth2UserInfoFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

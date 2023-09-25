@@ -1,6 +1,6 @@
 package com.clonecoding.steam.dto.game;
 
-import com.clonecoding.steam.dto.PaginationListDto;
+import com.clonecoding.steam.dto.common.PaginationListDto;
 import com.clonecoding.steam.dto.user.UserDTO;
 import lombok.Builder;
 

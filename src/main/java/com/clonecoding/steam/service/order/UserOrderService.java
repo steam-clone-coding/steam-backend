@@ -1,6 +1,6 @@
 package com.clonecoding.steam.service.order;
 
-import com.clonecoding.steam.dto.PaginationListDto;
+import com.clonecoding.steam.dto.common.PaginationListDto;
 import com.clonecoding.steam.dto.order.CartDTO;
 import com.clonecoding.steam.dto.order.OrderDTO;
 import org.springframework.data.domain.Pageable;

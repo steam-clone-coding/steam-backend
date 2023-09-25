@@ -1,7 +1,7 @@
 package com.clonecoding.steam.service.game;
 
 import com.clonecoding.steam.dto.game.GameDTO;
-import com.clonecoding.steam.dto.PaginationListDto;
+import com.clonecoding.steam.dto.common.PaginationListDto;
 import com.clonecoding.steam.dto.game.GameSearchConditions;
 import com.clonecoding.steam.dto.game.ReviewDTO;
 import com.clonecoding.steam.dto.game.ReviewSearchConditions;
@@ -61,7 +61,7 @@ public interface UserStoreService {
      * @return
      * @exception
     */
-    List<GameDTO.Preview> getRelateGameList(String gameId, Pageable page);
+    PaginationListDto<GameDTO.Preview> getRelateGameList(String gameId, Pageable page);
 
     /**
      * @author minseok kim

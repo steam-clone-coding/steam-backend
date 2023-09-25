@@ -1,6 +1,7 @@
 package com.clonecoding.steam.repository;
 
-import com.clonecoding.steam.entity.User;
+import com.clonecoding.steam.entity.user.User;
+import com.clonecoding.steam.repository.user.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

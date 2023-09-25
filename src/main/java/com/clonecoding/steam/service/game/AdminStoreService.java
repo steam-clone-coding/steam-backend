@@ -1,6 +1,6 @@
 package com.clonecoding.steam.service.game;
 
-import com.clonecoding.steam.dto.PaginationListDto;
+import com.clonecoding.steam.dto.common.PaginationListDto;
 import com.clonecoding.steam.dto.game.DiscountPolicyDTO;
 import com.clonecoding.steam.dto.game.GameDTO;
 import org.springframework.data.domain.Pageable;
@@ -54,6 +54,7 @@ public interface AdminStoreService {
      * @exception
     */
     List<GameDTO.RequestedPreview> getRequestedGameList();
+
 
     /**
      * @author minseok kim

@@ -1,12 +1,12 @@
 package com.clonecoding.steam.filter;
 
 import com.clonecoding.steam.dto.response.LoginResponse;
-import com.clonecoding.steam.entity.User;
-import com.clonecoding.steam.enums.UserAuthority;
+import com.clonecoding.steam.entity.user.User;
+import com.clonecoding.steam.enums.user.UserAuthority;
 import com.clonecoding.steam.exceptions.ExceptionMessages;
 import com.clonecoding.steam.exceptions.UnAuthorizedException;
-import com.clonecoding.steam.service.RedisService;
-import com.clonecoding.steam.utils.JwtTokenProvider;
+import com.clonecoding.steam.service.common.RedisService;
+import com.clonecoding.steam.utils.auth.JwtTokenProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -18,7 +18,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
