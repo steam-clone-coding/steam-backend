@@ -1,8 +1,10 @@
 package com.clonecoding.steam.service;
-import com.clonecoding.steam.auth.OAuth2UserInfo;
-import com.clonecoding.steam.entity.User;
-import com.clonecoding.steam.repository.UserRepository;
-import com.clonecoding.steam.utils.JwtTokenProvider;
+import com.clonecoding.steam.dto.auth.OAuth2UserInfo;
+import com.clonecoding.steam.entity.user.User;
+import com.clonecoding.steam.repository.user.UserRepository;
+import com.clonecoding.steam.service.auth.OAuth2AuthenticationSuccessHandler;
+import com.clonecoding.steam.service.common.RedisService;
+import com.clonecoding.steam.utils.auth.JwtTokenProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

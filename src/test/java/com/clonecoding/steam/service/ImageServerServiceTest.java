@@ -1,10 +1,10 @@
 package com.clonecoding.steam.service;
 
-import com.clonecoding.steam.dto.fileserver.ImageRemoveResult;
 import com.clonecoding.steam.dto.fileserver.MultipleImageUploadResult;
 import com.clonecoding.steam.dto.fileserver.SingleImageUploadResult;
 import com.clonecoding.steam.dto.fileserver.UploadedImageInfo;
 import com.clonecoding.steam.exceptions.InternalServerException;
+import com.clonecoding.steam.service.common.ImageServerService;
 import org.apache.http.HttpHeaders;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.*;

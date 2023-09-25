@@ -1,8 +1,8 @@
 package com.clonecoding.steam.dto.request;
 
 
-import com.clonecoding.steam.enums.LoginType;
-import com.clonecoding.steam.enums.UserAuthority;
+import com.clonecoding.steam.enums.auth.LoginType;
+import com.clonecoding.steam.enums.user.UserAuthority;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

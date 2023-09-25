@@ -1,6 +1,7 @@
 package com.clonecoding.steam.controller;
 
 import com.clonecoding.steam.IntegrationTestSupport;
+import com.clonecoding.steam.controller.auth.OAuth2Controller;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -12,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class OAuth2ControllerTest extends IntegrationTestSupport {
     @Autowired
-    private  OAuth2Controller controller;
+    private OAuth2Controller controller;
 
 //    private static ClientAndServer mockServer;
 //

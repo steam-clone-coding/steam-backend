@@ -1,12 +1,11 @@
 package com.clonecoding.steam.filter;
 
 import com.clonecoding.steam.dto.request.LoginRequest;
-import com.clonecoding.steam.dto.response.LoginResponse;
-import com.clonecoding.steam.entity.User;
+import com.clonecoding.steam.entity.user.User;
 import com.clonecoding.steam.exceptions.UnAuthorizedException;
-import com.clonecoding.steam.service.PrincipalUserDetailService;
-import com.clonecoding.steam.service.RedisService;
-import com.clonecoding.steam.utils.JwtTokenProvider;
+import com.clonecoding.steam.service.auth.PrincipalUserDetailService;
+import com.clonecoding.steam.service.common.RedisService;
+import com.clonecoding.steam.utils.auth.JwtTokenProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -14,8 +13,6 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,7 +23,7 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 import java.io.IOException;
 import java.util.Date;
 
-import static com.clonecoding.steam.utils.TokenOperationHelper.createRefreshTokenCookie;
+import static com.clonecoding.steam.utils.auth.TokenOperationHelper.createRefreshTokenCookie;
 
 public class CustomUsernamePasswordAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 

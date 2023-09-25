@@ -4,7 +4,7 @@ import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.clonecoding.steam.utils.TokenOperationHelper.createRefreshTokenCookie;
+import static com.clonecoding.steam.utils.auth.TokenOperationHelper.createRefreshTokenCookie;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class TokenOperationHelperTest {
