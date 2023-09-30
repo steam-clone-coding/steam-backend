@@ -13,7 +13,7 @@ public class ReviewDTO {
 
         private OverallReviews overallReviews;
 
-        @Builder
+//        @Builder
         public PaginationList(Number count, List<Detail> data, OverallReviews overallReviews) {
             super(count, data);
             this.overallReviews = overallReviews;
