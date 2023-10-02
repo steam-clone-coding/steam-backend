@@ -1,9 +1,9 @@
 package com.clonecoding.steam.config;
 
 
-import com.clonecoding.steam.filter.CustomUsernamePasswordAuthenticationFilter;
-import com.clonecoding.steam.filter.ExceptionHandlerFilter;
-import com.clonecoding.steam.filter.JwtAuthenticationFilter;
+import com.clonecoding.steam.filter.auth.CustomUsernamePasswordAuthenticationFilter;
+import com.clonecoding.steam.filter.common.ExceptionHandlerFilter;
+import com.clonecoding.steam.filter.auth.JwtAuthenticationFilter;
 import com.clonecoding.steam.service.auth.OAuth2AuthenticationSuccessHandler;
 import com.clonecoding.steam.service.auth.PrincipalOauth2UserService;
 import com.clonecoding.steam.utils.user.CustomPasswordEncoder;
@@ -45,7 +45,7 @@ public class SecurityConfig{
     private final PrincipalOauth2UserService oauth2UserService;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
 
-    private static final RequestMatcher LOGIN_REQUEST_MATCHER = new AntPathRequestMatcher("/api/login","POST");
+    private static final RequestMatcher LOGIN_REQUEST_MATCHER = new AntPathRequestMatcher("/api/v1/login","POST");
 
 
     //TODO: hashWidth, ITERATIONS, HASHING ALGORITHM은 어떻게 하는게 제일 효율적일까?
@@ -89,8 +89,8 @@ public class SecurityConfig{
                 .cors(cors-> cors.configurationSource(corsConfigurationSource))
                 .authorizeHttpRequests((authorizeHttpRequest)->{
                     authorizeHttpRequest
-                            .requestMatchers("/api/login/**").permitAll()
-                            .requestMatchers("/api/user/**").permitAll()
+                            .requestMatchers("/api/v1/login/**").permitAll()
+                            .requestMatchers("/api/v1/user/**").permitAll()
                             .requestMatchers("/v3/api-docs/**", "/swagger-ui/**" ).permitAll()
                             .anyRequest().authenticated();
                 })

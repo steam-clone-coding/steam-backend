@@ -1,4 +1,4 @@
-package com.clonecoding.steam.filter;
+package com.clonecoding.steam.filter.auth;
 
 import com.clonecoding.steam.dto.request.LoginRequest;
 import com.clonecoding.steam.entity.user.User;

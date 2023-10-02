@@ -154,7 +154,7 @@ public class UserServiceTest {
 
         assertThat(findUser).extracting("email", "username", "password")
                 .containsExactly(testEmail, testUsername, encodedPassword);
-    }c
+    }
 
     @TestConfiguration
     @DataRedisTest
