@@ -31,7 +31,7 @@ public interface UserCommunityService {
      * @description: 제공된 사용자 ID를 기반으로 사용자의 방명록 정보 조회
      * @param: userId 방명록 정보를 검색할 사용자의 ID
      * @param: page 페이지네이션
-     * @return:
+     * @return: 주어진 사용자 ID와 페이지 정보에 따라 검색된 방명록 정보를 포함하는 PaginationListDto 객체
      */
     PaginationListDto<UserDTO.GuestBook> getUserGuestBook(String userId, Pageable page);
 

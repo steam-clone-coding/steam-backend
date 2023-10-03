@@ -18,7 +18,7 @@ public class BoardDTO {
     public static class Create{
         String id;
         String title;
-        String ImageFileUrl; // url로 받을 수 있나?
+        String ImageFileUrl;
         String description;
         String gameId;
     }
