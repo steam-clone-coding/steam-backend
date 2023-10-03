@@ -15,7 +15,7 @@ public interface BoardService {
      * @return: 주어진 게시판 타입과 페이지 정보에 따라 조회된 게시글 목록을 포함하는 PaginationListDto 객체.
      * 만약 조회된 게시글이 없다면, 빈 PaginationListDto 객체를 반환
      */
-    PaginationListDto<BoardDTO.Preview> getBoardList(BoardType section , Pageable page);
+    PaginationListDto<BoardDTO.Preview> getBoardList(BoardType section, Pageable page);
 
     /*
      * @author: parkjunha
@@ -54,7 +54,7 @@ public interface BoardService {
      * @return: 지정된 게시판 글에 연결된 댓글 목록을 포함하는 PaginationListDto 객체를 반환
      * 댓글이 없는 경우 빈 PaginationListDto 객체를 반환
      */
-    PaginationListDto<BoardDTO.Comment> getComment(BoardType section, String boardId);
+    PaginationListDto<BoardDTO.Comment> getComment(BoardType section, String boardId, Pageable page);
 
 
 
