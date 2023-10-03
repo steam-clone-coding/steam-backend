@@ -1,4 +1,4 @@
-package com.clonecoding.steam.filter;
+package com.clonecoding.steam.filter.common;
 
 
 import com.clonecoding.steam.dto.response.ErrorResponse;

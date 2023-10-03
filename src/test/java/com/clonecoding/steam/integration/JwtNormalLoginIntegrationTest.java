@@ -52,7 +52,7 @@ public class JwtNormalLoginIntegrationTest {
     @DisplayName("Bearer 토큰 없이 인증이 필요한 uri 접근시 401 코드를 리턴한다.")
     void t1() throws Exception {
         //when & then
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/health-check"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/health-check"))
                 .andExpect(MockMvcResultMatchers.status().isUnauthorized());
 
     }
@@ -90,7 +90,7 @@ public class JwtNormalLoginIntegrationTest {
         // 200Code와 함께, accessToken, refreshToken, uid를 리턴하는지 확인
         mockMvc.perform(
                 MockMvcRequestBuilders
-                        .post("/api/login")
+                        .post("/api/v1/login")
                         .content(objectMapper.writeValueAsString(testLoginRequestBody))
         )
                 .andDo(print())
@@ -114,7 +114,7 @@ public class JwtNormalLoginIntegrationTest {
         // 401 Code와 함께 에러 메시지를 리턴하는지 확인
         mockMvc.perform(
                         MockMvcRequestBuilders
-                                .post("/api/login")
+                                .post("/api/v1/login")
                                 .content(objectMapper.writeValueAsString(testLoginRequestBody))
                 )
                 .andDo(print())
@@ -152,7 +152,7 @@ public class JwtNormalLoginIntegrationTest {
         // 401 Code와 함께 에러 메시지를 리턴하는지 확인
         mockMvc.perform(
                         MockMvcRequestBuilders
-                                .post("/api/login")
+                                .post("/api/v1/login")
                                 .content(objectMapper.writeValueAsString(testLoginRequestBody))
                 )
                 .andDo(print())
@@ -188,7 +188,7 @@ public class JwtNormalLoginIntegrationTest {
         //when & then
         mockMvc.perform(
                         MockMvcRequestBuilders
-                                .post("/api/user/new")
+                                .post("/api/v1/user/new")
                                 .content(objectMapper.writeValueAsString(reqBody))
                 )
                 .andDo(print())
@@ -227,7 +227,7 @@ public class JwtNormalLoginIntegrationTest {
         //when & then
         mockMvc.perform(
                         MockMvcRequestBuilders
-                                .post("/api/user/new")
+                                .post("/api/v1/user/new")
                                 .content(objectMapper.writeValueAsString(reqBody))
                 )
                 .andDo(print())
@@ -254,7 +254,7 @@ public class JwtNormalLoginIntegrationTest {
         //when & then
         mockMvc.perform(
                         MockMvcRequestBuilders
-                                .post("/api/user/new")
+                                .post("/api/v1/user/new")
                                 .content(objectMapper.writeValueAsString(reqBody))
                 )
                 .andDo(print())
@@ -279,7 +279,7 @@ public class JwtNormalLoginIntegrationTest {
         //when & then
         mockMvc.perform(
                         MockMvcRequestBuilders
-                                .post("/api/user/new")
+                                .post("/api/v1/user/new")
                                 .content(objectMapper.writeValueAsString(reqBody))
                 )
                 .andDo(print())
