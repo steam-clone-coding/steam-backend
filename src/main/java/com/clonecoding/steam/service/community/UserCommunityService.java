@@ -28,14 +28,6 @@ public interface UserCommunityService {
 
     /**
      * @author: parkjunha
-     * @description: 제공된 사용자 ID를 기반으로 사용자의 친구 정보 리스트 조회
-     * @param: userId 친구 정보를 검색할 사용자의 ID
-     * @return: 친구의 ID, 프로필 이미지 URL, 및 이름을 포함하는 FriendDTO.Preview 객체
-     */
-    FriendDTO.Preview getUserFriend(String userId);
-
-    /**
-     * @author: parkjunha
      * @description: 제공된 사용자 ID를 기반으로 사용자의 방명록 정보 조회
      * @param: userId 방명록 정보를 검색할 사용자의 ID
      * @param: page 페이지네이션
