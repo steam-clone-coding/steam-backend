@@ -60,6 +60,7 @@ public class Game {
     private GameStatus status;
 
     @Column(name = "required_age", nullable = false)
+    @Builder.Default
     private int requiredAge = 0;
 
 

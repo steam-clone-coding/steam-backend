@@ -35,6 +35,7 @@ public class Review {
     private String description;
 
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<ReviewLike> likes = new ArrayList<>();
 
     public void addLike(ReviewLike like) {
