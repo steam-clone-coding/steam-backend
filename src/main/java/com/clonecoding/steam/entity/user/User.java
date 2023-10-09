@@ -1,6 +1,8 @@
 package com.clonecoding.steam.entity.user;
 
 
+import com.clonecoding.steam.entity.game.Game;
+import com.clonecoding.steam.entity.game.GameLike;
 import com.clonecoding.steam.enums.auth.LoginType;
 import com.clonecoding.steam.enums.user.UserAuthority;
 import jakarta.persistence.*;
@@ -8,6 +10,8 @@ import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -64,7 +68,6 @@ public class User {
     @Builder.Default
     private LocalDateTime lastLoginTime = LocalDateTime.now();
 
-
     @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
 
@@ -79,6 +82,29 @@ public class User {
                 .uid(uid)
                 .userRole(UserAuthority.ROLE_USER)
                 .build();
+    }
+
+    @OneToMany(mappedBy = "developer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Game> developedGames;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<GameLike> likedGames;
+
+    public void likeGame(Game game) {
+        if (likedGames == null) {
+            likedGames = new ArrayList<>();
+        }
+        GameLike gameLike = GameLike.builder().user(this).game(game).build();
+        likedGames.add(gameLike);
+        game.getLikedByUsers().add(gameLike); // Game 엔티티도 업데이트
+    }
+
+    public void unlikeGame(Game game) {
+        if (likedGames != null) {
+            GameLike gameLike = GameLike.builder().user(this).game(game).build();
+            likedGames.remove(gameLike);
+            game.getLikedByUsers().remove(gameLike); // Game 엔티티도 업데이트
+        }
     }
 
 }
