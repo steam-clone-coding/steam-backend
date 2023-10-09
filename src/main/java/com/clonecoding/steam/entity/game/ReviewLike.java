@@ -12,8 +12,8 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Table(name = "review_likes")
 public class ReviewLike {
-    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "review_like_id_seq")
-    @SequenceGenerator(name = "review_like_id_seq", sequenceName = "review_like_id_seq", allocationSize = 1)
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "review_likes_id_seq")
+    @SequenceGenerator(name = "review_likes_id_seq", sequenceName = "review_likes_id_seq", allocationSize = 1)
     @Column(name = "review_like_id")
     private Long id;
 

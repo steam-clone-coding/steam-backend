@@ -9,6 +9,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Table(name="countries")
 public class Country {
 
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "countries_id_seq")

@@ -11,8 +11,8 @@ import lombok.*;
 @Table(name = "friends")
 public class Friend {
 
-    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "friend_id_seq")
-    @SequenceGenerator(name = "friend_id_seq", sequenceName = "friend_id_seq", allocationSize = 1)
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "friends_id_seq")
+    @SequenceGenerator(name = "friends_id_seq", sequenceName = "friends_id_seq", allocationSize = 1)
     @Column(name = "friend_id")
     private Long id;
 

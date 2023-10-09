@@ -11,8 +11,8 @@ import lombok.*;
 @Table(name = "discount_images")
 public class DiscountImage {
 
-    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "discount_image_id_seq")
-    @SequenceGenerator(name = "discount_image_id_seq", sequenceName = "discount_image_id_seq", allocationSize = 1)
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "discount_images_id_seq")
+    @SequenceGenerator(name = "discount_images_id_seq", sequenceName = "discount_images_id_seq", allocationSize = 1)
     @Column(name = "discount_image_id")
     private Long id;
 

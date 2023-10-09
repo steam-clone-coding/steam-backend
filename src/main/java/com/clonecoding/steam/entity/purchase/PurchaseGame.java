@@ -13,8 +13,8 @@ import lombok.*;
 @Table(name = "purchase_games")
 public class PurchaseGame {
 
-    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "purchase_id_seq")
-    @SequenceGenerator(name = "purchase_id_seq", sequenceName = "purchase_id_seq", allocationSize = 1)
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "purchase_games_id_seq")
+    @SequenceGenerator(name = "purchase_games_id_seq", sequenceName = "purchase_games_id_seq", allocationSize = 1)
     @Column(name = "purchase_id")
     private Long id;
 

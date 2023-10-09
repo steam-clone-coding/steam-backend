@@ -9,10 +9,10 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Table(name = "game_download_file")
+@Table(name = "game_download_files")
 public class GameDownloadFile {
-    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "game_download_file_id_seq")
-    @SequenceGenerator(name = "game_download_file_id_seq", sequenceName = "game_download_file_id_seq", allocationSize = 1)
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "game_download_files_id_seq")
+    @SequenceGenerator(name = "game_download_files_id_seq", sequenceName = "game_download_files_id_seq", allocationSize = 1)
     @Column(name = "game_file_id")
     private Long id;
 

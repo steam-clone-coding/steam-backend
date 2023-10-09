@@ -10,6 +10,7 @@ public class DiscountPolicy {
 
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "discount_policies_id_seq")
     @SequenceGenerator(name = "discount_policies_id_seq", sequenceName = "discount_policies_id_seq", allocationSize = 1)
+    @Column(name = "discount_policy_id")
     private Long id;
 
     @Column(nullable = false)

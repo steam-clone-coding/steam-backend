@@ -10,7 +10,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "games_like")
+@Table(name = "game_likes")
 public class GameLike {
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "game_likes_id_seq")
     @SequenceGenerator(name = "game_likes_id_seq", sequenceName = "game_likes_id_seq", allocationSize = 1)

@@ -13,8 +13,8 @@ import lombok.*;
 @Table(name = "country_restrictions")
 public class CountryRestriction {
 
-    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "restriction_id_seq")
-    @SequenceGenerator(name = "restriction_id_seq", sequenceName = "restriction_id_seq", allocationSize = 1)
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "country_restrictions_id_seq")
+    @SequenceGenerator(name = "country_restrictions_id_seq", sequenceName = "country_restrictions_id_seq", allocationSize = 1)
     @Column(name = "restriction_id")
     private Long id;
 
