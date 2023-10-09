@@ -38,7 +38,7 @@ public class Game {
     private String shortDescription;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "developer_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User developer;
 
     @Column(name = "release_date", nullable = false)
@@ -66,7 +66,6 @@ public class Game {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "requirement_id")
     private Requirements requirements;
-
 
 
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)

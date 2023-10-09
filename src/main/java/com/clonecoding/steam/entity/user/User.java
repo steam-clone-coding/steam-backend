@@ -45,28 +45,30 @@ public class User {
 
     private String email;
 
-    @Enumerated(EnumType.STRING)
-    private LoginType loginType;
-
     private String profile_image;
 
     @Column(unique = true)
     private String nickname;
+
+    private String introduction;
+
+    @Builder.Default
+    private LocalDateTime lastLoginTime = LocalDateTime.now();
+
+    @Enumerated(EnumType.STRING)
+    private LoginType loginType;
+
+    private String uid;
 
     private String username;
 
     @Column(length = 3000)
     private String password;
 
-    private String uid;
-
     @Enumerated(EnumType.STRING)
     private UserAuthority userRole;
 
     private String salt;
-
-    @Builder.Default
-    private LocalDateTime lastLoginTime = LocalDateTime.now();
 
     @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();

@@ -1,4 +1,4 @@
-package com.clonecoding.steam.entity.game;
+package com.clonecoding.steam.entity.purchase;
 
 import jakarta.persistence.*;
 
@@ -16,7 +16,7 @@ public class DiscountPolicy {
     private String discountName;
 
     @Column(nullable = false, columnDefinition = "varchar(255) CHECK (discount_type IN ('FIXED', 'PERCENT'))")
-    private String discountType;
+    private DiscountTypes discountType;
 
     @Column(nullable = false)
     private Timestamp startDate;
