@@ -3,10 +3,15 @@ jwt:
   access-token-expire-time: 600000
   refresh-token-expire-time: 1800000
 
+static:
+  image-server-uri: http://localhost:1080
+  single-file-upload-uri: /images/upload
+  multi-file-upload-uri: /images/upload_many
+  delete-uri: /images/delete
+  access-token: c95a5024651547fa82e1eebc0daa52a2
 nanoId:
   alphabet: ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789
   length: 10
-
 
 spring:
   datasource:
@@ -48,3 +53,4 @@ spring:
       algorithm: PBKDF2WithHmacSHA512
     salt:
       algorithm: SHA1PRNG
+

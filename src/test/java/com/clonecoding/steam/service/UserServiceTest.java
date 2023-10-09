@@ -1,20 +1,19 @@
 package com.clonecoding.steam.service;
 
-import com.clonecoding.steam.dto.request.UserLoginDTO;
 import com.clonecoding.steam.dto.request.UserRegisterDTO;
-import com.clonecoding.steam.dto.response.LoginResponse;
-import com.clonecoding.steam.entity.User;
-import com.clonecoding.steam.enums.UserAuthority;
-import com.clonecoding.steam.exceptions.EncodeException;
+import com.clonecoding.steam.entity.user.User;
+import com.clonecoding.steam.enums.user.UserAuthority;
 import com.clonecoding.steam.exceptions.ExceptionMessages;
-import com.clonecoding.steam.exceptions.UnAuthorizedException;
 import com.clonecoding.steam.exceptions.UserInfoConflictException;
-import com.clonecoding.steam.repository.UserRepository;
-import com.clonecoding.steam.utils.JwtTokenProvider;
-import com.clonecoding.steam.utils.NanoIdProvider;
-import com.clonecoding.steam.utils.PasswordEncodeUtils;
-import com.clonecoding.steam.utils.UserValidator;
-import lombok.extern.slf4j.Slf4j;
+import com.clonecoding.steam.repository.user.UserRepository;
+import com.clonecoding.steam.service.common.RedisService;
+import com.clonecoding.steam.service.user.UserService;
+import com.clonecoding.steam.utils.auth.JwtTokenProvider;
+import com.clonecoding.steam.utils.common.NanoIdProvider;
+import com.clonecoding.steam.utils.user.PasswordEncodeUtils;
+
+import com.clonecoding.steam.utils.user.UserValidator;
+
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -26,13 +25,11 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
+
 import org.springframework.data.redis.core.RedisTemplate;
+
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
-
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
@@ -73,6 +70,8 @@ public class UserServiceTest {
 
         // 유저 저장
         userRepository.save(testUser);
+
+
     }
 
     @AfterEach
@@ -128,6 +127,8 @@ public class UserServiceTest {
                 .hasMessage(ExceptionMessages.INVALID_PASSWORD.getMessage());
     }
 
+
+
     @Test
     @DisplayName("비밀번호 조건, 이메일, username이 중복되지 않은 새로운 유저 정보를 저장할 수 있다.")
     void t4() throws Exception {
@@ -135,6 +136,7 @@ public class UserServiceTest {
         final String testEmail = "registertest@email.com";
         final String testUsername = "registertest";
         final String testPassword = "a123456!";
+
 
         final UserRegisterDTO dto = UserRegisterDTO.builder()
                 .email(testEmail)
@@ -152,7 +154,7 @@ public class UserServiceTest {
 
         assertThat(findUser).extracting("email", "username", "password")
                 .containsExactly(testEmail, testUsername, encodedPassword);
-    }c
+    }
 
     @TestConfiguration
     @DataRedisTest
@@ -160,8 +162,10 @@ public class UserServiceTest {
         @Autowired
         private Environment environment;
 
+
         @Bean
         public PasswordEncodeUtils passwordEncodeUtils() {
+
             return new PasswordEncodeUtils(environment);
         }
 
@@ -177,7 +181,7 @@ public class UserServiceTest {
 
         @Bean
         public JwtTokenProvider jwtTokenProvider(RedisService redisService) {
-            return new JwtTokenProvider(environment, redisService);
+            return new JwtTokenProvider(environment);
         }
 
         @Bean
