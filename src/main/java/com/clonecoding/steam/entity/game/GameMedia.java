@@ -1,5 +1,6 @@
 package com.clonecoding.steam.entity.game;
 
+import com.clonecoding.steam.enums.game.GameMediaType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -25,5 +26,6 @@ public class GameMedia {
     private String mediaUrl;
 
     @Column(name = "media_type", nullable = false)
-    private String mediaType;
+    @Enumerated(EnumType.STRING)
+    private GameMediaType mediaType;
 }
