@@ -35,12 +35,9 @@ public class Review {
     private String description;
 
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ReviewLike> likes;
+    private List<ReviewLike> likes = new ArrayList<>();
 
     public void addLike(ReviewLike like) {
-        if (likes == null) {
-            likes = new ArrayList<>();
-        }
         likes.add(like);
         like.setReview(this); // 양방향 연관관계 설정
     }
