@@ -1,5 +1,6 @@
 package com.clonecoding.steam.entity.purchase;
 
+import com.clonecoding.steam.enums.purchase.DiscountTypes;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;

@@ -1,4 +1,4 @@
-package com.clonecoding.steam.entity.purchase;
+package com.clonecoding.steam.enums.purchase;
 
 public enum DiscountTypes {
     FIXED,
