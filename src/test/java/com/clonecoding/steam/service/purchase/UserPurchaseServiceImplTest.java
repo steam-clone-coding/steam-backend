@@ -90,6 +90,19 @@ class UserPurchaseServiceImplTest {
 
     }
 
+    @Test
+    @DisplayName("Cart 추가시 Game 조회가 실패하면 Exception을 Throw 한다.")
+    public void addCartWithInvalidGame() throws Exception{
+        //given
+
+        //when
+        assertThatThrownBy(()->userPurchaseService.addCart(testUser.getUid(), "noGameUid"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage(ExceptionMessages.GAME_NOT_FOUND.getMessage());
+        //then
+
+    }
+
 
     @Test
     @DisplayName("이미 User가 Cart에 추가된 게임을 다시 Cart에 추가하려고 한다면 Exception을 throw한다.")
