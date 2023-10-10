@@ -12,6 +12,7 @@ import com.clonecoding.steam.repository.purchase.CartRepository;
 import com.clonecoding.steam.repository.user.UserRepository;
 import com.clonecoding.steam.utils.common.NanoIdProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,7 +53,12 @@ public class UserPurchaseServiceImpl implements UserPurchaseService{
     @Override
     public PaginationListDto<CartDTO.Preview> getCartList(String userUid, Pageable page) {
 
-        return null;
+        Page<Cart> result = cartRepository.findByUser_Uid(userUid, page);
+
+        return PaginationListDto.<CartDTO.Preview>builder()
+                .count(result.getTotalElements())
+                .data(result.getContent().stream().map(CartDTO.Preview::entityToDto).toList())
+                .build();
     }
 
 
