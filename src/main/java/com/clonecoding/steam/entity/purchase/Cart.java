@@ -18,6 +18,9 @@ public class Cart {
     @Column(name = "cart_id")
     private Long id;
 
+    @Column(name = "uid", nullable = false)
+    private String uid;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "game_id", nullable = false)
     private Game game;
