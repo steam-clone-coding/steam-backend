@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 /**
- * 주문 관련 리포지토리입니다.
+ * 주문 관련 리포지토리
  * Author: Jinyeon Seol
  */
 public interface OrderRepository extends JpaRepository<Order, Long> {
@@ -44,7 +44,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     }
 
     /**
-     * 주문 상태를 업데이트합니다.
+     * 주문 상태를 업데이트
      *
      * @param orderCode      주문 코드
      * @param purchaseStatus 업데이트할 주문 상태
@@ -53,7 +53,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     void updatePurchaseStatusByOrderCode(String orderCode, PurchaseStatus purchaseStatus);
 
     /**
-     * 주문을 저장합니다.
+     * 주문 저장
      *
      * @param order 주문 정보
      * @return 저장된 주문 정보
