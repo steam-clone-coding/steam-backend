@@ -10,7 +10,7 @@ import java.util.Optional;
 
 /**
  * 주문 관련 리포지토리
- * Author: Jinyeon Seol
+ * Author: Jinyeong Seol
  */
 public interface OrderRepository extends JpaRepository<Order, Long> {
     /**
