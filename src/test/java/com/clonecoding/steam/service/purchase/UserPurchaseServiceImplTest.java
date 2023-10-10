@@ -47,6 +47,7 @@ class UserPurchaseServiceImplTest {
         testGame = Game.builder()
                 .id(1L)
                 .uid("testGame")
+                .name("game 1")
                 .build();
 
         testUser = User.builder()
@@ -82,7 +83,7 @@ class UserPurchaseServiceImplTest {
         //then
         assertThat(result.getCount()).isEqualTo(1);
         assertThat(result.getData().size()).isEqualTo(1);
-
+        assertThat(result.getData().get(0).getName()).isEqualTo("game 1");
     }
 
 

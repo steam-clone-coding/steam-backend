@@ -1,7 +1,11 @@
 package com.clonecoding.steam.dto.order;
 
+import lombok.Data;
+
 public class CartDTO {
 
+
+    @Data
     public static class Preview{
         private String id;
         private String thumbnailUrl;
