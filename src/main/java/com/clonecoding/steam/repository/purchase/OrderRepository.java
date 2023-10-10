@@ -32,27 +32,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     Page<Order> findByUser_IdOrderByOrderedAtDesc(Long userId, Pageable pageable);
 
     /**
-     * 주문 환불 처리를 수행 (purchaseStatus를 REFUND로 업데이트)
-     *
-     * @param userUid   사용자 UID
-     * @param orderCode 주문 코드
-     */
-    @Transactional
-    default void refundOrderByUidAndOrderCode(String userUid, String orderCode) {
-        Optional<Order> orderOptional = findByUser_UidAndOrderCode(userUid, orderCode);
-        orderOptional.ifPresent(order -> updatePurchaseStatusByOrderCode(order.getOrderCode(), PurchaseStatus.REFUND));
-    }
-
-    /**
-     * 주문 상태를 업데이트
-     *
-     * @param orderCode      주문 코드
-     * @param purchaseStatus 업데이트할 주문 상태
-     */
-    @Transactional
-    void updatePurchaseStatusByOrderCode(String orderCode, PurchaseStatus purchaseStatus);
-
-    /**
      * 주문 저장
      *
      * @param order 주문 정보
