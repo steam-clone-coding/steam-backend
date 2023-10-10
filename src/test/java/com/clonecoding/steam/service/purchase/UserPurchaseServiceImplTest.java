@@ -4,6 +4,7 @@ import com.clonecoding.steam.dto.common.PaginationListDto;
 import com.clonecoding.steam.dto.order.CartDTO;
 import com.clonecoding.steam.entity.game.Game;
 import com.clonecoding.steam.entity.user.User;
+import com.clonecoding.steam.exceptions.ExceptionMessages;
 import com.clonecoding.steam.repository.game.GameRepository;
 import com.clonecoding.steam.repository.purchase.CartRepository;
 import com.clonecoding.steam.repository.user.UserRepository;
@@ -77,6 +78,20 @@ class UserPurchaseServiceImplTest {
     }
 
     @Test
+    @DisplayName("User의 Cart를 추가하려 했는데 User 조회가 실패한다면 Exception을 throw 한다.")
+    public void addCartWithInvalidUser() throws Exception{
+        //given
+
+        //when
+        assertThatThrownBy(()->userPurchaseService.addCart("noUserUid", testGame.getUid()))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage(ExceptionMessages.USER_NOT_FOUND.getMessage());
+        //then
+
+    }
+
+
+    @Test
     @DisplayName("이미 User가 Cart에 추가된 게임을 다시 Cart에 추가하려고 한다면 Exception을 throw한다.")
     public void testDuplicatedGameInCart() throws Exception{
         //given
@@ -137,7 +152,7 @@ class UserPurchaseServiceImplTest {
 
         @Bean
         public UserPurchaseService userPurchaseService(){
-            return new UserPurchaseServiceImpl(cartRepository, userRepository);
+            return new UserPurchaseServiceImpl(cartRepository, userRepository, gameRepository);
         }
 
 
