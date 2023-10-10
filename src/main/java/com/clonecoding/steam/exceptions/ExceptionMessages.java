@@ -22,7 +22,8 @@ public enum ExceptionMessages {
     USER_NOT_FOUND("username에 맞는 사용자를 찾을 수 없습니다"),
     PASSWORD_NOT_FOUND("비밀번호에 맞는 사용자가 존재하지 않습니다."),
     PASSWORD_ENCODING_FAILED("비밀번호 인코딩에 실패하였습니다."),
-    USER_CREATION_FAILED("사용자 생성에 실패하였습니다.");
+    USER_CREATION_FAILED("사용자 생성에 실패하였습니다."),
+    GAME_NOT_FOUND("해당하는 게임을 찾을 수 없습니다.");
     private String message;
 
 }

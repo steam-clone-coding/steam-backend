@@ -16,7 +16,7 @@ nanoId:
 spring:
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:testdb
+    url: jdbc:h2:mem:testdb;MODE=PostgreSQL;
     username: sa
     password:
 
@@ -43,9 +43,12 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
     database: h2
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     open-in-view: false
-
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
   security:
     pbkdf2:
       hashwidth: 16

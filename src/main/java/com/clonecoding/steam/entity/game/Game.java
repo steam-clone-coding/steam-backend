@@ -43,11 +43,13 @@ public class Game {
 
     @Column(name = "release_date", nullable = false)
     @Temporal(TemporalType.DATE)
-    private LocalDate releaseDate;
+    @Builder.Default
+    private LocalDate releaseDate = LocalDate.now();
 
     @Column(name = "created_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime createdAt;
+    @Builder.Default
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     @Column(name = "uid", nullable = false)
     private String uid;
