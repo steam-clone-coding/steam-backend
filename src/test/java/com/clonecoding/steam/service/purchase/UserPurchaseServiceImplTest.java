@@ -104,6 +104,22 @@ class UserPurchaseServiceImplTest {
         assertThat(result.getData().get(0).getName()).isEqualTo("game 1");
     }
 
+    @Test
+    @DisplayName("User Cart목록 조회시, 해당하는 결과가 없다면 빈 배열을 리턴한다.")
+    public void getEmptyCartListWithNoData() throws Exception{
+        //given
+
+        //when
+        PaginationListDto<CartDTO.Preview> result =
+                userPurchaseService.getCartList(testUser.getUid(), PageRequest.of(0, 10));
+
+        //then
+        assertThat(result.getCount()).isEqualTo(0);
+        assertThat(result.getData()).isNotNull();
+        assertThat(result.getData()).isEmpty();
+
+    }
+
 
 
     @TestConfiguration
