@@ -4,20 +4,21 @@ import com.clonecoding.steam.dto.common.PaginationListDto;
 import com.clonecoding.steam.dto.order.CartDTO;
 import com.clonecoding.steam.entity.game.Game;
 import com.clonecoding.steam.entity.user.User;
+import com.clonecoding.steam.enums.game.GameStatus;
 import com.clonecoding.steam.exceptions.ExceptionMessages;
 import com.clonecoding.steam.repository.game.GameRepository;
 import com.clonecoding.steam.repository.purchase.CartRepository;
 import com.clonecoding.steam.repository.user.UserRepository;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import com.clonecoding.steam.utils.common.NanoIdProvider;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -38,29 +39,39 @@ class UserPurchaseServiceImplTest {
     @Autowired
     private UserPurchaseService userPurchaseService;
 
-    private static User testUser;
-    private static Game testGame;
+    private User testUser;
+    private Game testGame;
 
-
-    @BeforeAll
-    static void beforeAll() {
-        testGame = Game.builder()
-                .id(1L)
-                .uid("testGame")
-                .name("game 1")
-                .build();
-
+    @BeforeEach
+    @Transactional
+    void setUp() {
         testUser = User.builder()
-                .id(1L)
-                .uid("testUser")
+                .username("test-user")
+                .email("hello@naver.com")
+                .uid("testuid")
                 .build();
 
-    }
 
+        testGame = Game.builder()
+                .uid("testGameuid")
+                .name("game 1")
+                .price(10000)
+                .developer(testUser)
+                .recentVersion("0.0.1")
+                .status(GameStatus.WAIT)
+                .build();
+
+
+
+        userRepository.save(testUser);
+        gameRepository.save(testGame);
+    }
 
     @AfterEach
     void tearDown() {
         cartRepository.deleteAllInBatch();
+        gameRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     @Test
@@ -162,10 +173,18 @@ class UserPurchaseServiceImplTest {
         @Autowired
         private UserRepository userRepository;
 
+        @Autowired
+        private Environment environment;
+
 
         @Bean
         public UserPurchaseService userPurchaseService(){
-            return new UserPurchaseServiceImpl(cartRepository, userRepository, gameRepository);
+            return new UserPurchaseServiceImpl(cartRepository, userRepository, gameRepository, nanoIdProvider());
+        }
+
+        @Bean
+        public NanoIdProvider nanoIdProvider(){
+            return new NanoIdProvider(environment);
         }
 
 

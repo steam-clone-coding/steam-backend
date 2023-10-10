@@ -3,11 +3,14 @@ package com.clonecoding.steam.service.purchase;
 import com.clonecoding.steam.dto.common.PaginationListDto;
 import com.clonecoding.steam.dto.order.CartDTO;
 import com.clonecoding.steam.dto.order.OrderDTO;
+import com.clonecoding.steam.entity.game.Game;
+import com.clonecoding.steam.entity.purchase.Cart;
 import com.clonecoding.steam.entity.user.User;
 import com.clonecoding.steam.exceptions.ExceptionMessages;
 import com.clonecoding.steam.repository.game.GameRepository;
 import com.clonecoding.steam.repository.purchase.CartRepository;
 import com.clonecoding.steam.repository.user.UserRepository;
+import com.clonecoding.steam.utils.common.NanoIdProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,12 +25,27 @@ public class UserPurchaseServiceImpl implements UserPurchaseService{
     private final CartRepository cartRepository;
     private final UserRepository userRepository;
     private final GameRepository gameRepository;
+    private final NanoIdProvider nanoIdProvider;
 
     @Override
     @Transactional
     public void addCart(String userUid, String gameUid) {
         User user = userRepository.findUserByUid(userUid)
                 .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.USER_NOT_FOUND.getMessage()));
+
+
+        Game game = gameRepository.findByUid(gameUid)
+                .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.GAME_NOT_FOUND.getMessage()));
+
+
+        Cart cart = Cart.builder()
+                .user(user)
+                .game(game)
+                .uid(nanoIdProvider.createNanoId())
+                .build();
+
+        cartRepository.save(cart);
+
     }
 
 
