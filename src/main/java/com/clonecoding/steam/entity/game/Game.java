@@ -1,5 +1,6 @@
 package com.clonecoding.steam.entity.game;
 
+import com.clonecoding.steam.entity.purchase.DiscountedGame;
 import com.clonecoding.steam.entity.user.User;
 import com.clonecoding.steam.enums.game.GameStatus;
 import jakarta.persistence.*;
@@ -18,8 +19,6 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Table(name = "games")
 public class Game {
-
-
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "games_id_seq")
     @SequenceGenerator(name = "games_id_seq", sequenceName = "games_id_seq", allocationSize = 1)
     @Column(name = "game_id")
@@ -80,6 +79,8 @@ public class Game {
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GameLike> likedByUsers;
 
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DiscountedGame> discountedGames = new ArrayList<>();
 
     public void setDeveloper(User developer) {
         this.developer = developer;
