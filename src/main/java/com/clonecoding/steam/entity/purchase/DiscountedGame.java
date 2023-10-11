@@ -1,6 +1,6 @@
-package com.clonecoding.steam.entity.game;
+package com.clonecoding.steam.entity.purchase;
 
-import com.clonecoding.steam.entity.purchase.DiscountPolicy;
+import com.clonecoding.steam.entity.game.Game;
 import jakarta.persistence.*;
 import lombok.*;
 
