@@ -42,12 +42,12 @@ public interface UserPurchaseService {
     /**
      * @author minseok kim
      * @description 주문 상세 조회
-     * @param orderUid 조회하려는 주문의 ID
+     * @param orderCode 조회하려는 주문의 ID
      * @param userUid 조회하려는 주문의 userID
      * @return
      * @exception
     */
-    OrderDTO.Detail getOrder(String orderUid, String userUid);
+    OrderDTO.Detail getOrder(String orderCode, String userUid);
 
     /**
      * @author minseok kim
@@ -64,11 +64,11 @@ public interface UserPurchaseService {
      * @author minseok kim
      * @description 주문 취소
      * @param userUid 취소하려는 유저의 ID
-     * @param orderUid 취소하려는 주문의 ID
+     * @param orderCode 취소하려는 주문의 ID
      * @return
      * @exception
     */
-    void refund(String userUid, String orderUid);
+    void refund(String userUid, String orderCode);
 
 
     /**
