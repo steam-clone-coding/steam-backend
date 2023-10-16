@@ -40,6 +40,17 @@ class GameTest {
         assertThat(actual).isEqualTo(discountedGame);
     }
 
+    @Test
+    @DisplayName("활성화된 할인 정책이 없다면 할인 금액은 0이다.")
+    void testNoActiveDiscountPolicy(){
+        // given
+        final Game game = new Game();
+        // when
+        int salePrice = game.getSalePrice(LocalDateTime.of(2023, 10, 13, 12,0));
+        // then
+        assertThat(salePrice).isZero();
+    }
+
 
     @Test
     @DisplayName("현재 활성화된 고정 금액 할인 정책이 있다면 할인 금액을 알 수 있다.")
@@ -61,10 +72,39 @@ class GameTest {
         game.addDiscountedGames(discountedGame);
 
         //when
-        int salePrice = game.getSalePrice();
+        int salePrice = game.getSalePrice(LocalDateTime.of(2023, 10, 13, 12,0));
 
         //then
         assertThat(salePrice).isEqualTo(5000);
     }
+
+    @Test
+    @DisplayName("현재 활성화된 % 금액 할인 정책이 있다면 할인 금액을 알 수 있다.")
+    void testGetRateSalePrice(){
+        // given
+        final Game game = Game.builder()
+                .price(10000)
+                .build();
+
+        final DiscountPolicy discountPolicy = DiscountPolicy.builder()
+                .startDate(Timestamp.valueOf(LocalDateTime.of(2023,10,13,0,0)))
+                .endDate(Timestamp.valueOf(LocalDateTime.of(2023,10,14,0,0)))
+                .discountType(DiscountTypes.PERCENT)
+                .build();
+
+        final DiscountedGame discountedGame = DiscountedGame.builder()
+                .discountPolicy(discountPolicy)
+                .rateDiscountRate(0.5f)
+                .game(game)
+                .build();
+
+        game.addDiscountedGames(discountedGame);
+        //when
+        int salePrice = game.getSalePrice(LocalDateTime.of(2023, 10, 13, 12,0));
+
+        //then
+        assertThat(salePrice).isEqualTo(5000);
+    }
+
 
 }

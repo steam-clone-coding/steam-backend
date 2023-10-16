@@ -83,9 +83,11 @@ public class Game {
     private List<GameLike> likedByUsers;
 
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<DiscountedGame> discountedGames = new ArrayList<>();
 
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<Review> reviews = new ArrayList<>();
 
     public void setDeveloper(User developer) {
@@ -126,14 +128,17 @@ public class Game {
     }
 
 
-    public int getSalePrice() {
-        final DiscountedGame discountedGame = getActivateDiscount(LocalDateTime.now());
+    public int getSalePrice(LocalDateTime now) {
+        final DiscountedGame discountedGame = getActivateDiscount(now);
         if(discountedGame == null){
             return 0;
         }
 
         if(discountedGame.getDiscountPolicy().getDiscountType() == DiscountTypes.FIXED){
             return discountedGame.getFixDiscountPrice();
+        }
+        else if(discountedGame.getDiscountPolicy().getDiscountType() == DiscountTypes.PERCENT){
+            return (int) (discountedGame.getRateDiscountRate() * price);
         }
 
         return 0;
