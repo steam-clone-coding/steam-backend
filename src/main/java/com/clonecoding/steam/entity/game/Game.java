@@ -14,8 +14,8 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Table(name = "games")
 public class Game {
@@ -69,19 +69,23 @@ public class Game {
     @JoinColumn(name = "requirement_id")
     private Requirements requirements;
 
-
+    @Builder.Default
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<GameMedia> gameMedias;
+    private List<GameMedia> gameMedias = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<GameCategory> gameCategories;
+    private List<GameCategory> gameCategories = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<GameLike> likedByUsers;
+    private List<GameLike> likedByUsers = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DiscountedGame> discountedGames = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews = new ArrayList<>();
 

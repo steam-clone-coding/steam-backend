@@ -2,11 +2,19 @@ package com.clonecoding.steam.entity.purchase;
 
 import com.clonecoding.steam.enums.purchase.DiscountTypes;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "discount_policies")
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class DiscountPolicy {
 
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "discount_policies_id_seq")
@@ -18,6 +26,7 @@ public class DiscountPolicy {
     private String discountName;
 
     @Column(nullable = false, columnDefinition = "varchar(255) CHECK (discount_type IN ('FIXED', 'PERCENT'))")
+    @Enumerated(EnumType.STRING)
     private DiscountTypes discountType;
 
     @Column(nullable = false)
