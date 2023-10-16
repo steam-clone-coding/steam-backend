@@ -70,7 +70,7 @@ public class GameDTO {
 
         private Integer salePrice;
 
-        private Float saleRate;
+        private Double saleRate;
 
         private Integer like;
 
@@ -83,7 +83,7 @@ public class GameDTO {
         public static Detail entityToDto(Game game, LocalDateTime now){
             return Detail.builder()
                     .id(game.getUid())
-                    .thumbnailUrl(getThumbnailUrl(game))
+                    .thumbnailUrl(game.getThumbnail())
                     .imageUrls(getImagesUrl(game))
                     .name(game.getName())
                     .description(game.getDescription())
@@ -92,7 +92,7 @@ public class GameDTO {
                     .releaseDate(game.getReleaseDate())
                     .netPrice(game.getPrice())
                     .salePrice(getSalePrice(game, now))
-                    .saleRate(getSaleRate(game, now))
+                    .saleRate(game.getDiscountRate(now))
                     .like(game.getLikedByUsers().size())
                     .score(4.5F) // ?
                     .recentVersion(game.getRecentVersion())
@@ -100,12 +100,8 @@ public class GameDTO {
                     .build();
         }
 
-        public static String getThumbnailUrl(Game game){
-            return game.getGameMedias().stream()
-                    .filter(media -> media.getMediaType().equals(GameMediaType.HEADER_IMAGE))
-                    .findFirst()
-                    .map(GameMedia::getMediaUrl)
-                    .orElse("None");
+        private static int getSalePrice(Game game, LocalDateTime now) {
+            return game.getPrice() - game.getSalePrice(now);
         }
 
         public static List<String> getImagesUrl(Game game){
@@ -113,21 +109,6 @@ public class GameDTO {
                     .filter(media -> !media.getMediaType().equals(GameMediaType.HEADER_IMAGE))
                     .map(GameMedia::getMediaUrl)
                     .toList();
-        }
-
-        public static Float getSaleRate(Game game, LocalDateTime now) {
-            return game.getDiscountedGames().stream()
-                    .filter(dg -> dg.getDiscountPolicy().getDiscountType().equals(DiscountTypes.PERCENT))
-                    .filter(dg -> dg.getDiscountPolicy().getEndDate().after(Timestamp.valueOf(now)))
-                    .map(DiscountedGame::getRateDiscountRate)
-                    .max(Float::compareTo)
-                    .orElse(0.0F);
-        }
-
-        public static Integer getSalePrice(Game game, LocalDateTime now) {
-            Float discountRate = getSaleRate(game, now); // getSaleRate는 앞서 제공한 메서드입니다.
-
-            return (int) (game.getPrice() * (1 - discountRate));
         }
 
     }

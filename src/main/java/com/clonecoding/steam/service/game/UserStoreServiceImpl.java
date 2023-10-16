@@ -40,18 +40,8 @@ public class UserStoreServiceImpl implements UserStoreService{
     public PaginationListDto<GameDTO.Search> search(String query, Pageable page) {
         Page<Game> findGames = gameRepository.findByNameContaining(query, page);
 
-        Map<Game, String> gameList = findGames.stream()
-                .collect(Collectors.toMap(
-                        game -> game,
-                        game -> game.getGameMedias().stream()
-                                .filter(media -> media.getMediaType().equals(GameMediaType.HEADER_IMAGE))
-                                .findFirst()
-                                .map(GameMedia::getMediaUrl)
-                                .orElse("None")
-                ));
-
-        List<GameDTO.Search> gameDtoList = gameList.entrySet().stream()
-                .map(entry -> GameDTO.Search.entityToDto(entry.getKey(), entry.getValue()))
+        List<GameDTO.Search> gameDtoList = findGames.stream()
+                .map(game -> GameDTO.Search.entityToDto(game, game.getThumbnail()))
                 .collect(Collectors.toList());
 
         return PaginationListDto.<GameDTO.Search>builder()

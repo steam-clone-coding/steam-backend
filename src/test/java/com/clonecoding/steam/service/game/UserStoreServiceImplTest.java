@@ -139,7 +139,9 @@ class UserStoreServiceImplTest extends IntegrationTestSupport {
         discountPolicyRepository.saveAll(discountPolicyList);
         discountedGameRepository.saveAll(discountedGameList);
 
-        game.setDiscountedGames(discountedGameList);
+        for(DiscountedGame discountedGame : discountedGameList){
+            game.addDiscountedGames(discountedGame);
+        }
 
         //when
         GameDTO.Detail response = userStoreService.getGameDetail(game.getUid(), LocalDateTime.of(2023, 10, 17,10,11));
