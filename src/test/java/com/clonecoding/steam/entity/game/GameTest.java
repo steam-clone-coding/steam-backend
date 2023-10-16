@@ -2,6 +2,7 @@ package com.clonecoding.steam.entity.game;
 
 import com.clonecoding.steam.entity.purchase.DiscountPolicy;
 import com.clonecoding.steam.entity.purchase.DiscountedGame;
+import com.clonecoding.steam.enums.game.GameMediaType;
 import com.clonecoding.steam.enums.purchase.DiscountTypes;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -178,6 +179,47 @@ class GameTest {
         );
         // then
         assertThat(discountRate).isEqualTo(0.5);
+    }
+
+    @Test
+    @DisplayName("썸네일 이미지가 존재한다면 이미지 URL을 리턴할 수 있다.")
+    public void testGetThumbnail() {
+
+        //given
+        Game game = new Game();
+
+        GameMedia thumbnail = GameMedia.builder()
+                .mediaType(GameMediaType.HEADER_IMAGE)
+                .mediaUrl("url1")
+                .build();
+
+        GameMedia media = GameMedia.builder()
+                .mediaType(GameMediaType.SCREEN_SHOT)
+                .mediaUrl("url2")
+                .build();
+
+
+        game.addGameMedia(thumbnail);
+        game.addGameMedia(media);
+
+
+        // when
+        String thumbnailUrl = game.getThumbnail();
+
+        //then
+        assertThat(thumbnailUrl).isEqualTo("url1");
+
+    }
+
+    @Test
+    @DisplayName("썸네일 이미지가 존재하지 않는다면 NULL을 리턴한다.")
+    void testNoThumbnailImage(){
+        // given
+        Game game = new Game();
+        String thumbnailUrl = game.getThumbnail();
+
+        //then
+        assertThat(thumbnailUrl).isNull();
     }
 
 }
