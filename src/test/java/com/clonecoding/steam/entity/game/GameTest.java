@@ -106,5 +106,50 @@ class GameTest {
         assertThat(salePrice).isEqualTo(5000);
     }
 
+    @Test
+    @DisplayName("할인 정책이 존재하지 않는다면 할인률은 0%이다.")
+    void NoDiscountPolicyThenSaleRate0(){
+        // given
+        final Game game = Game.builder()
+                .price(10000)
+                .build();
+        // when
+        double discountRate = game.getDiscountRate(
+                LocalDateTime.of(2023,10,13,12,0)
+        );
+        // then
+        assertThat(discountRate).isZero();
+    }
+
+    @Test
+    @DisplayName("할인 정책이 고정금액 할인일 때 할인률을 계산할 수 있다.")
+    void calculateFixDiscountRate(){
+        // given
+        final Game game = Game.builder()
+                .price(10000)
+                .build();
+
+
+        final DiscountPolicy discountPolicy = DiscountPolicy.builder()
+                .startDate(Timestamp.valueOf(LocalDateTime.of(2023,10,13,0,0)))
+                .endDate(Timestamp.valueOf(LocalDateTime.of(2023,10,14,0,0)))
+                .discountType(DiscountTypes.FIXED)
+                .build();
+
+        final DiscountedGame discountedGame = DiscountedGame.builder()
+                .discountPolicy(discountPolicy)
+                .fixDiscountPrice(5000)
+                .game(game)
+                .build();
+
+        game.addDiscountedGames(discountedGame);
+
+        // when
+        double discountRate = game.getDiscountRate(
+                LocalDateTime.of(2023,10,13,12,0)
+        );
+        // then
+        assertThat(discountRate).isEqualTo(0.5);
+    }
 
 }

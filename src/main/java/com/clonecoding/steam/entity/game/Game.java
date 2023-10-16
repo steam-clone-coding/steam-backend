@@ -143,4 +143,22 @@ public class Game {
 
         return 0;
     }
+
+
+    public double getDiscountRate(LocalDateTime now){
+        DiscountedGame activateDiscount = getActivateDiscount(now);
+
+        if(activateDiscount == null){
+            return 0.0;
+        }
+
+        if(activateDiscount.getDiscountPolicy().getDiscountType() == DiscountTypes.FIXED){
+            return (double)  activateDiscount.getFixDiscountPrice() / price;
+        }
+        else if(activateDiscount.getDiscountPolicy().getDiscountType() == DiscountTypes.PERCENT){
+            return activateDiscount.getRateDiscountRate();
+        }
+
+        return 0.0;
+    }
 }
