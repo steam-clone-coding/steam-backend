@@ -2,11 +2,16 @@ package com.clonecoding.steam.entity.purchase;
 
 import com.clonecoding.steam.enums.purchase.DiscountTypes;
 import jakarta.persistence.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "discount_policies")
+@Getter
+@Builder
 public class DiscountPolicy {
 
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "discount_policies_id_seq")

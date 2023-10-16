@@ -8,6 +8,7 @@ import com.clonecoding.steam.enums.game.GameStatus;
 import com.clonecoding.steam.exceptions.ExceptionMessages;
 import com.clonecoding.steam.repository.game.GameRepository;
 import com.clonecoding.steam.repository.purchase.CartRepository;
+import com.clonecoding.steam.repository.purchase.OrderRepository;
 import com.clonecoding.steam.repository.user.UserRepository;
 import com.clonecoding.steam.utils.common.NanoIdProvider;
 import org.junit.jupiter.api.*;
@@ -138,7 +139,7 @@ class UserPurchaseServiceImplTest {
                 userPurchaseService.getCartList(testUser.getUid(), PageRequest.of(0, 10));
 
         //then
-        assertThat(result.getCount()).isEqualTo(1);
+        assertThat(result.getCount()).isEqualTo(1L);
         assertThat(result.getData().size()).isEqualTo(1);
         assertThat(result.getData().get(0).getName()).isEqualTo("game 1");
     }
@@ -153,7 +154,7 @@ class UserPurchaseServiceImplTest {
                 userPurchaseService.getCartList(testUser.getUid(), PageRequest.of(0, 10));
 
         //then
-        assertThat(result.getCount()).isEqualTo(0);
+        assertThat(result.getCount()).isEqualTo(0L);
         assertThat(result.getData()).isNotNull();
         assertThat(result.getData()).isEmpty();
 
@@ -174,12 +175,20 @@ class UserPurchaseServiceImplTest {
         private UserRepository userRepository;
 
         @Autowired
+        private OrderRepository orderRepository;
+
+        @Autowired
         private Environment environment;
 
 
         @Bean
         public UserPurchaseService userPurchaseService(){
-            return new UserPurchaseServiceImpl(cartRepository, userRepository, gameRepository, nanoIdProvider());
+            return new UserPurchaseServiceImpl(
+                    cartRepository,
+                    userRepository,
+                    gameRepository,
+                    nanoIdProvider(),
+                    orderRepository);
         }
 
         @Bean
