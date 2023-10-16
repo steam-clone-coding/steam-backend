@@ -19,6 +19,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
+
 
 @Service
 @RequiredArgsConstructor
@@ -41,6 +43,13 @@ public class UserPurchaseServiceImpl implements UserPurchaseService{
         Game game = gameRepository.findByUid(gameUid)
                 .orElseThrow(() -> new IllegalArgumentException(ExceptionMessages.GAME_NOT_FOUND.getMessage()));
 
+
+        boolean isDuplicatedGame = cartRepository.findByUser_Uid(userUid, Pageable.unpaged())
+                .stream().anyMatch(c -> Objects.equals(c.getGame().getUid(), gameUid));
+
+        if(isDuplicatedGame){
+            throw new IllegalArgumentException(ExceptionMessages.ALREADY_IN_CART.getMessage());
+        }
 
         Cart cart = Cart.builder()
                 .user(user)

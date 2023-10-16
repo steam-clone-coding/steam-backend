@@ -24,7 +24,8 @@ public enum ExceptionMessages {
     PASSWORD_ENCODING_FAILED("비밀번호 인코딩에 실패하였습니다."),
     USER_CREATION_FAILED("사용자 생성에 실패하였습니다."),
     GAME_NOT_FOUND("해당하는 게임을 찾을 수 없습니다."),
-    ORDER_NOT_FOUND("해당하는 주문 정보를 찾을 수 없습니다.");
+    ORDER_NOT_FOUND("해당하는 주문 정보를 찾을 수 없습니다."),
+    ALREADY_IN_CART("해당 게임이 이미 카트에 담겨있습니다.");
     private String message;
 
 }
