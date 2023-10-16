@@ -1,6 +1,7 @@
 package com.clonecoding.steam.dto.user;
 
 import com.clonecoding.steam.entity.user.Country;
+import com.clonecoding.steam.entity.user.User;
 
 import java.time.LocalDateTime;
 
@@ -9,6 +10,11 @@ public class UserDTO {
     public static class Preview{
         private String id;
         private String nickname;
+
+        public Preview(User user) {
+            this.id = user.getUid();
+            this.nickname = user.getNickname();
+        }
     }
 
     public static class Search{
