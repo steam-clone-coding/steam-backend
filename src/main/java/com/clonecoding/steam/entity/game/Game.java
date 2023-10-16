@@ -132,6 +132,12 @@ public class Game {
     }
 
 
+    /*
+     * @description 게임의 유효한 할인 정책이 존재하는 경우, 할인 금액을 계산하는 메서드
+     * @author minseok kim
+     * @param now 메서드를 호출한 시간
+     * @throws
+    */
     public int getSalePrice(LocalDateTime now) {
         final DiscountedGame discountedGame = getActivateDiscount(now);
         if(discountedGame == null){
@@ -149,6 +155,12 @@ public class Game {
     }
 
 
+    /*
+     * @description 게임의 유효한 할인 정책이 존재하는 경우, 할인률을 계산하는 메서드
+     * @author minseok kim
+     * @param now 메서드를 호출한 시간
+     * @throws
+     */
     public double getDiscountRate(LocalDateTime now){
         DiscountedGame activateDiscount = getActivateDiscount(now);
 
@@ -166,6 +178,12 @@ public class Game {
         return 0.0;
     }
 
+
+
+    /*
+     * @description 게임의 썸네일 이미지를 조회하는 메서드
+     * @author minseok kim
+     */
     public String getThumbnail() {
         for (GameMedia gameMedia: gameMedias) {
             if(gameMedia.getMediaType() == GameMediaType.HEADER_IMAGE){
