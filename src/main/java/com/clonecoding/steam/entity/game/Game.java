@@ -1,11 +1,14 @@
 package com.clonecoding.steam.entity.game;
 
+import com.clonecoding.steam.entity.purchase.DiscountPolicy;
 import com.clonecoding.steam.entity.purchase.DiscountedGame;
 import com.clonecoding.steam.entity.user.User;
 import com.clonecoding.steam.enums.game.GameStatus;
+import com.clonecoding.steam.enums.purchase.DiscountTypes;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -93,5 +96,43 @@ public class Game {
         }
         this.gameMedias.add(gameMedia);
         gameMedia.setGame(this);
+    }
+
+    public void addDiscountedGames(DiscountedGame discountedGame){
+        discountedGames.add(discountedGame);
+    }
+
+    /**
+     * @methodName getActivateDiscount
+     * @author Minseok kim
+     * @description 현재 게임에 대해 활성화된 할인 정책을 가져오는 메서드
+     */
+    public DiscountedGame getActivateDiscount(LocalDateTime now){
+        final Timestamp nowTimeStamp = Timestamp.valueOf(now);
+
+        for(DiscountedGame discountedGame : discountedGames){
+            DiscountPolicy discountPolicy = discountedGame.getDiscountPolicy();
+
+            if(discountPolicy.getStartDate().after(nowTimeStamp) || discountPolicy.getEndDate().before(nowTimeStamp)){
+                continue;
+            }
+            return discountedGame;
+        }
+        return null;
+
+    }
+
+
+    public int getSalePrice() {
+        final DiscountedGame discountedGame = getActivateDiscount(LocalDateTime.now());
+        if(discountedGame == null){
+            return 0;
+        }
+
+        if(discountedGame.getDiscountPolicy().getDiscountType() == DiscountTypes.FIXED){
+            return discountedGame.getFixDiscountPrice();
+        }
+
+        return 0;
     }
 }
