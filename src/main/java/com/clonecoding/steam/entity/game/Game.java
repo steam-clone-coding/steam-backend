@@ -3,6 +3,7 @@ package com.clonecoding.steam.entity.game;
 import com.clonecoding.steam.entity.purchase.DiscountPolicy;
 import com.clonecoding.steam.entity.purchase.DiscountedGame;
 import com.clonecoding.steam.entity.user.User;
+import com.clonecoding.steam.enums.game.GameMediaType;
 import com.clonecoding.steam.enums.game.GameStatus;
 import com.clonecoding.steam.enums.purchase.DiscountTypes;
 import jakarta.persistence.*;
@@ -74,13 +75,16 @@ public class Game {
 
 
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<GameMedia> gameMedias;
+    @Builder.Default
+    private List<GameMedia> gameMedias = new ArrayList<>();
 
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<GameCategory> gameCategories;
+    @Builder.Default
+    private List<GameCategory> gameCategories = new ArrayList<>();
 
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<GameLike> likedByUsers;
+    @Builder.Default
+    private List<GameLike> likedByUsers = new ArrayList<>();
 
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
@@ -160,5 +164,15 @@ public class Game {
         }
 
         return 0.0;
+    }
+
+    public String getThumbnail() {
+        for (GameMedia gameMedia: gameMedias) {
+            if(gameMedia.getMediaType() == GameMediaType.HEADER_IMAGE){
+                return gameMedia.getMediaUrl();
+            }
+        }
+
+        return null;
     }
 }
