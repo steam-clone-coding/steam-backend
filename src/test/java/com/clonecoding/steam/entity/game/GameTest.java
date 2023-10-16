@@ -151,5 +151,33 @@ class GameTest {
         // then
         assertThat(discountRate).isEqualTo(0.5);
     }
+    @Test
+    @DisplayName("할인 정책이 할인률 할인 일때, 할인률을 바로 리턴한다.")
+    void testGetDiscountRate(){
+        // given
+        final Game game = Game.builder()
+                .price(10000)
+                .build();
+
+        final DiscountPolicy discountPolicy = DiscountPolicy.builder()
+                .startDate(Timestamp.valueOf(LocalDateTime.of(2023,10,13,0,0)))
+                .endDate(Timestamp.valueOf(LocalDateTime.of(2023,10,14,0,0)))
+                .discountType(DiscountTypes.PERCENT)
+                .build();
+
+        final DiscountedGame discountedGame = DiscountedGame.builder()
+                .discountPolicy(discountPolicy)
+                .rateDiscountRate(0.5f)
+                .game(game)
+                .build();
+
+        game.addDiscountedGames(discountedGame);
+        // when
+        double discountRate = game.getDiscountRate(
+                LocalDateTime.of(2023,10,13,12,0)
+        );
+        // then
+        assertThat(discountRate).isEqualTo(0.5);
+    }
 
 }
