@@ -43,12 +43,12 @@ public class Game {
     @JoinColumn(name = "developer_id", nullable = false)
     private User developer;
 
-    @Column(name = "release_date", nullable = false)
+    @Column(name = "release_date")
     @Temporal(TemporalType.DATE)
     @Builder.Default
     private LocalDate releaseDate = LocalDate.now();
 
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -56,14 +56,14 @@ public class Game {
     @Column(name = "uid", nullable = false)
     private String uid;
 
-    @Column(name = "recent_version", nullable = false)
+    @Column(name = "recent_version")
     private String recentVersion;
 
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private GameStatus status;
 
-    @Column(name = "required_age", nullable = false)
+    @Column(name = "required_age")
     @Builder.Default
     private int requiredAge = 0;
 
@@ -84,6 +84,9 @@ public class Game {
 
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DiscountedGame> discountedGames = new ArrayList<>();
+
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews = new ArrayList<>();
 
     public void setDeveloper(User developer) {
         this.developer = developer;
