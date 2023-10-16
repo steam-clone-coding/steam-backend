@@ -154,7 +154,7 @@ class UserPurchaseServiceImplTest {
                 userPurchaseService.getCartList(testUser.getUid(), PageRequest.of(0, 10));
 
         //then
-        assertThat(result.getCount()).isEqualTo(0);
+        assertThat(result.getCount()).isEqualTo(0L);
         assertThat(result.getData()).isNotNull();
         assertThat(result.getData()).isEmpty();
 
