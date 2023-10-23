@@ -204,7 +204,7 @@ class GameTest {
 
 
         // when
-        String thumbnailUrl = game.getThumbnail();
+        String thumbnailUrl = game.getMedia(GameMediaType.HEADER_IMAGE);
 
         //then
         assertThat(thumbnailUrl).isEqualTo("url1");
@@ -216,7 +216,7 @@ class GameTest {
     void testNoThumbnailImage(){
         // given
         Game game = new Game();
-        String thumbnailUrl = game.getThumbnail();
+        String thumbnailUrl = game.getMedia(GameMediaType.HEADER_IMAGE);
 
         //then
         assertThat(thumbnailUrl).isNull();

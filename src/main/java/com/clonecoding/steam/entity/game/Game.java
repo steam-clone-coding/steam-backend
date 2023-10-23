@@ -184,9 +184,9 @@ public class Game {
      * @description 게임의 썸네일 이미지를 조회하는 메서드
      * @author minseok kim
      */
-    public String getThumbnail() {
+    public String getMedia(GameMediaType mediaType) {
         for (GameMedia gameMedia: gameMedias) {
-            if(gameMedia.getMediaType() == GameMediaType.HEADER_IMAGE){
+            if(gameMedia.getMediaType() == mediaType){
                 return gameMedia.getMediaUrl();
             }
         }
