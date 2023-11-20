@@ -2,6 +2,7 @@ package com.clonecoding.steam.entity.purchase;
 
 import com.clonecoding.steam.entity.user.Country;
 import com.clonecoding.steam.entity.user.User;
+import com.clonecoding.steam.enums.purchase.PayMethod;
 import com.clonecoding.steam.enums.purchase.PurchaseStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -39,4 +40,8 @@ public class Order {
     @Column(name = "purchase_status", nullable = false, columnDefinition = "varchar(255) CHECK (purchase_status IN ('PURCHASE_COMPLETE', 'REFUND'))")
     @Enumerated(EnumType.STRING)
     private PurchaseStatus purchaseStatus;
+
+    @OneToOne
+    @JoinColumn(name = "payment_id")
+    private Payment payment;
 }
