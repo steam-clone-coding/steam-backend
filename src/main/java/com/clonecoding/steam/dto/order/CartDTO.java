@@ -1,15 +1,13 @@
 package com.clonecoding.steam.dto.order;
 
 import com.clonecoding.steam.entity.game.Game;
-import com.clonecoding.steam.entity.game.GameCategory;
 import com.clonecoding.steam.entity.purchase.Cart;
-import com.clonecoding.steam.entity.purchase.DiscountedGame;
+import com.clonecoding.steam.enums.game.GameMediaType;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class CartDTO {
 
@@ -29,7 +27,7 @@ public class CartDTO {
 
             return Preview.builder()
                     .id(entity.getUid())
-                    .thumbnailUrl(game.getThumbnail())
+                    .thumbnailUrl(game.getMedia(GameMediaType.HEADER_IMAGE))
                     .name(game.getName())
                     .netPrice(game.getPrice())
                     .salePrice(game.getSalePrice(LocalDateTime.now()))
