@@ -4,19 +4,13 @@ import com.clonecoding.steam.dto.user.DeveloperDTO;
 import com.clonecoding.steam.entity.game.Game;
 import com.clonecoding.steam.entity.game.GameCategory;
 import com.clonecoding.steam.entity.game.GameMedia;
-import com.clonecoding.steam.entity.purchase.DiscountedGame;
 import com.clonecoding.steam.enums.game.GameMediaType;
-import com.clonecoding.steam.enums.purchase.DiscountTypes;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
-
 
 public class GameDTO {
     @Data
@@ -26,7 +20,7 @@ public class GameDTO {
         private String thumbnailUrl;
         private String name;
         private Integer price;
-        public static Search entityToDto(Game game, String gameThumbnailUrl){
+        public static Search of(Game game, String gameThumbnailUrl){
             return Search.builder()
                     .id(game.getUid())
                     .thumbnailUrl(gameThumbnailUrl)
@@ -37,7 +31,8 @@ public class GameDTO {
 
     }
 
-
+    @Data
+    @Builder
     public static class Preview{
         private String id;
         private String thumbnailUrl;
@@ -45,6 +40,17 @@ public class GameDTO {
         private Integer netPrice;
         private Integer salePrice;
         private Double saleRate;
+
+        public static Preview of(Game game, LocalDateTime now){
+            return Preview.builder()
+                    .id(game.getUid())
+                    .thumbnailUrl(game.getMedia(GameMediaType.HEADER_IMAGE))
+                    .name(game.getName())
+                    .netPrice(game.getPrice())
+                    .salePrice(game.getSalePrice(now))
+                    .saleRate(game.getDiscountRate(now))
+                    .build();
+        }
 
     }
 
@@ -80,10 +86,10 @@ public class GameDTO {
 
         private SystemRequirement systemRequirements;
 
-        public static Detail entityToDto(Game game, LocalDateTime now){
+        public static Detail of(Game game, LocalDateTime now){
             return Detail.builder()
                     .id(game.getUid())
-                    .thumbnailUrl(game.getThumbnail())
+                    .thumbnailUrl(game.getMedia(GameMediaType.HEADER_IMAGE))
                     .imageUrls(getImagesUrl(game))
                     .name(game.getName())
                     .description(game.getDescription())

@@ -41,7 +41,7 @@ public class UserStoreServiceImpl implements UserStoreService{
         Page<Game> findGames = gameRepository.findByNameContaining(query, page);
 
         List<GameDTO.Search> gameDtoList = findGames.stream()
-                .map(game -> GameDTO.Search.entityToDto(game, game.getThumbnail()))
+                .map(game -> GameDTO.Search.of(game, game.getMedia(GameMediaType.HEADER_IMAGE)))
                 .collect(Collectors.toList());
 
         return PaginationListDto.<GameDTO.Search>builder()
@@ -66,7 +66,7 @@ public class UserStoreServiceImpl implements UserStoreService{
     @Override
     public GameDTO.Detail getGameDetail(String gameId, LocalDateTime now) {
         Game findGame = gameRepository.findByUid(gameId).get();
-        return GameDTO.Detail.entityToDto(findGame, now);
+        return GameDTO.Detail.of(findGame, now);
     }
 
     @Override
