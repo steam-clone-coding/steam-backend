@@ -1,6 +1,7 @@
 package com.clonecoding.steam.service.user;
 
 import com.clonecoding.steam.dto.request.UserRegisterDTO;
+import com.clonecoding.steam.dto.user.UserDTO;
 import com.clonecoding.steam.entity.user.User;
 import com.clonecoding.steam.enums.auth.LoginType;
 import com.clonecoding.steam.exceptions.EncodeException;
@@ -30,6 +31,14 @@ public class UserService {
     private final NanoIdProvider nanoIdProvider;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserValidator userValidator;
+
+
+    public UserDTO.Preview getUserByUsername(String username){
+        User findUser = userRepository.findUserByUsername(username)
+                .orElseThrow(() -> new RuntimeException(ExceptionMessages.USER_NOT_FOUND.getMessage()));
+
+        return new UserDTO.Preview(findUser);
+    }
 
 
     // 사용자 등록

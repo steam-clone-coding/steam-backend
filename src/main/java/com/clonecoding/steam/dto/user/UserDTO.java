@@ -2,6 +2,8 @@ package com.clonecoding.steam.dto.user;
 
 import com.clonecoding.steam.entity.user.Country;
 import com.clonecoding.steam.entity.user.User;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 
 import java.time.LocalDateTime;
 
@@ -17,6 +19,8 @@ public class UserDTO {
         }
     }
 
+
+
     public static class Search{
         private String id;
         private String profileImageUrl;
@@ -25,6 +29,7 @@ public class UserDTO {
         private Country country;
         private Boolean isFriend;
     }
+
 
     public static class Profile{
         private String id;
