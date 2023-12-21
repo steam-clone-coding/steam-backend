@@ -7,6 +7,7 @@ import com.clonecoding.steam.dto.game.ReviewDTO;
 import com.clonecoding.steam.dto.game.ReviewSearchConditions;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface UserStoreService {
@@ -70,7 +71,7 @@ public interface UserStoreService {
      * @return
      * @exception
     */
-    GameDTO.Detail getGameDetail(String id);
+    GameDTO.Detail getGameDetail(String id, LocalDateTime now);
 
     /**
      * @author minseok kim
@@ -79,7 +80,8 @@ public interface UserStoreService {
      * @param reviewType 검색 상세조건(긍정 리뷰, 부정 리뷰)
      * @param purchaseType 검색 상세 조건(구매 방식 구분)
      * @param language 검색 상세 조건(언어 구분)
-     * @param minimumPlayTime 검색상세조건(최소 플레이타임)
+     * @param minimumPlayTime 검색상세조건(최소 플레이타임)\
+     * @param page 페이지 네이션
      * @return
      * @exception
     */
@@ -88,6 +90,7 @@ public interface UserStoreService {
             ReviewSearchConditions.ReviewType reviewType,
             ReviewSearchConditions.PurchaseType purchaseType,
             ReviewSearchConditions.Language language,
-            Integer minimumPlayTime
+            Integer minimumPlayTime,
+            Pageable page
     );
 }

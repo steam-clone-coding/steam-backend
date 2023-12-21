@@ -18,8 +18,8 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Table(name = "games")
 public class Game {
@@ -72,7 +72,6 @@ public class Game {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "requirement_id")
     private Requirements requirements;
-
 
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
@@ -192,5 +191,22 @@ public class Game {
         }
 
         return null;
+    }
+
+    /**
+     * @methodName calculateAverageRating
+     * @description 게임의 평균 평점을 계산하는 메서드
+     * @return double 평균 평점
+     */
+    public double calculateAverageRating() {
+        if (reviews.isEmpty()) {
+            return 0.0;
+        }
+
+        double totalRating = reviews.stream()
+                .mapToDouble(Review::getRating) // Review 엔티티에 getRating 메서드가 정의되어 있다고 가정
+                .sum();
+
+        return totalRating / reviews.size();
     }
 }
