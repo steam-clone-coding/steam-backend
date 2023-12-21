@@ -8,6 +8,7 @@ import com.clonecoding.steam.exceptions.UserInfoConflictException;
 import com.clonecoding.steam.repository.user.UserRepository;
 import com.clonecoding.steam.service.common.RedisService;
 import com.clonecoding.steam.service.user.UserService;
+import com.clonecoding.steam.service.user.impl.UserServiceImpl;
 import com.clonecoding.steam.utils.auth.JwtTokenProvider;
 import com.clonecoding.steam.utils.common.NanoIdProvider;
 import com.clonecoding.steam.utils.user.PasswordEncodeUtils;
@@ -42,7 +43,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 public class UserServiceTest {
 
     @Autowired
-    private UserService userService;
+    private UserServiceImpl userService;
 
     @Autowired
     private UserRepository userRepository;
@@ -193,7 +194,7 @@ public class UserServiceTest {
         public UserService userService(UserRepository userRepository, PasswordEncodeUtils passwordEncodeUtils,
                         JwtTokenProvider jwtTokenProvider, NanoIdProvider nanoIdProvider,
                         UserValidator userValidator) {
-            return new UserService(userRepository, passwordEncodeUtils, nanoIdProvider, jwtTokenProvider,  userValidator);
+            return new UserServiceImpl(userRepository, passwordEncodeUtils, nanoIdProvider, jwtTokenProvider,  userValidator);
         }
     }
 }

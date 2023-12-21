@@ -1,4 +1,4 @@
-package com.clonecoding.steam.service.purchase;
+package com.clonecoding.steam.service.purchase.impl;
 
 import com.clonecoding.steam.dto.common.PaginationListDto;
 import com.clonecoding.steam.dto.order.CartDTO;
@@ -12,6 +12,7 @@ import com.clonecoding.steam.repository.game.GameRepository;
 import com.clonecoding.steam.repository.purchase.CartRepository;
 import com.clonecoding.steam.repository.purchase.OrderRepository;
 import com.clonecoding.steam.repository.user.UserRepository;
+import com.clonecoding.steam.service.purchase.UserPurchaseService;
 import com.clonecoding.steam.utils.common.NanoIdProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,7 +26,7 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class UserPurchaseServiceImpl implements UserPurchaseService{
+public class UserPurchaseServiceImpl implements UserPurchaseService {
 
     private final CartRepository cartRepository;
     private final UserRepository userRepository;

@@ -10,6 +10,7 @@ import com.clonecoding.steam.repository.game.GameRepository;
 import com.clonecoding.steam.repository.purchase.CartRepository;
 import com.clonecoding.steam.repository.purchase.OrderRepository;
 import com.clonecoding.steam.repository.user.UserRepository;
+import com.clonecoding.steam.service.purchase.impl.UserPurchaseServiceImpl;
 import com.clonecoding.steam.utils.common.NanoIdProvider;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
