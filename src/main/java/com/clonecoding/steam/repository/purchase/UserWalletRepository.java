@@ -1,4 +1,4 @@
-package com.clonecoding.steam.repository.user;
+package com.clonecoding.steam.repository.purchase;
 
 import com.clonecoding.steam.entity.user.UserWallet;
 import org.springframework.data.repository.CrudRepository;

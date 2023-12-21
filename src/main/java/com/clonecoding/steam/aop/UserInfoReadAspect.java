@@ -2,7 +2,7 @@ package com.clonecoding.steam.aop;
 
 
 import com.clonecoding.steam.dto.user.UserDTO;
-import com.clonecoding.steam.service.user.UserService;
+import com.clonecoding.steam.service.user.impl.UserServiceImpl;
 import com.clonecoding.steam.utils.auth.SecurityUserContextUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class UserInfoReadAspect {
 
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
     @Around("@annotation(com.clonecoding.steam.aop.annotation.UserInfoRead)")
     public Object processCustomAnnotation(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {

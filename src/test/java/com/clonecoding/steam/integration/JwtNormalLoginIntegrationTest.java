@@ -9,7 +9,7 @@ import com.clonecoding.steam.enums.auth.LoginType;
 import com.clonecoding.steam.enums.user.UserAuthority;
 import com.clonecoding.steam.exceptions.ExceptionMessages;
 import com.clonecoding.steam.repository.user.UserRepository;
-import com.clonecoding.steam.service.user.UserService;
+import com.clonecoding.steam.service.user.impl.UserServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -41,7 +41,7 @@ public class JwtNormalLoginIntegrationTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private UserService userService;
+    private UserServiceImpl userService;
 
     @Autowired
     private UserRepository userRepository;
