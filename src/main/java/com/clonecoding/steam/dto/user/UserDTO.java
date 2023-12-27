@@ -4,11 +4,13 @@ import com.clonecoding.steam.entity.user.Country;
 import com.clonecoding.steam.entity.user.User;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 public class UserDTO {
 
+    @Getter
     public static class Preview{
         private String id;
         private String nickname;
